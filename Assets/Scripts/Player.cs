@@ -86,6 +86,7 @@ public class Player : MonoBehaviour
             Lose();
             return;
         }
+        gameOver = false;
         transform.position = new Vector3(4, 0.5f, 0);
         animator.Play("Expand");
         lifetime = Time.time;
