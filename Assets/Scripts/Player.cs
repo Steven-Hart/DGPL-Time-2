@@ -3,8 +3,10 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float moveSpeed = 1, lives = 5;
-    public UnityEngine.UI.Text lifeTimer, lifeCount;
+    public UnityEngine.UI.Text lifeTimer, lifeCount, WinLife, WinTime;
+    public GameObject winPanel;
 
+    private bool gameOver;
     private float lifetime;
     private Animator animator;
 
@@ -15,6 +17,8 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (gameOver)
+            return;
         float lifespan = Time.time - lifetime;
         if (lifespan >= 15)
         {
@@ -42,6 +46,19 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void Win()
+    {
+        gameOver = true;
+        winPanel.SetActive(true);
+        WinLife.text = lives.ToString("Lives remaining: 0");
+        WinTime.text = Mathf.Round((5 - lives) * 15 + Time.time - lifetime).ToString("0 seconds");
+    }
+
+    public void Lose()
+    {
+        gameOver = true;
+    }
+
     private void MovePlayer(float x, float y, float z)
     {
         Vector3 newPosition = transform.position + new Vector3(x * moveSpeed * Time.deltaTime, y * moveSpeed * Time.deltaTime, z * moveSpeed * Time.deltaTime);
@@ -58,7 +75,12 @@ public class Player : MonoBehaviour
 
     private void NextLife()
     {
-        transform.position = new Vector3(4, 1, 0);
+        if (lives <= 0)
+        {
+            Lose();
+            return;
+        }
+        transform.position = new Vector3(4, 0.5f, 0);
         animator.Play("Expand");
         lifetime = Time.time;
         lives--;
