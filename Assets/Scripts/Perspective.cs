@@ -20,12 +20,14 @@ public class Perspective : MonoBehaviour
                 transform.position = new Vector3(-10, 5, -5); // Up for change when level is made
                 transform.rotation = Quaternion.Euler(25, 45, 0);
                 GetComponent<Camera>().orthographic = true;
+                GetComponent<Camera>().cullingMask = ~(1 << 8); // Hide 2D only layer
                 break;
             case Perspectives.View3D: // An optional option just in case
                 transform.parent = null;
                 transform.position = new Vector3(5, 10, 0);
                 transform.LookAt(playerTransform);
                 GetComponent<Camera>().orthographic = false;
+                GetComponent<Camera>().cullingMask = ~(1 << 8); // Hide 2D only layer
                 break;
             case Perspectives.View2D: // Default: Static top down 2D view
             default:
@@ -33,6 +35,7 @@ public class Perspective : MonoBehaviour
                 transform.position = new Vector3(3, 10, 0);
                 transform.rotation = Quaternion.Euler(90, 90, 0); // Top down
                 GetComponent<Camera>().orthographic = true;
+                GetComponent<Camera>().cullingMask = -1;
                 break;
         }
     }
