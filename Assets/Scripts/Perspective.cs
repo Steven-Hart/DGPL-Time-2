@@ -17,8 +17,8 @@ public class Perspective : MonoBehaviour
         {
             case Perspectives.Isometric: // Orthographic iso view
                 transform.parent = playerTransform; // Camera moves with player
-                transform.position = new Vector3(-10, 5, -5); // Up for change when level is made
-                transform.rotation = Quaternion.Euler(25, 45, 0);
+                transform.position = new Vector3(-2, 8, -5); // Up for change when level is made
+                transform.rotation = Quaternion.Euler(45, 45, 0);
                 GetComponent<Camera>().orthographic = true;
                 GetComponent<Camera>().cullingMask = ~(1 << 8); // Hide 2D only layer
                 break;
