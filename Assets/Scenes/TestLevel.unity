@@ -1074,17 +1074,17 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 184549909}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1378867561}
   m_Father: {fileID: 1470924327}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -39}
+  m_AnchoredPosition: {x: 0, y: -39.00003}
   m_SizeDelta: {x: 200, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &184549911
@@ -3205,7 +3205,9 @@ MonoBehaviour:
   lifeCount: {fileID: 720328291}
   WinLife: {fileID: 702297910}
   WinTime: {fileID: 1928597065}
+  WinText: {fileID: 1209614043}
   winPanel: {fileID: 1470924326}
+  nextButton: {fileID: 184549909}
 --- !u!54 &630420216
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7973,8 +7975,8 @@ RectTransform:
   - {fileID: 1209614042}
   - {fileID: 702297909}
   - {fileID: 1928597064}
-  - {fileID: 1772503327}
   - {fileID: 184549910}
+  - {fileID: 1772503327}
   m_Father: {fileID: 1021355986}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8730,7 +8732,7 @@ RectTransform:
   m_Children:
   - {fileID: 1261404728}
   m_Father: {fileID: 1470924327}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -8775,18 +8777,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1772503329}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11500000, guid: 7ef57eb5a632f7147920d062b1a7c9f8, type: 3}
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: TestLevel
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1772503329
@@ -10213,6 +10204,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ef57eb5a632f7147920d062b1a7c9f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  retryButton: {fileID: 1772503328}
+  nextButton: {fileID: 184549911}
 --- !u!1 &2041495734
 GameObject:
   m_ObjectHideFlags: 0

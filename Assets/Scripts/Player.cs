@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float moveSpeed = 1, lives = 5;
-    public UnityEngine.UI.Text lifeTimer, lifeCount, WinLife, WinTime;
-    public GameObject winPanel;
+    public float moveSpeed = 1, lives = 5, lifetime;
+    public UnityEngine.UI.Text lifeTimer, lifeCount, WinLife, WinTime, WinText;
+    public GameObject winPanel, nextButton;
 
     private bool gameOver;
-    private float lifetime;
     private Animator animator;
 
     void Start()
     {
         animator = GetComponent<Animator>();
+        lifetime = Time.time;
     }
 
     void Update()
@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
         float lifespan = Time.time - lifetime;
         if (lifespan >= 15)
         {
+            gameOver = true;
             lifetime = Time.time;
             animator.Play("Shrink");
             return;
@@ -50,13 +51,18 @@ public class Player : MonoBehaviour
     {
         gameOver = true;
         winPanel.SetActive(true);
+        WinText.text = "Level Completed!";
         WinLife.text = lives.ToString("Lives remaining: 0");
         WinTime.text = Mathf.Round((5 - lives) * 15 + Time.time - lifetime).ToString("0 seconds");
     }
 
     public void Lose()
     {
-        gameOver = true;
+        winPanel.SetActive(true);
+        WinTime.gameObject.SetActive(false);
+        WinLife.gameObject.SetActive(false);
+        nextButton.gameObject.SetActive(false);
+        WinText.text = "Level Failed!";
     }
 
     private void MovePlayer(float x, float y, float z)
