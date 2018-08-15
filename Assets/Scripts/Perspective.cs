@@ -29,9 +29,9 @@ public class Perspective : MonoBehaviour
                 break;
             case Perspectives.View2D: // Default: Static top down 2D view
             default:
-                transform.parent = null;
-                transform.position = new Vector3(0, 10, 0);
-                transform.rotation = Quaternion.Euler(90, 0, 0); // Top down
+                transform.parent = playerTransform; // Camera moves with player
+                transform.position = new Vector3(3, 10, 0);
+                transform.rotation = Quaternion.Euler(90, 90, 0); // Top down
                 GetComponent<Camera>().orthographic = true;
                 break;
         }
