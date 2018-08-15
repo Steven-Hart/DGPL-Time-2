@@ -3080,7 +3080,7 @@ MonoBehaviour:
   moveSpeed: 2
   lives: 5
   lifeTimer: {fileID: 614420827}
-  lifeCount: {fileID: 0}
+  lifeCount: {fileID: 720328291}
 --- !u!135 &630420217
 SphereCollider:
   m_ObjectHideFlags: 0
