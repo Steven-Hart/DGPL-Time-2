@@ -8,8 +8,8 @@ public class Finish : MonoBehaviour
 
     void Start()
     {
-        retryButton.GetComponent<Button>().onClick.AddListener(Retry);
-        nextButton.GetComponent<Button>().onClick.AddListener(Next);
+        //retryButton.GetComponent<Button>().onClick.AddListener(Retry);
+        //nextButton.GetComponent<Button>().onClick.AddListener(Next);
     }
 
     void OnTriggerEnter(Collider collision)
@@ -24,9 +24,9 @@ public class Finish : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
     }
-    public void Next()
+    public void Next(string sceneName)
     {
         // Next scene
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
     }
 }
