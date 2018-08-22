@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
-        lifetime = Time.time;
+        lifetime = Time.time; // Start of life
     }
 
     void Update()
@@ -20,15 +20,15 @@ public class Player : MonoBehaviour
         if (gameOver)
             return;
         float lifespan = Time.time - lifetime;
-        if (lifespan >= 15)
+        if (lifespan >= 15) // End of life
         {
             gameOver = true;
             lifetime = Time.time;
-            animator.Play("Shrink");
+            animator.Play("Shrink"); // "Death" animation
             return;
         }
-        lifeTimer.text = Mathf.Round(15 - lifespan).ToString("00");
-        float inputHorizontal = Input.GetAxis("Horizontal"), inputVertical = Input.GetAxis("Vertical");
+        lifeTimer.text = Mathf.Round(15 - lifespan).ToString("00"); // Life timer display update
+        float inputHorizontal = Input.GetAxis("Horizontal"), inputVertical = Input.GetAxis("Vertical"); // Get movement input
         if (inputVertical > 0)
         {
             MovePlayer(2, 0, 0);
@@ -50,7 +50,7 @@ public class Player : MonoBehaviour
     public void Win()
     {
         gameOver = true;
-        winPanel.SetActive(true);
+        winPanel.SetActive(true); // Display end screen
         WinText.text = "Level Completed!";
         WinLife.text = lives.ToString("Lives remaining: 0");
         WinTime.text = Mathf.Round((5 - lives) * 15 + Time.time - lifetime).ToString("0 seconds");
@@ -58,7 +58,7 @@ public class Player : MonoBehaviour
 
     public void Lose()
     {
-        winPanel.SetActive(true);
+        winPanel.SetActive(true); // Display end screen
         WinTime.gameObject.SetActive(false);
         WinLife.gameObject.SetActive(false);
         nextButton.gameObject.SetActive(false);
@@ -67,8 +67,8 @@ public class Player : MonoBehaviour
 
     private void MovePlayer(float x, float y, float z)
     {
-        Vector3 newPosition = transform.position + new Vector3(x * moveSpeed * Time.deltaTime, y * moveSpeed * Time.deltaTime, z * moveSpeed * Time.deltaTime);
-        Collider[] collisions = Physics.OverlapBox(newPosition, new Vector3(0.5f, 0.5f, 0.5f));
+        Vector3 newPosition = transform.position + new Vector3(x * moveSpeed * Time.deltaTime, y * moveSpeed * Time.deltaTime, z * moveSpeed * Time.deltaTime); // Change to fixed space movement later
+        Collider[] collisions = Physics.OverlapBox(newPosition, new Vector3(0.5f, 0.5f, 0.5f)); // Check for obstacles
         foreach (Collider col in collisions)
         {
             if (col.tag == "Obstacle")
@@ -76,10 +76,10 @@ public class Player : MonoBehaviour
                 return;
             }
         }
-        transform.Translate(x * moveSpeed * Time.deltaTime, y * moveSpeed * Time.deltaTime, z * moveSpeed * Time.deltaTime);
+        transform.Translate(x * moveSpeed * Time.deltaTime, y * moveSpeed * Time.deltaTime, z * moveSpeed * Time.deltaTime); // Move
     }
 
-    private void NextLife()
+    private void NextLife() // Called by animation event at end of shrink "death" animation
     {
         if (lives <= 0)
         {
@@ -87,9 +87,9 @@ public class Player : MonoBehaviour
             return;
         }
         gameOver = false;
-        transform.position = new Vector3(4, 0.5f, 0);
-        animator.Play("Expand");
-        lifetime = Time.time;
+        transform.position = new Vector3(4, 0.5f, 0); // Start position.. Could make it a variable so spawn position can be adjusted eg. Checkpoints
+        animator.Play("Expand"); // Play spawn animation
+        lifetime = Time.time; // Start of new life
         lives--;
         lifeCount.text = lives.ToString();
     }
