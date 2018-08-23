@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
     public UnityEngine.UI.Text lifeTimer, lifeCount, WinLife, WinTime, WinText;
     public GameObject winPanel, nextButton;
 
-    private bool gameOver, ghostLife =true;
+    private bool gameOver, ghostLife;
     private Animator animator;
     private float moveDelay;
 
@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         lifetime = Time.time; // Start of game for scoring
+        ghostLife = false;
     }
 
     void Update()

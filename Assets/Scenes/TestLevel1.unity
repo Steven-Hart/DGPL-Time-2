@@ -5179,6 +5179,31 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 135936506601938246, guid: 1f8b9523a78492b47a52c33c9710c5b4,
+        type: 2}
+      propertyPath: m_Radius
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 135936506601938246, guid: 1f8b9523a78492b47a52c33c9710c5b4,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 135944770650748020, guid: 1f8b9523a78492b47a52c33c9710c5b4,
+        type: 2}
+      propertyPath: m_Radius
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 135944770650748020, guid: 1f8b9523a78492b47a52c33c9710c5b4,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114595156422314984, guid: 1f8b9523a78492b47a52c33c9710c5b4,
+        type: 2}
+      propertyPath: moveSpeed
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 95448637726604422, guid: 1f8b9523a78492b47a52c33c9710c5b4, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 1f8b9523a78492b47a52c33c9710c5b4, type: 2}
@@ -8836,7 +8861,7 @@ Animator:
   m_GameObject: {fileID: 1647432085}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ad6eca340971fa245bae1966c9461626, type: 2}
+  m_Controller: {fileID: 9100000, guid: 2045ab743805900498d352f491e00b2b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
