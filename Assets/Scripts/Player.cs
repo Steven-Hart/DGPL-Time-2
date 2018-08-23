@@ -2,40 +2,41 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float moveSpeed = 1, lives = 5, lifetime;
+    public float moveSpeed = 1, lives = 5, lifetime, movesMade, startMoves=15;
     public UnityEngine.UI.Text lifeTimer, lifeCount, WinLife, WinTime, WinText;
     public GameObject winPanel, nextButton;
 
-    private bool gameOver, ghostLife;
+    private bool gameOver, ghostLife =true;
     private Animator animator;
+    private float moveDelay;
 
     void Start()
     {
         animator = GetComponent<Animator>();
-        lifetime = Time.time; // Start of life
-        ghostLife = true;
-        
+        lifetime = Time.time; // Start of game for scoring
     }
 
     void Update()
     {
         if (gameOver)
             return;
-        float lifespan = Time.time - lifetime;
-        if (lifespan >= 15 && !ghostLife) // End of life
+        //float lifespan = Time.time - lifetime;
+        float lifespan = startMoves - movesMade;
+        if (lifespan < 0) // End of life
         {
-            gameOver = true;
-            lifetime = Time.time;
-            animator.Play("Shrink"); // "Death" animation
-            return;
-        }
-        else if(lifespan >= 15)
-        {
+            if (!ghostLife) // Ghost life
+            {
+                gameOver = true;
+                lifetime = Time.time;
+                animator.Play("Shrink"); // "Death" animation
+                return;
+            }
             ResetPos();
             GetComponent<SphereCollider>().enabled = true;
             ghostLife = false;
         }
-        lifeTimer.text = Mathf.Round(15 - lifespan).ToString("00"); // Life timer display update
+        // lifeTimer.text = Mathf.Round(15 - lifespan).ToString("00"); // Life timer display update
+        lifeTimer.text = lifespan.ToString("00");
         float inputHorizontal = Input.GetAxis("Horizontal"), inputVertical = Input.GetAxis("Vertical"); // Get movement input
         if (inputVertical > 0)
         {
@@ -75,6 +76,7 @@ public class Player : MonoBehaviour
 
     private void MovePlayer(float x, float y, float z)
     {
+        /*
         Vector3 newPosition = transform.position + new Vector3(x * moveSpeed * Time.deltaTime, y * moveSpeed * Time.deltaTime, z * moveSpeed * Time.deltaTime); // Change to fixed space movement later
         Collider[] collisions = Physics.OverlapBox(newPosition, new Vector3(0.5f, 0.5f, 0.5f)); // Check for obstacles
         foreach (Collider col in collisions)
@@ -85,6 +87,23 @@ public class Player : MonoBehaviour
             }
         }
         transform.Translate(x * moveSpeed * Time.deltaTime, y * moveSpeed * Time.deltaTime, z * moveSpeed * Time.deltaTime); // Move
+        */
+        Debug.Log("moveDelay: " + moveDelay);
+        Debug.Log("Time.time - moveDelay: " + (Time.time - moveDelay));
+        if (Time.time - moveDelay < moveSpeed)
+            return;
+        Vector3 newPosition = transform.position + new Vector3(x, y, z); // Change to fixed space movement later
+        Collider[] collisions = Physics.OverlapBox(newPosition, new Vector3(0.5f, 0.5f, 0.5f)); // Check for obstacles
+        foreach (Collider col in collisions)
+        {
+            if (col.tag == "Obstacle")
+            {
+                return;
+            }
+        }
+        moveDelay = Time.time;
+        movesMade++;
+        transform.Translate(x, y, z); // Move
     }
 
     private void NextLife() // Called by animation event at end of shrink "death" animation
@@ -102,6 +121,7 @@ public class Player : MonoBehaviour
     private void ResetPos()
     {
         transform.position = new Vector3(4, 0.5f, 0); // Start position.. Could make it a variable so spawn position can be adjusted eg. Checkpoints
+        movesMade = 0;
         animator.Play("Expand"); // Play spawn animation
         lifetime = Time.time; // Start of new life
     }
