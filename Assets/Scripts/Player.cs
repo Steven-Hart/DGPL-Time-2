@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
         else if(lifespan >= 15)
         {
             ResetPos();
+            GetComponent<SphereCollider>().enabled = true;
             ghostLife = false;
         }
         lifeTimer.text = Mathf.Round(15 - lifespan).ToString("00"); // Life timer display update
