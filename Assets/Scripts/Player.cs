@@ -6,13 +6,15 @@ public class Player : MonoBehaviour
     public UnityEngine.UI.Text lifeTimer, lifeCount, WinLife, WinTime, WinText;
     public GameObject winPanel, nextButton;
 
-    private bool gameOver;
+    private bool gameOver, ghostLife;
     private Animator animator;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         lifetime = Time.time; // Start of life
+        ghostLife = true;
+        
     }
 
     void Update()
@@ -20,12 +22,17 @@ public class Player : MonoBehaviour
         if (gameOver)
             return;
         float lifespan = Time.time - lifetime;
-        if (lifespan >= 15) // End of life
+        if (lifespan >= 15 && !ghostLife) // End of life
         {
             gameOver = true;
             lifetime = Time.time;
             animator.Play("Shrink"); // "Death" animation
             return;
+        }
+        else if(lifespan >= 15)
+        {
+            ResetPos();
+            ghostLife = false;
         }
         lifeTimer.text = Mathf.Round(15 - lifespan).ToString("00"); // Life timer display update
         float inputHorizontal = Input.GetAxis("Horizontal"), inputVertical = Input.GetAxis("Vertical"); // Get movement input
@@ -87,10 +94,14 @@ public class Player : MonoBehaviour
             return;
         }
         gameOver = false;
+        ResetPos();
+        lives--;
+        lifeCount.text = lives.ToString();
+    }
+    private void ResetPos()
+    {
         transform.position = new Vector3(4, 0.5f, 0); // Start position.. Could make it a variable so spawn position can be adjusted eg. Checkpoints
         animator.Play("Expand"); // Play spawn animation
         lifetime = Time.time; // Start of new life
-        lives--;
-        lifeCount.text = lives.ToString();
     }
 }
