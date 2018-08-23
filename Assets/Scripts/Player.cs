@@ -121,7 +121,7 @@ public class Player : MonoBehaviour
     }
     private void ResetPos()
     {
-        transform.position = new Vector3(4, 0.5f, 0); // Start position.. Could make it a variable so spawn position can be adjusted eg. Checkpoints
+        transform.position = new Vector3(4, 1f, 0); // Start position.. Could make it a variable so spawn position can be adjusted eg. Checkpoints
         movesMade = 0;
         animator.Play("Expand"); // Play spawn animation
         lifetime = Time.time; // Start of new life
