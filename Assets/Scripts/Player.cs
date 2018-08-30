@@ -5,10 +5,12 @@ public class Player : MonoBehaviour
     public float moveSpeed = 1, lives = 5, lifetime, movesMade, startMoves=15;
     public UnityEngine.UI.Text lifeTimer, lifeCount, WinLife, WinTime, WinText;
     public GameObject winPanel, nextButton;
+    public PlayerCube playerCube;
 
     private bool gameOver, ghostLife;
     private Animator animator;
     private float moveDelay;
+    private Vector3 newPosition;
 
     void Start()
     {
@@ -41,10 +43,12 @@ public class Player : MonoBehaviour
         float inputHorizontal = Input.GetAxis("Horizontal"), inputVertical = Input.GetAxis("Vertical"); // Get movement input
         if (inputVertical > 0)
         {
+            playerCube.transform.rotation = Quaternion.Euler(0,180,0);
             MovePlayer(2, 0, 0);
         }
         else if (inputVertical < 0)
         {
+            playerCube.transform.rotation = Quaternion.Euler(0, 90, 0);
             MovePlayer(-2, 0, 0);
         }
         else if (inputHorizontal > 0)
@@ -89,12 +93,10 @@ public class Player : MonoBehaviour
         }
         transform.Translate(x * moveSpeed * Time.deltaTime, y * moveSpeed * Time.deltaTime, z * moveSpeed * Time.deltaTime); // Move
         */
-        Debug.Log("moveDelay: " + moveDelay);
-        Debug.Log("Time.time - moveDelay: " + (Time.time - moveDelay));
         if (Time.time - moveDelay < moveSpeed)
             return;
-        Vector3 newPosition = transform.position + new Vector3(x, y, z); // Change to fixed space movement later
-        Collider[] collisions = Physics.OverlapBox(newPosition, new Vector3(0.5f, 0.5f, 0.5f)); // Check for obstacles
+        Vector3 movePosition = transform.position + new Vector3(x, y, z); // Change to fixed space movement later
+        Collider[] collisions = Physics.OverlapBox(movePosition, new Vector3(0.5f, 0.5f, 0.5f)); // Check for obstacles
         foreach (Collider col in collisions)
         {
             if (col.tag == "Obstacle")
@@ -103,8 +105,15 @@ public class Player : MonoBehaviour
             }
         }
         moveDelay = Time.time;
+        newPosition = new Vector3(x, y, z);
+        Debug.Log("newPosition: " + newPosition);
+        playerCube.MoveAnimation(); // Play movement animation
+    }
+
+    public void TranslatePlayer()
+    {
         movesMade++;
-        transform.Translate(x, y, z); // Move
+        transform.Translate(newPosition); // Move
     }
 
     private void NextLife() // Called by animation event at end of shrink "death" animation
