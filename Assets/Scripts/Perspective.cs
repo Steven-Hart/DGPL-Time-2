@@ -10,13 +10,13 @@ public class Perspective : MonoBehaviour
 {
     public Perspectives selectedPerspective;
     public Transform playerTransform;
-
+        
     void Start()
     {
         switch (selectedPerspective)
         {
             case Perspectives.Isometric: // Orthographic iso view
-                transform.parent = playerTransform; // Camera moves with player
+                //transform.parent = playerTransform; // Camera moves with player
                 transform.position = new Vector3(-2, 8, -5); // Up for change when level is made
                 transform.rotation = Quaternion.Euler(45, 45, 0);
                 GetComponent<Camera>().orthographic = true;
@@ -33,11 +33,15 @@ public class Perspective : MonoBehaviour
             default:
                 transform.parent = playerTransform; // Camera moves with player
                 transform.position = new Vector3(3, 10, 0);
-                transform.rotation = Quaternion.Euler(90, 90, 0); // Top down
+                transform.rotation =Quaternion.Euler(90, 90, 0); // Top down
                 GetComponent<Camera>().orthographic = true;
                 GetComponent<Camera>().cullingMask = -1;
                 break;
         }
     }
 
+    public void CameraMove(Vector3 translatePosition)
+    {
+        transform.position += translatePosition;
+    }
 }

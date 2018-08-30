@@ -6,10 +6,10 @@ public class Player : MonoBehaviour
     public UnityEngine.UI.Text lifeTimer, lifeCount, WinLife, WinTime, WinText;
     public GameObject winPanel, nextButton;
     public PlayerCube playerCube;
+    public Perspective perpsCamera;
+    public bool gameOver, ghostLife, moveDelay;
 
-    private bool gameOver, ghostLife;
     private Animator animator;
-    private float moveDelay;
     private Vector3 newPosition;
 
     void Start()
@@ -40,23 +40,27 @@ public class Player : MonoBehaviour
         }
         // lifeTimer.text = Mathf.Round(15 - lifespan).ToString("00"); // Life timer display update
         lifeTimer.text = lifespan.ToString("00");
+        if (moveDelay)
+            return;
         float inputHorizontal = Input.GetAxis("Horizontal"), inputVertical = Input.GetAxis("Vertical"); // Get movement input
-        if (inputVertical > 0)
+        if (inputVertical > 0) // Up
         {
-            playerCube.transform.rotation = Quaternion.Euler(0,180,0);
+            transform.rotation = Quaternion.Euler(0,180,0);
             MovePlayer(2, 0, 0);
         }
-        else if (inputVertical < 0)
+        else if (inputVertical < 0) // Down
         {
-            playerCube.transform.rotation = Quaternion.Euler(0, 90, 0);
+            transform.rotation = Quaternion.Euler(0, 0, 0);
             MovePlayer(-2, 0, 0);
         }
-        else if (inputHorizontal > 0)
+        else if (inputHorizontal > 0) // Right
         {
+            transform.rotation = Quaternion.Euler(0, -90, 0);
             MovePlayer(0, 0, -2);
         }
-        else if (inputHorizontal < 0)
+        else if (inputHorizontal < 0) // Left
         {
+            transform.rotation = Quaternion.Euler(0, 90, 0);
             MovePlayer(0, 0, 2);
         }
     }
@@ -93,7 +97,7 @@ public class Player : MonoBehaviour
         }
         transform.Translate(x * moveSpeed * Time.deltaTime, y * moveSpeed * Time.deltaTime, z * moveSpeed * Time.deltaTime); // Move
         */
-        if (Time.time - moveDelay < moveSpeed)
+        if (moveDelay) // Ignore movement input
             return;
         Vector3 movePosition = transform.position + new Vector3(x, y, z); // Change to fixed space movement later
         Collider[] collisions = Physics.OverlapBox(movePosition, new Vector3(0.5f, 0.5f, 0.5f)); // Check for obstacles
@@ -104,16 +108,17 @@ public class Player : MonoBehaviour
                 return;
             }
         }
-        moveDelay = Time.time;
         newPosition = new Vector3(x, y, z);
-        Debug.Log("newPosition: " + newPosition);
         playerCube.MoveAnimation(); // Play movement animation
     }
 
     public void TranslatePlayer()
     {
+        Debug.Log("Reached here");
+        moveDelay = false;
         movesMade++;
-        transform.Translate(newPosition); // Move
+        transform.position += newPosition; // Move
+        perpsCamera.CameraMove(newPosition);
     }
 
     private void NextLife() // Called by animation event at end of shrink "death" animation
