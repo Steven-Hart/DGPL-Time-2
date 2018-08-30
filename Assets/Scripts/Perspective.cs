@@ -10,6 +10,7 @@ public class Perspective : MonoBehaviour
 {
     public Perspectives selectedPerspective;
     public Transform playerTransform;
+    public Vector3 originPosition;
         
     void Start()
     {
@@ -38,10 +39,16 @@ public class Perspective : MonoBehaviour
                 GetComponent<Camera>().cullingMask = -1;
                 break;
         }
+        originPosition = transform.position;
     }
 
     public void CameraMove(Vector3 translatePosition)
     {
         transform.position += translatePosition;
+    }
+
+    public void CameraPositionReset()
+    {
+        transform.position = originPosition;
     }
 }
