@@ -114,7 +114,6 @@ public class Player : MonoBehaviour
 
     public void TranslatePlayer()
     {
-        Debug.Log("Reached here");
         moveDelay = false;
         movesMade++;
         transform.position += newPosition; // Move
