@@ -204,6 +204,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114929001283360274, guid: 0b751ee18e894b24eaffcfce880d8167,
+        type: 2}
+      propertyPath: colorMappings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4778186939353960, guid: 0b751ee18e894b24eaffcfce880d8167, type: 2}
       propertyPath: m_LocalPosition.x
       value: -12.716503
@@ -235,6 +240,17 @@ Prefab:
     - target: {fileID: 4778186939353960, guid: 0b751ee18e894b24eaffcfce880d8167, type: 2}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114929001283360274, guid: 0b751ee18e894b24eaffcfce880d8167,
+        type: 2}
+      propertyPath: colorMappings.Array.data[0].prefab
+      value: 
+      objectReference: {fileID: 1563170015956822, guid: aff7fc90f6f34df41b0951e5033045e1,
+        type: 2}
+    - target: {fileID: 114929001283360274, guid: 0b751ee18e894b24eaffcfce880d8167,
+        type: 2}
+      propertyPath: colorMappings.Array.data[0].color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0b751ee18e894b24eaffcfce880d8167, type: 2}
@@ -9756,7 +9772,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 2800000, guid: f860745fdd77ffe4489a1c6b9a1a09c2, type: 3}
-  colorMappings: []
+  colorMappings:
+  - color: {r: 0, g: 0, b: 0, a: 1}
+    prefab: {fileID: 1563170015956822, guid: aff7fc90f6f34df41b0951e5033045e1, type: 2}
 --- !u!4 &2108869946
 Transform:
   m_ObjectHideFlags: 0
