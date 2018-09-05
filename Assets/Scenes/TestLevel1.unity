@@ -88,7 +88,6 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
-    m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -5102,7 +5101,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4385687909762422, guid: 1f8b9523a78492b47a52c33c9710c5b4, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 4385687909762422, guid: 1f8b9523a78492b47a52c33c9710c5b4, type: 2}
       propertyPath: m_LocalPosition.z
@@ -5216,6 +5215,11 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114595156422314984, guid: 1f8b9523a78492b47a52c33c9710c5b4,
+        type: 2}
+      propertyPath: perpsCamera
+      value: 
+      objectReference: {fileID: 1460587156}
     m_RemovedComponents:
     - {fileID: 95448637726604422, guid: 1f8b9523a78492b47a52c33c9710c5b4, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 1f8b9523a78492b47a52c33c9710c5b4, type: 2}
@@ -8360,6 +8364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedPerspective: 2
   playerTransform: {fileID: 630420214}
+  originPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &1470924326
 GameObject:
   m_ObjectHideFlags: 0
