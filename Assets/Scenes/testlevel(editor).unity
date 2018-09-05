@@ -9756,6 +9756,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map: {fileID: 2800000, guid: f860745fdd77ffe4489a1c6b9a1a09c2, type: 3}
+  colorMappings: []
 --- !u!4 &2108869946
 Transform:
   m_ObjectHideFlags: 0
