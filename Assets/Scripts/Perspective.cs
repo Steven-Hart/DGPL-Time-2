@@ -10,15 +10,15 @@ public class Perspective : MonoBehaviour
 {
     public Perspectives selectedPerspective;
     public Transform playerTransform;
-    public Vector3 originPosition;
-        
+    public Vector3 originPosition, startPosition;
+
     void Start()
     {
         switch (selectedPerspective)
         {
             case Perspectives.Isometric: // Orthographic iso view
                 //transform.parent = playerTransform; // Camera moves with player
-                transform.position = new Vector3(-2, 8, -5); // Up for change when level is made
+                transform.position = startPosition; // Up for change when level is made
                 transform.rotation = Quaternion.Euler(45, 45, 0);
                 GetComponent<Camera>().orthographic = true;
                 GetComponent<Camera>().cullingMask = ~(1 << 8); // Hide 2D only layer
