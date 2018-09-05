@@ -27,7 +27,7 @@ public class LevelGenerator : MonoBehaviour {
 
         if (pixelColor.a == 0)
         {
-            // The pixel is transparent, igore.
+            // The pixel is transparent, ignore.
             return;
         }
 
@@ -35,10 +35,11 @@ public class LevelGenerator : MonoBehaviour {
         {
             if (colorMapping.color.Equals(pixelColor))
             {
-                Vector3 position = new Vector3(x, 0, z);
+                Vector3 position = new Vector3(2*x, -1.1f, 2*z); // Coordinate offsets need to be set for each object type
                 Instantiate(colorMapping.prefab, position, Quaternion.identity, transform);
+				break; // Break loop after match
             }
         }
-        Debug.Log(pixelColor);
+        //Debug.Log(pixelColor);
     }
 }
