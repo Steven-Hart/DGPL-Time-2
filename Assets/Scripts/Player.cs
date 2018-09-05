@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     public PlayerCube playerCube;
     public Perspective perpsCamera;
     public bool gameOver, ghostLife, moveDelay;
+	public Vector3 startPosition = new Vector3(4, 1.2f, 0);
 
     private Animator animator;
     private Vector3 newPosition;
@@ -134,7 +135,7 @@ public class Player : MonoBehaviour
     }
     private void ResetPos()
     {
-        transform.position = new Vector3(4, 1f, 0); // Start position.. Could make it a variable so spawn position can be adjusted eg. Checkpoints
+        transform.position = startPosition; // Start position, change variable for checkpoints
         perpsCamera.CameraPositionReset();
         movesMade = 0;
         animator.Play("Expand"); // Play spawn animation
