@@ -39,8 +39,8 @@ GameObject:
   - component: {fileID: 4474976155938952}
   - component: {fileID: 33357493271860060}
   - component: {fileID: 23207482689079412}
-  - component: {fileID: 95084395907650980}
   - component: {fileID: 114599555119776222}
+  - component: {fileID: 95208968901416038}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -60,8 +60,8 @@ GameObject:
   - component: {fileID: 135936506601938246}
   - component: {fileID: 23941367884951018}
   - component: {fileID: 114595156422314984}
-  - component: {fileID: 95448637726604422}
   - component: {fileID: 54979439964890154}
+  - component: {fileID: 95178579713037488}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -76,8 +76,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1461758646176416}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 4, y: 1.2, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 4552620300108188}
   - {fileID: 4474976155938952}
@@ -248,24 +248,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
---- !u!95 &95084395907650980
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1366552509201872}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 2045ab743805900498d352f491e00b2b, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 2
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
---- !u!95 &95448637726604422
+--- !u!95 &95178579713037488
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 1
@@ -275,6 +258,23 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: ad6eca340971fa245bae1966c9461626, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!95 &95208968901416038
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1366552509201872}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2045ab743805900498d352f491e00b2b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -293,7 +293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d98ad703cf9988f42a996323b185c2b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
+  moveSpeed: 0.25
   lives: 5
   lifetime: 0
   movesMade: 0
@@ -306,6 +306,11 @@ MonoBehaviour:
   winPanel: {fileID: 0}
   nextButton: {fileID: 0}
   playerCube: {fileID: 114599555119776222}
+  perpsCamera: {fileID: 0}
+  gameOver: 0
+  ghostLife: 0
+  moveDelay: 0
+  startPosition: {x: 4, y: 1.2, z: 0}
 --- !u!114 &114599555119776222
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -325,10 +330,10 @@ SphereCollider:
   m_GameObject: {fileID: 1461758646176416}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: -0.1, z: 0}
 --- !u!135 &135944770650748020
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -337,7 +342,7 @@ SphereCollider:
   m_GameObject: {fileID: 1206010077600252}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
