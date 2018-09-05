@@ -98,8 +98,6 @@ public class Player : MonoBehaviour
         }
         transform.Translate(x * moveSpeed * Time.deltaTime, y * moveSpeed * Time.deltaTime, z * moveSpeed * Time.deltaTime); // Move
         */
-        if (moveDelay) // Ignore movement input
-            return;
         Vector3 movePosition = transform.position + new Vector3(x, y, z); // Change to fixed space movement later
         Collider[] collisions = Physics.OverlapBox(movePosition, new Vector3(0.5f, 0.5f, 0.5f)); // Check for obstacles
         foreach (Collider col in collisions)
@@ -110,12 +108,12 @@ public class Player : MonoBehaviour
             }
         }
         newPosition = new Vector3(x, y, z);
+		moveDelay = true;
         playerCube.MoveAnimation(); // Play movement animation
     }
 
     public void TranslatePlayer()
     {
-        moveDelay = false;
         movesMade++;
         transform.position += newPosition; // Move
         perpsCamera.CameraMove(newPosition);

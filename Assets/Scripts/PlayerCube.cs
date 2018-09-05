@@ -18,9 +18,13 @@ public class PlayerCube : MonoBehaviour {
     public void MovePlayer() // To be called by animation event move down
     {
         player.TranslatePlayer();
-        player.moveDelay = false;
         transform.position = Vector3.zero;
         transform.rotation = Quaternion.identity;
         animator.Play("Idle");
     }
+
+	private void ResetDelay()
+	{
+		player.moveDelay = false;
+	}
 }
