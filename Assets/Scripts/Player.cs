@@ -116,7 +116,8 @@ public class Player : MonoBehaviour
     {
         movesMade++;
         transform.position += newPosition; // Move
-        perpsCamera.CameraMove(newPosition);
+        //perpsCamera.CameraMove(newPosition);
+        perpsCamera.TargetCameraPosition = newPosition;
     }
 
     private void NextLife() // Called by animation event at end of shrink "death" animation
