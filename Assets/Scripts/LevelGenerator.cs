@@ -10,7 +10,7 @@ public class LevelGenerator : MonoBehaviour {
         GenerateLevel();
 	}
 
-    void GenerateLevel()
+    public void GenerateLevel()
     {
         for (int x = 0; x < map.width; x++)
         {
@@ -21,7 +21,7 @@ public class LevelGenerator : MonoBehaviour {
         }
     }
 
-    void GenerateTile(int x, int z)
+    private void GenerateTile(int x, int z)
     {
         Color pixelColor = map.GetPixel(x,z); // Color of pixel in image 
 
@@ -35,7 +35,7 @@ public class LevelGenerator : MonoBehaviour {
         {
             if (colorMapping.color.Equals(pixelColor))
             {
-                Vector3 position = new Vector3(2*x, -1.1f, 2*z); // Coordinate offsets need to be set for each object type
+                Vector3 position = new Vector3(2*x, colorMapping.yOffset, 2*z); // Coordinate offsets need to be set for each object type
                 Instantiate(colorMapping.prefab, position, Quaternion.identity, transform);
 				return; // Break loop after match
             }
@@ -49,4 +49,5 @@ public class ColorToPrefab
 {
     public Color color;
     public GameObject prefab;
+    public float yOffset;
 }
