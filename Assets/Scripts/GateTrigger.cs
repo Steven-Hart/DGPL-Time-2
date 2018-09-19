@@ -2,7 +2,7 @@
 
 public class GateTrigger : MonoBehaviour
 {
-    public GameObject Gate;
+    public GameObject Link;
 
     void OnTriggerEnter(Collider collision)
     {
