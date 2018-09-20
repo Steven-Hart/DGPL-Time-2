@@ -8,7 +8,7 @@ public class GateTrigger : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            Gate.SetActive(false); // Disables gate
+            Link.SetActive(false); // Disables gate
             //Gate.SetActive(!Gate.activeSelf); // Toggles Gate
         }
     }
