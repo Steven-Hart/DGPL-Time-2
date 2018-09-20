@@ -16,11 +16,11 @@ public class LevelEditor : MonoBehaviour {
 
 	public void PlaceObject(int x, int y) 
 	{
-		Cell thisCell = workingMap.GetCell(x, y);
+		Cell thisCell = WorkingMap.GetCell(x, y);
 		switch(SelectedTool) // Special considerations for certain objects
 		{
 			case ObjectTypes.Player:
-				workingMap.PlayerSpawn = null;
+				WorkingMap.PlayerSpawn = null;
 				break;
 			case ObjectTypes.Enemy:
 				// Set up special and colour
@@ -66,6 +66,13 @@ public class LevelEditor : MonoBehaviour {
                     return null;
                 }
                 loadedMap.GetCell (x, y);
+                string lineRead = reader.ReadLine();
+                while(lineRead !=null)
+                {
+                    // Save Line Format: #,# ObjectType, Link, 
+                    
+                    lineRead = reader.ReadLine();
+                }
             }
 		}
 		catch (Exception e)
@@ -76,7 +83,8 @@ public class LevelEditor : MonoBehaviour {
 		}
 		return loadedMap;
 	}
-	public Map workingMap { get; set; } // The map being edited
+
+	public Map WorkingMap { get; set; } // The map being edited
 	public ObjectTypes SelectedTool { get; set; } // Current selected object type
 }
 public class Cell
