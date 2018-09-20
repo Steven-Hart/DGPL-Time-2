@@ -11,6 +11,7 @@ public class Perspective : MonoBehaviour
     public Perspectives selectedPerspective;
     public Transform playerTransform;
     public Vector3 originPosition, startPosition;
+    public bool CameraSmooth;
 
     private Vector3 _targetcameraposition;
 
@@ -41,16 +42,20 @@ public class Perspective : MonoBehaviour
                 GetComponent<Camera>().cullingMask = -1;
                 break;
         }
+        CameraSmooth = true;
         _targetcameraposition = originPosition = transform.position;
         
     }
 
     void Update()
     {
-        CameraMove(TargetCameraPosition);
+        if(CameraSmooth == true)
+        {
+            CameraMoveSmooth(TargetCameraPosition);
+        }
     }
 
-    public void CameraMove(Vector3 targetPosition)
+    public void CameraMoveSmooth(Vector3 targetPosition)
     {
         //Vector3 targetPosition = transform.position + translatePosition;
         Vector3 movePosition = new Vector3((targetPosition.x - transform.position.x)*0.1f, 0, (targetPosition.z - transform.position.z) * 0.1f);
@@ -58,6 +63,11 @@ public class Perspective : MonoBehaviour
         //Debug.Log(TargetCameraPosition);
         //transform.position += translatePosition;
 
+    }
+
+    public void CameraMove()
+    {
+        transform.position = TargetCameraPosition;
     }
 
     public Vector3 TargetCameraPosition
