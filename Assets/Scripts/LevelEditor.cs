@@ -8,11 +8,13 @@ public enum ObjectTypes
 	Ground,
 	Enemy,
 	Gate,
-	Trigger
+	Trigger,
+	Void
 }
 public class LevelEditor : MonoBehaviour {
 
-    public GameObject cellPrefab;   
+    public GameObject cellPrefab;
+	public GameObject playerPrefab, groundPrefab, enemyPrefab, gatePrefab, triggerPrefab; // Level building blocks
 
 	public void PlaceObject(int x, int y) 
 	{
@@ -37,6 +39,45 @@ public class LevelEditor : MonoBehaviour {
 		thisCell.ObjectType = SelectedTool;
 	}
 
+	private static bool ValidateCoordinates(string[] stringCoords, out int x, out int y)
+	{
+		x = y = -1;
+		if (int.TryParse(stringCoords[0], out x) && int.TryParse(stringCoords[1], out y)) // Loaded coordinate type check
+		{
+			if (x < 0 || x > Map.MapSize[0] || y < 0 || y > Map.MapSize[1]) // Loaded coordinate range check
+			{
+				Debug.Log("Coordinates outside of map bounds.");
+				return false;
+			}
+		}
+		else
+		{
+			Debug.Log("Coordinates are not numeric.");
+			return false;
+		}
+		return true;
+	}
+
+	private static ObjectTypes StringToObjectTypes(string stringType)
+	{
+		switch (stringType.ToLower())
+		{
+			case "player":
+				return ObjectTypes.Player;
+			case "enemy":
+				return ObjectTypes.Enemy;
+			case "gate":
+				return ObjectTypes.Gate;
+			case "trigger":
+				return ObjectTypes.Trigger;
+			case "ground":
+				return ObjectTypes.Ground;
+			case "void":
+			default:
+				return ObjectTypes.Void;
+		}
+	}
+
 	public static Map LoadLevel (string levelFile) 
 	{
         Map loadedMap = new Map();
@@ -46,27 +87,65 @@ public class LevelEditor : MonoBehaviour {
             {
                 loadedMap.Name = reader.ReadLine();
                 string[] spawn = reader.ReadLine().Split(','); // Format: x,y
-                int x, y = -1;
-                if (int.TryParse(spawn[1],out x) && int.TryParse(spawn[1], out y)) // Loaded coordinate type check
-                {
-                    if(x < 0 || x > loadedMap.MapSize[0] || y < 0 || y > loadedMap.MapSize[1]) // Loaded coordinate range check
-                    {
-                        Debug.Log("Coordinates outside of map bounds.");
-                        return null;
-                    }
-                }
-                else
-                {
-                    Debug.Log("Line 2: Spawn Coordinates are not numeric.");
-                    return null;
-                }
-                loadedMap.GetCell (x, y);
-                string lineRead = reader.ReadLine();
+                int x, y; // Coordinates
+
+				if (!ValidateCoordinates(spawn, out x, out y))
+				{
+					Debug.Log("Invalid player spawn point.");
+					return null;
+				}
+				loadedMap.GetCell(x, y).ObjectType = ObjectTypes.Player;
+
+				string lineRead = reader.ReadLine();
+				int lineNumber = 3;
                 while(lineRead !=null)
                 {
-                    // Save Line Format: #,# ObjectType,Direction,Link,Special
+					// Save Line Format: #,# ObjectType,Direction,Link,Special
 					// Mandatory: #,# ObjectType,Direction
-                    lineRead = reader.ReadLine();
+					string[] lineSplit = lineRead.Split(' ');
+					if (ValidateCoordinates(lineSplit[0].Split(','), out x, out y))
+					{
+						string[] cellSplit = lineSplit[1].Split(',');
+						Cell loadCell= loadedMap.GetCell(x, y);
+						switch (cellSplit.Length)
+						{
+							case 1:
+								Debug.Log("Line " + lineNumber + ": Invalid Number of cell Attributes.");
+								break;
+							default:
+							case 5:
+								// Load special script (future-proofing)
+								goto case 4;
+							case 4:
+								// Load object link
+								if (!ValidateCoordinates(new string[] { cellSplit[2], cellSplit[3] }, out x, out y))
+								{
+									Debug.Log("Line " + lineNumber + ": Invalid link coordinates.");
+								}
+								else
+								{
+									loadCell.Link = new int[2] { x, y };
+								}
+								goto case 2; // The forbidden goto because of C# limitations
+							case 3:
+							case 2:
+								// Load object direction
+								short direction = 0;
+								short.TryParse(cellSplit[1], out direction);
+								loadCell.Direction = direction;
+
+								// Load type
+								loadCell.ObjectType = StringToObjectTypes(cellSplit[0]);
+								break;
+						}
+					}
+					else
+					{
+						Debug.Log("Line " + lineNumber + ": Invalid coordinates.");
+					}
+
+					lineNumber++;
+					lineRead = reader.ReadLine();
                 }
             }
 		}
@@ -110,13 +189,13 @@ public class Cell
 {
 	public short Direction { get; set; } // 0 Up, 1 Down, 2 Left, 3 Right 
 	public ObjectTypes ObjectType { get; set; } // Null = empty cell
-	public GameObject Link { get; set; } // For triggers
-	public MonoBehaviour Special { get; set; } // Special enemies.. maybe consumables?
+	public int[] Link { get; set; } // For triggers
+	public MonoBehaviour Special { get; set; } // Special enemies.. maybe consumables? Future-proofing
 }
 
 public class Map {
     private Cell[,] map = new Cell[12,12];
-    private int[] mapSize = new int[] {12,12};
+    private static int[] mapSize = new int[] {12,12}; // If we decide to change size limit later on.
 
     public Map()
     {
@@ -134,7 +213,7 @@ public class Map {
 	
 	public string Name { get; set; }
 	public Cell PlayerSpawn { get; set; } // To check if player spawn already exists
-    public int[] MapSize
+    public static int[] MapSize
     {
         get { return mapSize; }
     }
