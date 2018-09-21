@@ -42,19 +42,14 @@ public class LevelEditor : MonoBehaviour {
         Map loadedMap = new Map();
 		try
 		{
-			if (!File.Exists(levelFile)) // Check if file exists
-            {
-                Debug.Log("\""+ levelFile + "\"" + " does not exist.");
-                return null;
-            }
             using (StreamReader reader = File.OpenText(levelFile))
             {
                 loadedMap.Name = reader.ReadLine();
-                string[] spawn = reader.ReadLine().Split(',');
+                string[] spawn = reader.ReadLine().Split(','); // Format: x,y
                 int x, y = -1;
-                if (int.TryParse(spawn[1],out x) || int.TryParse(spawn[1], out y))
+                if (int.TryParse(spawn[1],out x) && int.TryParse(spawn[1], out y)) // Loaded coordinate type check
                 {
-                    if(x < 0 || x > loadedMap.MapSize[0] || y < 0 || y > loadedMap.MapSize[1])
+                    if(x < 0 || x > loadedMap.MapSize[0] || y < 0 || y > loadedMap.MapSize[1]) // Loaded coordinate range check
                     {
                         Debug.Log("Coordinates outside of map bounds.");
                         return null;
@@ -69,24 +64,48 @@ public class LevelEditor : MonoBehaviour {
                 string lineRead = reader.ReadLine();
                 while(lineRead !=null)
                 {
-                    // Save Line Format: #,# ObjectType, Link, 
-                    
+                    // Save Line Format: #,# ObjectType,Direction,Link,Special
+					// Mandatory: #,# ObjectType,Direction
                     lineRead = reader.ReadLine();
                 }
             }
 		}
+		catch (FileNotFoundException e)
+		{
+			Debug.Log("\"" + levelFile + "\"" + " does not exist.");
+			Debug.Log(e.Message);
+			return null;
+		}
+		catch (FileLoadException e)
+		{
+			Debug.Log("\"" + levelFile + "\"" + " cannot be loaded.");
+			Debug.Log(e.Message);
+			return null;
+		}
 		catch (Exception e)
 		{
-            // Need to work on more specific exception catching..
             Debug.Log(e.Message);
             return null;
 		}
 		return loadedMap;
 	}
 
+	public static bool SaveLevel (Map mapToSave)
+	{
+
+		return true;
+	}
+
+	public static bool BuildLevel(Map mapToBuild)
+	{
+
+		return true;
+	}
+
 	public Map WorkingMap { get; set; } // The map being edited
 	public ObjectTypes SelectedTool { get; set; } // Current selected object type
 }
+
 public class Cell
 {
 	public short Direction { get; set; } // 0 Up, 1 Down, 2 Left, 3 Right 
@@ -94,13 +113,14 @@ public class Cell
 	public GameObject Link { get; set; } // For triggers
 	public MonoBehaviour Special { get; set; } // Special enemies.. maybe consumables?
 }
+
 public class Map {
     private Cell[,] map = new Cell[12,12];
     private int[] mapSize = new int[] {12,12};
 
     public Map()
     {
-        Name = "";
+        Name = "UntitledMap";
     }
 	public Map(string name)
 	{
