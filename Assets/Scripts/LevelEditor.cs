@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum ObjectTypes
@@ -14,7 +15,7 @@ public enum ObjectTypes
 public class LevelEditor : MonoBehaviour {
 
     public GameObject cellPrefab;
-	public GameObject playerPrefab, groundPrefab, enemyPrefab, gatePrefab, triggerPrefab; // Level building blocks
+	public static GameObject playerPrefab, groundPrefab, enemyPrefab, gatePrefab, triggerPrefab; // Level building blocks
 
 	void Start()
 	{
@@ -22,7 +23,7 @@ public class LevelEditor : MonoBehaviour {
 		SelectedTool = ObjectTypes.Ground;
 	}
 
-	public void PlaceObject(int x, int y) 
+	public void PlaceObject(int x, int y) // Place data into cell button
 	{
 		Cell thisCell = WorkingMap.GetCell(x, y);
 		switch(SelectedTool) // Special considerations for certain objects
@@ -45,28 +46,38 @@ public class LevelEditor : MonoBehaviour {
 		thisCell.ObjectType = SelectedTool;
 	}
 
-	private static void CreateObject(int x, int y, Cell cellToBuild)
+	private static GameObject CreateObject(int x, int y, Cell cellToBuild, Transform parent) // Create objects in scene
 	{
 		float objectY = 0;
-		Vector3 cellPosition = new Vector3(2*x, objectY, 2*y);
 		Quaternion objectRotation = Quaternion.identity;
+		GameObject prefabToPlace;
 		switch(cellToBuild.ObjectType) // Special considerations for certain objects
 		{
 			case ObjectTypes.Player:
 				objectY = 2.2f;
+                prefabToPlace = playerPrefab;
 				break;
 			case ObjectTypes.Enemy:
+                prefabToPlace = enemyPrefab;
+				break;
 			case ObjectTypes.Gate:
 				objectY = 2.0f;
 				objectRotation = Quaternion.Euler(0, cellToBuild.Direction * 90, 0);
-				break;
+                prefabToPlace = gatePrefab;
+                break;
 			case ObjectTypes.Trigger:
 				objectY =1f;
-				
+                prefabToPlace = playerPrefab;
 				break;
-			default:
-				break;
+			case ObjectTypes.Ground:
+                Instantiate(groundPrefab, new Vector3(2 * x, 0, 2 * y), Quaternion.identity, parent);
+				goto default;
+			case ObjectTypes.Void: // if no object exists in the cell
+            default:
+				return null;
 		}
+		Instantiate(groundPrefab, new Vector3(2 * x, 0, 2 * y), Quaternion.identity, parent); // The ground under object
+		return Instantiate(prefabToPlace, new Vector3(2 * x, objectY, 2 * y), objectRotation, parent); // The object itself
 	}
 
 	private static bool ValidateCoordinates(string[] stringCoords, out int x, out int y)
@@ -272,17 +283,44 @@ public class LevelEditor : MonoBehaviour {
 		return true;
 	}
 
-	public static bool BuildLevel(Map mapToBuild)
+	public static bool BuildLevel(Map mapToBuild, Transform parent)
 	{
-		try
+        GameObject[,] objectMap = new GameObject[Map.MapSize[0], Map.MapSize[1]]; // For establishing object links
+        Dictionary<int[], int[]> linkStorage = new Dictionary<int[], int[]>(); // Store link information from map
+
+        try
 		{
 			for (int x = 0; x < Map.MapSize[0]; x++)
 			{
 				for (int y = 0; y < Map.MapSize[1]; y++)
 				{
-					CreateObject(x,y, mapToBuild.GetCell(x,y));
+					Cell cellToBuild = mapToBuild.GetCell(x, y);
+                    objectMap[x,y] = CreateObject(x, y, cellToBuild, parent);
+					int[] objectLink = cellToBuild.Link; // Store link to link after all objects are built
+					if (objectLink[0] >= 0 && objectLink[1] >= 0)
+					{
+						linkStorage.Add(new int[] {x, y}, objectLink); // Save coords of linked objects
+					}
 				}
 			}
+            for (int x = 0; x < Map.MapSize[0]; x++)
+            {
+                for (int y = 0; y < Map.MapSize[1]; y++)
+                {
+					int[] currentCoords = new int[] { x, y };
+                    if(linkStorage.ContainsKey(currentCoords))
+					{
+						GameObject linkSource = objectMap[x,y]; // Get source object
+						int [] linkCoords = linkStorage[currentCoords]; // Get coords of object its linked to
+						GameObject linkDestination = objectMap[linkCoords[0], linkCoords[1]]; // Get linked object
+
+						GateTrigger gateSource = linkSource.GetComponent<GateTrigger>(); // Check if source object is a gate
+						if(gateSource == null) // If not gate then next cell
+							continue;
+						gateSource.Link = linkDestination; // Set object to disable by trigger
+					}
+                }
+            }
 		}
 		catch (Exception e)
 		{
