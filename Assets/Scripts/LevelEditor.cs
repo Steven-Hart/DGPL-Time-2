@@ -16,11 +16,30 @@ public class LevelEditor : MonoBehaviour {
 
     public GameObject cellPrefab;
 	public static GameObject playerPrefab, groundPrefab, enemyPrefab, gatePrefab, triggerPrefab; // Level building blocks
-
+	public UnityEngine.UI.Button playerButton, groundButton, voidButton, enemyButton, gateButton, triggerButton, setNameButton;
 	void Start()
 	{
 		WorkingMap = new Map();
 		SelectedTool = ObjectTypes.Ground;
+        // Level Editor UI
+        playerButton.onClick.AddListener(delegate{ChangeTool(ObjectTypes.Player);});
+        groundButton.onClick.AddListener(delegate{ChangeTool(ObjectTypes.Ground);});
+        enemyButton.onClick.AddListener(delegate{ChangeTool(ObjectTypes.Enemy);});
+        gateButton.onClick.AddListener(delegate { ChangeTool(ObjectTypes.Gate); });
+        triggerButton.onClick.AddListener(delegate { ChangeTool(ObjectTypes.Trigger); });
+        voidButton.onClick.AddListener(delegate { ChangeTool(ObjectTypes.Void); });
+        setNameButton.onClick.AddListener(ChangeMapNameFromTextBox);
+		// TODO play button, load from file, save to file.
+	}
+
+	public void ChangeTool(ObjectTypes target) // For buttons
+	{
+		SelectedTool = target;
+	}
+
+	public void ChangeMapNameFromTextBox() // Need textbox and setNameButton
+	{
+		
 	}
 
 	public void PlaceObject(int x, int y) // Place data into cell button
@@ -29,13 +48,17 @@ public class LevelEditor : MonoBehaviour {
 		switch(SelectedTool) // Special considerations for certain objects
 		{
 			case ObjectTypes.Player:
-
+				if(WorkingMap.PlayerSpawn != thisCell)
+				{
+					WorkingMap.PlayerSpawn = thisCell;
+					WorkingMap.PlayerSpawnCoordinate = new int[] {x,y};
+				}
 				break;
 			case ObjectTypes.Enemy:
 				// Set up special and colour
 				break;
 			case ObjectTypes.Gate:
-				// Set up link? and colour
+				// Set up color
 				break;
 			case ObjectTypes.Trigger:
 				// Set up link and colour
