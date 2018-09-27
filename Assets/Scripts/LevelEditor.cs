@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum ObjectTypes
 {
@@ -14,59 +15,157 @@ public enum ObjectTypes
 }
 public class LevelEditor : MonoBehaviour {
 
-    public GameObject cellPrefab;
+	public enum ToolTypes
+	{
+		Player,
+		Ground,
+		Enemy,
+		Gate,
+		Trigger,
+		Void,
+		Edit,
+		Link,
+		Rotate
+	}
+    public GameObject cellPrefab, mapParent, editDialog;
 	public static GameObject playerPrefab, groundPrefab, enemyPrefab, gatePrefab, triggerPrefab; // Level building blocks
-	public UnityEngine.UI.Button playerButton, groundButton, voidButton, enemyButton, gateButton, triggerButton, setNameButton;
+	public Button playerButton, groundButton, voidButton, enemyButton, gateButton, triggerButton, setNameButton, testButton;
+	
+	private GameObject[,] cellButtons = new GameObject[Map.MapSize[0], Map.MapSize[1]];
+
 	void Start()
 	{
 		WorkingMap = new Map();
-		SelectedTool = ObjectTypes.Ground;
+		SelectedTool = ToolTypes.Ground;
+		BuildUI();
         // Level Editor UI
-        playerButton.onClick.AddListener(delegate{ChangeTool(ObjectTypes.Player);});
-        groundButton.onClick.AddListener(delegate{ChangeTool(ObjectTypes.Ground);});
-        enemyButton.onClick.AddListener(delegate{ChangeTool(ObjectTypes.Enemy);});
-        gateButton.onClick.AddListener(delegate { ChangeTool(ObjectTypes.Gate); });
-        triggerButton.onClick.AddListener(delegate { ChangeTool(ObjectTypes.Trigger); });
-        voidButton.onClick.AddListener(delegate { ChangeTool(ObjectTypes.Void); });
+        playerButton.onClick.AddListener(delegate{ChangeTool(ToolTypes.Player);});
+        groundButton.onClick.AddListener(delegate{ChangeTool(ToolTypes.Ground);});
+        enemyButton.onClick.AddListener(delegate{ChangeTool(ToolTypes.Enemy);});
+        gateButton.onClick.AddListener(delegate{ChangeTool(ToolTypes.Gate);});
+        triggerButton.onClick.AddListener(delegate{ChangeTool(ToolTypes.Trigger);});
+        voidButton.onClick.AddListener(delegate{ChangeTool(ToolTypes.Void);});
         setNameButton.onClick.AddListener(ChangeMapNameFromTextBox);
 		// TODO play button, load from file, save to file.
 	}
 
-	public void ChangeTool(ObjectTypes target) // For buttons
+	private void BuildUI()
+	{
+		Vector3 startCellPosition = new Vector3(-774f, -646f,0f); // x spacing: 105, y spacing: 105
+		for (int y = 0; y < Map.MapSize[1]; y++)
+		{
+			for (int x = 0; x < Map.MapSize[0]; x++)
+			{
+				GameObject builtCell = Instantiate(cellPrefab, transform, false); // Instantiate cell
+				cellButtons[x,y] = builtCell;
+				builtCell.transform.localPosition =new Vector3(-774f + (105 * x), -646f + (105 * y), 0); // Set position relative to parent
+				builtCell.GetComponent<Button>().onClick.AddListener(delegate { EditCell(x, y, builtCell); }); // Set button function
+			}
+		}
+	}
+
+	public void ChangeTool(ToolTypes target) // For buttons
 	{
 		SelectedTool = target;
 	}
 
 	public void ChangeMapNameFromTextBox() // Need textbox and setNameButton
 	{
-		
+		// Need to create a text box
 	}
 
-	public void PlaceObject(int x, int y) // Place data into cell button
+	public void EditCell(int x, int y, GameObject cellClicked) // Place data into cell button
 	{
 		Cell thisCell = WorkingMap.GetCell(x, y);
 		switch(SelectedTool) // Special considerations for certain objects
 		{
-			case ObjectTypes.Player:
+			case ToolTypes.Player:
 				if(WorkingMap.PlayerSpawn != thisCell)
 				{
 					WorkingMap.PlayerSpawn = thisCell;
 					WorkingMap.PlayerSpawnCoordinate = new int[] {x,y};
 				}
+
+				GameObject oldSpawn = cellButtons[x,y];
+				// Change button image display
 				break;
-			case ObjectTypes.Enemy:
+			case ToolTypes.Enemy:
+				if (thisCell.ObjectType == ObjectTypes.Enemy)
+				{
+					return;
+				}
+				thisCell.ObjectType = ObjectTypes.Enemy;
+
 				// Set up special and colour
 				break;
-			case ObjectTypes.Gate:
+			case ToolTypes.Gate:
+				if (thisCell.ObjectType == ObjectTypes.Gate)
+				{
+					return;
+				}
+				thisCell.ObjectType = ObjectTypes.Gate;
+
 				// Set up color
 				break;
-			case ObjectTypes.Trigger:
+			case ToolTypes.Trigger:
+				if (thisCell.ObjectType == ObjectTypes.Trigger)
+				{
+					return;
+				}
+				thisCell.ObjectType = ObjectTypes.Trigger;
+			
 				// Set up link and colour
 				break;
-			default:
+			case ToolTypes.Ground:
+				if (thisCell.ObjectType == ObjectTypes.Ground)
+				{
+					return;
+				}
+				thisCell.ObjectType = ObjectTypes.Ground;
+
+				// Ground with no object on it.
 				break;
+			case ToolTypes.Void:
+				if (thisCell.ObjectType == ObjectTypes.Void)
+				{
+					return;
+				}
+				thisCell.ObjectType = ObjectTypes.Void;
+
+				// Clear button and cell on map
+				break;
+			case ToolTypes.Edit:
+				if (thisCell.ObjectType != ObjectTypes.Enemy || thisCell.ObjectType != ObjectTypes.Gate || thisCell.ObjectType != ObjectTypes.Trigger)
+				{
+					return;
+				}
+
+				editDialog.SetActive(true);
+
+				// Need to pass cell to edit into dialog script
+				// Edit tool - link and colour
+				return;
+			case ToolTypes.Rotate:
+				if(thisCell.ObjectType != ObjectTypes.Enemy || thisCell.ObjectType != ObjectTypes.Gate)
+				{
+					return;
+				}
+
+				thisCell.Direction += 1; // Rotate clockwise
+				if (thisCell.Direction > 3)
+				{
+					thisCell.Direction = 0; // Wrap around to 0
+				}
+
+				// Rotate button image
+				// Rotate tool - only for certain objects
+				return;
+			default:
+				return;
 		}
-		thisCell.ObjectType = SelectedTool;
+		thisCell.Direction = 0;
+		thisCell.Link = new int[] { -1, -1 }; // Need to remove possible links to this object
+		thisCell.Special = null;
 	}
 
 	private static GameObject CreateObject(int x, int y, Cell cellToBuild, Transform parent) // Create objects in scene
@@ -354,7 +453,7 @@ public class LevelEditor : MonoBehaviour {
 	}
 
 	public Map WorkingMap { get; set; } // The map being edited
-	public ObjectTypes SelectedTool { get; set; } // Current selected object type
+	public ToolTypes SelectedTool { get; set; } // Current selected object type
 }
 
 public class Cell
@@ -367,7 +466,7 @@ public class Cell
 		Special = null;
 	}
 
-	public short Direction { get; set; } // 0 Up, 1 Down, 2 Left, 3 Right 
+	public short Direction { get; set; } // 0 Up, 1 Right, 2 Down, 3 Left 
 	public ObjectTypes ObjectType { get; set; } // Null = empty cell
 	public int[] Link { get; set; } // For triggers
 	public MonoBehaviour Special { get; set; } // Special enemies.. maybe consumables? Future-proofing
