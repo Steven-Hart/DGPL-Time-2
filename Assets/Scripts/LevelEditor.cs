@@ -11,6 +11,7 @@ public enum ObjectTypes
 	Enemy,
 	Gate,
 	Trigger,
+	End,
 	Void
 }
 public class LevelEditor : MonoBehaviour {
@@ -22,16 +23,17 @@ public class LevelEditor : MonoBehaviour {
 		Enemy,
 		Gate,
 		Trigger,
+		End,
 		Void,
 		Edit,
 		Link,
 		Rotate
 	}
     public GameObject cellPrefab, mapParent, editDialog;
-	public static GameObject playerPrefab, groundPrefab, enemyPrefab, gatePrefab, triggerPrefab; // Level building blocks
-	public Button playerButton, groundButton, voidButton, enemyButton, gateButton, triggerButton, setNameButton, testButton;
+	public Button playerButton, groundButton, voidButton, enemyButton, gateButton, triggerButton, editButton, rotateButton, setNameButton, testButton, endButton;
 	
 	private GameObject[,] cellButtons = new GameObject[Map.MapSize[0], Map.MapSize[1]];
+	private static Color32 playerColour = new Color32(13, 144, 19, 255), groundColour = new Color32(131, 131, 131, 255), gateColour = new Color32(24,236,255,255), enemyColour = new Color32(237, 28, 36, 255), triggerColour = new Color32(255,156,23, 255), endColour = new Color32(0,255,0, 255);
 
 	void Start()
 	{
@@ -44,14 +46,18 @@ public class LevelEditor : MonoBehaviour {
         enemyButton.onClick.AddListener(delegate{ChangeTool(ToolTypes.Enemy);});
         gateButton.onClick.AddListener(delegate{ChangeTool(ToolTypes.Gate);});
         triggerButton.onClick.AddListener(delegate{ChangeTool(ToolTypes.Trigger);});
+		editButton.onClick.AddListener(delegate{ChangeTool(ToolTypes.Edit);});
+		rotateButton.onClick.AddListener(delegate{ChangeTool(ToolTypes.Rotate);});
+        endButton.onClick.AddListener(delegate {ChangeTool(ToolTypes.End);});
         voidButton.onClick.AddListener(delegate{ChangeTool(ToolTypes.Void);});
         setNameButton.onClick.AddListener(ChangeMapNameFromTextBox);
+		testButton.onClick.AddListener(delegate{BuildLevel(WorkingMap, transform);});
 		// TODO play button, load from file, save to file.
 	}
 
 	private void BuildUI()
 	{
-		Vector3 startCellPosition = new Vector3(-774f, -646f,0f); // x spacing: 105, y spacing: 105
+		//Vector3 startCellPosition = new Vector3(-774f, -646f,0f); // x spacing: 105, y spacing: 105
 		for (int y = 0; y < Map.MapSize[1]; y++)
 		{
 			for (int x = 0; x < Map.MapSize[0]; x++)
@@ -59,7 +65,9 @@ public class LevelEditor : MonoBehaviour {
 				GameObject builtCell = Instantiate(cellPrefab, transform, false); // Instantiate cell
 				cellButtons[x,y] = builtCell;
 				builtCell.transform.localPosition =new Vector3(-774f + (105 * x), -646f + (105 * y), 0); // Set position relative to parent
-				builtCell.GetComponent<Button>().onClick.AddListener(delegate { EditCell(x, y, builtCell); }); // Set button function
+				int newX =x, newY = y;
+				GameObject currentCell = builtCell;
+				builtCell.GetComponent<Button>().onClick.AddListener(delegate{EditCell(newX, newY, currentCell);}); // Set button function
 			}
 		}
 	}
@@ -67,6 +75,7 @@ public class LevelEditor : MonoBehaviour {
 	public void ChangeTool(ToolTypes target) // For buttons
 	{
 		SelectedTool = target;
+		Debug.Log(SelectedTool);
 	}
 
 	public void ChangeMapNameFromTextBox() // Need textbox and setNameButton
@@ -76,17 +85,27 @@ public class LevelEditor : MonoBehaviour {
 
 	public void EditCell(int x, int y, GameObject cellClicked) // Place data into cell button
 	{
+		Debug.Log("Coords:" + x + "," + y + " cellClicked: " + cellClicked);
 		Cell thisCell = WorkingMap.GetCell(x, y);
 		switch(SelectedTool) // Special considerations for certain objects
 		{
 			case ToolTypes.Player:
+				if (WorkingMap.PlayerSpawnCoordinate[1] < cellButtons.GetLength(1) && WorkingMap.PlayerSpawnCoordinate[0] < cellButtons.GetLength(0) && WorkingMap.PlayerSpawnCoordinate[0] >= 0&& WorkingMap.PlayerSpawnCoordinate[0] >= 0)
+				{ // Remove old spawn point
+                    GameObject oldSpawn = cellButtons[WorkingMap.PlayerSpawnCoordinate[0], WorkingMap.PlayerSpawnCoordinate[1]];
+                    oldSpawn.GetComponent<Image>().color = groundColour;
+				}
 				if(WorkingMap.PlayerSpawn != thisCell)
 				{
+					if (WorkingMap.PlayerSpawn != null)
+                    {
+                        WorkingMap.PlayerSpawn.ObjectType = ObjectTypes.Ground; // Replacing old spawn points with ground
+					}
 					WorkingMap.PlayerSpawn = thisCell;
 					WorkingMap.PlayerSpawnCoordinate = new int[] {x,y};
 				}
 
-				GameObject oldSpawn = cellButtons[x,y];
+				cellClicked.GetComponent<Image>().color = playerColour;
 				// Change button image display
 				break;
 			case ToolTypes.Enemy:
@@ -96,6 +115,7 @@ public class LevelEditor : MonoBehaviour {
 				}
 				thisCell.ObjectType = ObjectTypes.Enemy;
 
+				cellClicked.GetComponent<Image>().color = enemyColour;
 				// Set up special and colour
 				break;
 			case ToolTypes.Gate:
@@ -105,6 +125,7 @@ public class LevelEditor : MonoBehaviour {
 				}
 				thisCell.ObjectType = ObjectTypes.Gate;
 
+                cellClicked.GetComponent<Image>().color = gateColour;
 				// Set up color
 				break;
 			case ToolTypes.Trigger:
@@ -113,7 +134,8 @@ public class LevelEditor : MonoBehaviour {
 					return;
 				}
 				thisCell.ObjectType = ObjectTypes.Trigger;
-			
+
+                cellClicked.GetComponent<Image>().color = triggerColour;
 				// Set up link and colour
 				break;
 			case ToolTypes.Ground:
@@ -123,8 +145,30 @@ public class LevelEditor : MonoBehaviour {
 				}
 				thisCell.ObjectType = ObjectTypes.Ground;
 
+                cellClicked.GetComponent<Image>().color = groundColour;
 				// Ground with no object on it.
 				break;
+            case ToolTypes.End:
+                if (WorkingMap.EndCellCoordinate[1] < cellButtons.GetLength(1) && WorkingMap.EndCellCoordinate[0] < cellButtons.GetLength(0) && WorkingMap.EndCellCoordinate[0] >= 0 && WorkingMap.EndCellCoordinate[0] >= 0)
+                {	// Remove old end point
+                    GameObject oldEnd = cellButtons[WorkingMap.EndCellCoordinate[0], WorkingMap.EndCellCoordinate[1]];
+                    oldEnd.GetComponent<Image>().color = groundColour;
+                }
+                
+                if (thisCell.ObjectType == ObjectTypes.End)
+                {
+					if (WorkingMap.EndCell != null)
+                    {
+                        WorkingMap.EndCell.ObjectType = ObjectTypes.Ground; // Replace old end point with ground
+					}
+					WorkingMap.EndCell = thisCell;
+					WorkingMap.EndCellCoordinate = new int[] {x,y};
+                }
+                thisCell.ObjectType = ObjectTypes.End;
+
+                cellClicked.GetComponent<Image>().color = endColour;
+                // Ground with no object on it.
+                break;
 			case ToolTypes.Void:
 				if (thisCell.ObjectType == ObjectTypes.Void)
 				{
@@ -132,6 +176,7 @@ public class LevelEditor : MonoBehaviour {
 				}
 				thisCell.ObjectType = ObjectTypes.Void;
 
+                cellClicked.GetComponent<Image>().color = Color.white;
 				// Clear button and cell on map
 				break;
 			case ToolTypes.Edit:
@@ -191,6 +236,10 @@ public class LevelEditor : MonoBehaviour {
 				objectY =1f;
                 prefabToPlace = playerPrefab;
 				break;
+            case ObjectTypes.End:
+                objectY = 1f;
+                prefabToPlace = endPrefab;
+                break;
 			case ObjectTypes.Ground:
                 Instantiate(groundPrefab, new Vector3(2 * x, 0, 2 * y), Quaternion.identity, parent);
 				goto default;
@@ -235,14 +284,16 @@ public class LevelEditor : MonoBehaviour {
 				return ObjectTypes.Trigger;
 			case "ground":
 				return ObjectTypes.Ground;
+            case "end":
+                return ObjectTypes.End;
 			case "void":
 			default:
 				return ObjectTypes.Void;
 		}
 	}
 
-	public static Map LoadLevel (string levelFile) 
-	{
+	public static Map LoadLevel (string levelFile)  // TODO: end object load
+    {
         Map loadedMap = new Map();
 		try
 		{
@@ -333,7 +384,7 @@ public class LevelEditor : MonoBehaviour {
 		return loadedMap;
 	}
 
-	public static bool SaveLevel (Map mapToSave, string savePath)
+	public static bool SaveLevel (Map mapToSave, string savePath) // TODO: end object save
 	{
 		try
 		{
@@ -373,6 +424,9 @@ public class LevelEditor : MonoBehaviour {
 							case ObjectTypes.Ground:
 								saveLine += " ground";
 								break;
+                            case ObjectTypes.End:
+                                saveLine += " end";
+                                break;
 						}
 						writer.WriteLine(saveLine);
 					}
@@ -473,18 +527,32 @@ public class Cell
 }
 
 public class Map {
-    private Cell[,] map = new Cell[12,12];
+    private Cell[,] map = new Cell[12, 12];
     private static int[] mapSize = new int[] {12,12}; // If we decide to change size limit later on.
 
 	public Map()
     {
         Name = "UntitledMap";
-		PlayerSpawnCoordinate = new int[2] { -1, -1 };
+		PlayerSpawnCoordinate = EndCellCoordinate = new int[2] { -1, -1 };
+		for (int x = 0; x < mapSize[0]; x++)
+		{
+            for (int y = 0; y < mapSize[0]; y++)
+            {
+				map[x,y] = new Cell();
+            }
+		}
     }
 	public Map(string name)
 	{
 		Name = name;
-		PlayerSpawnCoordinate = new int[2] { -1, -1 };
+        PlayerSpawnCoordinate = EndCellCoordinate = new int[2] { -1, -1 };
+        for (int x = 0; x < mapSize[0]; x++)
+        {
+            for (int y = 0; y < mapSize[0]; y++)
+            {
+                map[x, y] = new Cell();
+            }
+        }
 	}
 
 	public Cell GetCell(int x, int y) // Returns cell of selected coordinate on map
@@ -495,6 +563,8 @@ public class Map {
 	public string Name { get; set; }
 	public Cell PlayerSpawn { get; set; } // To check if player spawn already exists
 	public int [] PlayerSpawnCoordinate { get; set; }
+	public Cell EndCell {get; set;}
+	public int[] EndCellCoordinate {get; set;}
 	public static int[] MapSize
     {
         get { return mapSize; }
