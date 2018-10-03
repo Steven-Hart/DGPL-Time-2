@@ -101,6 +101,7 @@ MonoBehaviour:
   playerTransform: {fileID: 0}
   originPosition: {x: 0, y: 0, z: 0}
   startPosition: {x: -8, y: 15, z: -10}
+  CameraSmooth: 0
 --- !u!124 &124610319350678854
 Behaviour:
   m_ObjectHideFlags: 1

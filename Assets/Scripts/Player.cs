@@ -6,9 +6,10 @@ public class Player : MonoBehaviour
     public UnityEngine.UI.Text lifeTimer, lifeCount, WinLife, WinTime, WinText;
     public GameObject winPanel, nextButton;
     public PlayerCube playerCube;
-    public Perspective perpsCamera;
+    //public Perspective perpsCamera;
     public bool gameOver, ghostLife, moveDelay;
 	public Vector3 startPosition = new Vector3(4, 1.2f, 0);
+    public float scaledMoveDistance;
 
     private Animator animator;
     private Vector3 newPosition;
@@ -18,6 +19,7 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
         lifetime = Time.time; // Start of game for scoring
         ghostLife = false;
+        scaledMoveDistance = 1;
     }
 
     void Update()
@@ -47,22 +49,22 @@ public class Player : MonoBehaviour
         if (inputVertical > 0) // Up
         {
             transform.rotation = Quaternion.Euler(0,180,0);
-            MovePlayer(2, 0, 0);
+            MovePlayer(scaledMoveDistance, 0, 0);
         }
         else if (inputVertical < 0) // Down
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
-            MovePlayer(-2, 0, 0);
+            MovePlayer(-scaledMoveDistance, 0, 0);
         }
         else if (inputHorizontal > 0) // Right
         {
             transform.rotation = Quaternion.Euler(0, -90, 0);
-            MovePlayer(0, 0, -2);
+            MovePlayer(0, 0, -scaledMoveDistance);
         }
         else if (inputHorizontal < 0) // Left
         {
             transform.rotation = Quaternion.Euler(0, 90, 0);
-            MovePlayer(0, 0, 2);
+            MovePlayer(0, 0, scaledMoveDistance);
         }
     }
 
@@ -116,11 +118,13 @@ public class Player : MonoBehaviour
     {
         movesMade++;
         transform.position += newPosition; // Move
+        /* Camera Movement
         perpsCamera.TargetCameraPosition = newPosition;
         if (perpsCamera.CameraSmooth == false)
         {
             perpsCamera.CameraMove();
         }
+        */
     }
 
     private void NextLife() // Called by animation event at end of shrink "death" animation
@@ -138,7 +142,7 @@ public class Player : MonoBehaviour
     private void ResetPos()
     {
         transform.position = startPosition; // Start position, change variable for checkpoints
-        perpsCamera.CameraPositionReset();
+        //perpsCamera.CameraPositionReset();
         movesMade = 0;
         animator.Play("Expand"); // Play spawn animation
         lifetime = Time.time; // Start of new life
