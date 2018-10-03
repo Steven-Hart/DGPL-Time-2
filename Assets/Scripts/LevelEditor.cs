@@ -27,15 +27,37 @@ public class LevelEditor : MonoBehaviour {
 		Void,
 		Edit,
 		Link,
+		Linking,
 		Rotate
 	}
     public GameObject cellPrefab, mapParent, editDialog;
-	public Button playerButton, groundButton, voidButton, enemyButton, gateButton, triggerButton, editButton, rotateButton, setNameButton, testButton, endButton;
+    [Space(1)]
+    [Header("Level Test")]
+	public GameObject testLevelGroup;
+	public GameObject MainMenu;
+	[Space(1)]
+	[Header("Editor Buttons")]
+	public Button playerButton;
+    public Button groundButton;
+    public Button voidButton;
+    public Button enemyButton;
+    public Button gateButton;
+    public Button triggerButton;
+	public Button editButton;
+    public Button rotateButton;
+    public Button setNameButton;
+    public Button testButton;
+    public Button endButton;
+    public Button linkButton;
 	
-	private GameObject[,] cellButtons = new GameObject[Map.MapSize[0], Map.MapSize[1]];
-	private static Color32 playerColour = new Color32(13, 144, 19, 255), groundColour = new Color32(131, 131, 131, 255), gateColour = new Color32(24,236,255,255), enemyColour = new Color32(237, 28, 36, 255), triggerColour = new Color32(255,156,23, 255), endColour = new Color32(0,255,0, 255);
+    public static GameObject playerPrefab, groundPrefab, enemyPrefab, gatePrefab, triggerPrefab, endPrefab; // Level building blocks
 
-	void Start()
+    private GameObject[,] cellButtons = new GameObject[Map.MapSize[0], Map.MapSize[1]]; // Cell buttons store for script access
+	private int[] linkSource = new int[] {-1,-1}; // Store current link source
+	private static Color32 playerColour = new Color32(13, 144, 19, 255), groundColour = new Color32(131, 131, 131, 255), gateColour = new Color32(24,236,255,255), enemyColour = new Color32(237, 28, 36, 255), triggerColour = new Color32(255,156,23, 255), endColour = new Color32(0,255,0, 255);
+	private List<int[]> linkStorage = new List<int[]>();
+
+    void Start()
 	{
 		WorkingMap = new Map();
 		SelectedTool = ToolTypes.Ground;
@@ -49,6 +71,7 @@ public class LevelEditor : MonoBehaviour {
 		editButton.onClick.AddListener(delegate{ChangeTool(ToolTypes.Edit);});
 		rotateButton.onClick.AddListener(delegate{ChangeTool(ToolTypes.Rotate);});
         endButton.onClick.AddListener(delegate {ChangeTool(ToolTypes.End);});
+        linkButton.onClick.AddListener(delegate { ChangeTool(ToolTypes.Link); });
         voidButton.onClick.AddListener(delegate{ChangeTool(ToolTypes.Void);});
         setNameButton.onClick.AddListener(ChangeMapNameFromTextBox);
 		testButton.onClick.AddListener(delegate{BuildLevel(WorkingMap, transform);});
@@ -75,6 +98,8 @@ public class LevelEditor : MonoBehaviour {
 	public void ChangeTool(ToolTypes target) // For buttons
 	{
 		SelectedTool = target;
+		if (target != ToolTypes.Linking)
+        	linkSource = new int[]{-1,-1}; // Reset link if changed during linking stage
 		Debug.Log(SelectedTool);
 	}
 
@@ -85,8 +110,9 @@ public class LevelEditor : MonoBehaviour {
 
 	public void EditCell(int x, int y, GameObject cellClicked) // Place data into cell button
 	{
-		Debug.Log("Coords:" + x + "," + y + " cellClicked: " + cellClicked);
+		Debug.Log("Coords:" + x + "," + y + " SelectedTool: " + SelectedTool);
 		Cell thisCell = WorkingMap.GetCell(x, y);
+
 		switch(SelectedTool) // Special considerations for certain objects
 		{
 			case ToolTypes.Player:
@@ -104,7 +130,7 @@ public class LevelEditor : MonoBehaviour {
 					WorkingMap.PlayerSpawn = thisCell;
 					WorkingMap.PlayerSpawnCoordinate = new int[] {x,y};
 				}
-
+                cellClicked.transform.GetChild(1).gameObject.SetActive(false);
 				cellClicked.GetComponent<Image>().color = playerColour;
 				// Change button image display
 				break;
@@ -115,10 +141,12 @@ public class LevelEditor : MonoBehaviour {
 				}
 				thisCell.ObjectType = ObjectTypes.Enemy;
 
+                cellClicked.transform.GetChild(1).gameObject.SetActive(true);
 				cellClicked.GetComponent<Image>().color = enemyColour;
 				// Set up special and colour
 				break;
 			case ToolTypes.Gate:
+                cellClicked.transform.GetChild(1).gameObject.SetActive(true);
 				if (thisCell.ObjectType == ObjectTypes.Gate)
 				{
 					return;
@@ -126,6 +154,7 @@ public class LevelEditor : MonoBehaviour {
 				thisCell.ObjectType = ObjectTypes.Gate;
 
                 cellClicked.GetComponent<Image>().color = gateColour;
+                cellClicked.transform.GetChild(1).gameObject.SetActive(true);
 				// Set up color
 				break;
 			case ToolTypes.Trigger:
@@ -135,6 +164,7 @@ public class LevelEditor : MonoBehaviour {
 				}
 				thisCell.ObjectType = ObjectTypes.Trigger;
 
+                cellClicked.transform.GetChild(1).gameObject.SetActive(false);
                 cellClicked.GetComponent<Image>().color = triggerColour;
 				// Set up link and colour
 				break;
@@ -145,6 +175,7 @@ public class LevelEditor : MonoBehaviour {
 				}
 				thisCell.ObjectType = ObjectTypes.Ground;
 
+                cellClicked.transform.GetChild(1).gameObject.SetActive(false);
                 cellClicked.GetComponent<Image>().color = groundColour;
 				// Ground with no object on it.
 				break;
@@ -155,7 +186,7 @@ public class LevelEditor : MonoBehaviour {
                     oldEnd.GetComponent<Image>().color = groundColour;
                 }
                 
-                if (thisCell.ObjectType == ObjectTypes.End)
+                if (WorkingMap.EndCell != thisCell)
                 {
 					if (WorkingMap.EndCell != null)
                     {
@@ -166,6 +197,7 @@ public class LevelEditor : MonoBehaviour {
                 }
                 thisCell.ObjectType = ObjectTypes.End;
 
+                cellClicked.transform.GetChild(1).gameObject.SetActive(false);
                 cellClicked.GetComponent<Image>().color = endColour;
                 // Ground with no object on it.
                 break;
@@ -176,23 +208,71 @@ public class LevelEditor : MonoBehaviour {
 				}
 				thisCell.ObjectType = ObjectTypes.Void;
 
+                cellClicked.transform.GetChild(1).gameObject.SetActive(false);
                 cellClicked.GetComponent<Image>().color = Color.white;
 				// Clear button and cell on map
 				break;
 			case ToolTypes.Edit:
-				if (thisCell.ObjectType != ObjectTypes.Enemy || thisCell.ObjectType != ObjectTypes.Gate || thisCell.ObjectType != ObjectTypes.Trigger)
+				if (thisCell.ObjectType != ObjectTypes.Enemy && thisCell.ObjectType != ObjectTypes.Gate && thisCell.ObjectType != ObjectTypes.Trigger)
 				{
 					return;
 				}
 
 				editDialog.SetActive(true);
 
-				// Need to pass cell to edit into dialog script
-				// Edit tool - link and colour
+				// TODO: Edit tool - colour
 				return;
+			case ToolTypes.Link:
+				if (thisCell.ObjectType != ObjectTypes.Trigger)
+					return;
+				
+				linkSource = new int[] {x, y};
+
+                ChangeTool(ToolTypes.Linking); // Set to link destination selection state
+				return;
+			case ToolTypes.Linking:
+                if ((linkSource[0] != -1 && linkSource[0] != x) && (linkSource[1] != -1 || linkSource[1] != y))
+                {
+                    if (thisCell.ObjectType != ObjectTypes.Gate)
+                    {
+						Debug.Log("Link destination is not a gate");
+                        return;
+                    }
+                    // check if link already exists (listStorage.Contains() does not match arrays properly)
+                    int[] newLink = new int[] { x, y, linkSource[0], linkSource[1]};
+                    foreach (int[] linked in linkStorage)
+                    {
+						if (linked[0] == newLink[0] && linked[1] == newLink[1] && linked[2] == newLink[2] && linked[3] == newLink[3])
+                        {
+                            Debug.Log("Link already exists");
+							ChangeTool(ToolTypes.Link); // Reset tool to link
+                            return;
+						}
+                    }
+                    // Destination cell link display
+                    linkStorage.Add(newLink);
+					int linkIndex = linkStorage.IndexOf(newLink,0);
+					Text destinationText = cellButtons[x, y].transform.GetChild(0).GetComponent<Text>();
+                    if (destinationText.text != "")
+                    {
+                        destinationText.text += ", ";
+                    }
+                    destinationText.text += linkIndex.ToString();
+                    // Source cell link display
+                    Text sourceText = cellButtons[linkSource[0], linkSource[1]].transform.GetChild(0).GetComponent<Text>();
+                    if (sourceText.text != "")
+					{
+						sourceText.text += ", ";
+					}
+					sourceText.text += linkIndex.ToString();
+                    ChangeTool(ToolTypes.Link); // Set tool to original state
+                    return;
+                }
+				break;
 			case ToolTypes.Rotate:
-				if(thisCell.ObjectType != ObjectTypes.Enemy || thisCell.ObjectType != ObjectTypes.Gate)
+				if(thisCell.ObjectType != ObjectTypes.Enemy && thisCell.ObjectType != ObjectTypes.Gate)
 				{
+					Debug.Log("RotateTool: incorrect type");
 					return;
 				}
 
@@ -202,10 +282,13 @@ public class LevelEditor : MonoBehaviour {
 					thisCell.Direction = 0; // Wrap around to 0
 				}
 
+                cellClicked.transform.GetChild(1).gameObject.SetActive(true);
+				cellClicked.transform.GetChild(1).rotation = Quaternion.Euler(0,0,45 - (thisCell.Direction * 90));
 				// Rotate button image
 				// Rotate tool - only for certain objects
 				return;
 			default:
+				Debug.Log("EditCell: reached default case");
 				return;
 		}
 		thisCell.Direction = 0;
