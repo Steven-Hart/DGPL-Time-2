@@ -365,9 +365,10 @@ GameObject:
   - component: {fileID: 182689402}
   - component: {fileID: 182689401}
   - component: {fileID: 182689400}
+  - component: {fileID: 182689403}
   m_Layer: 0
   m_Name: Gate 2
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -436,11 +437,23 @@ Transform:
   m_GameObject: {fileID: 182689399}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.5, y: 1, z: -5}
-  m_LocalScale: {x: 0.5, y: 0.75, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.75, z: 0}
   m_Children: []
   m_Father: {fileID: 1767355306}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &182689403
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 182689399}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2, z: 0.2}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &291176246
 GameObject:
   m_ObjectHideFlags: 0
@@ -4159,6 +4172,7 @@ GameObject:
   - component: {fileID: 372480180}
   - component: {fileID: 372480179}
   - component: {fileID: 372480178}
+  - component: {fileID: 372480182}
   m_Layer: 0
   m_Name: Button 2
   m_TagString: Untagged
@@ -4207,7 +4221,7 @@ BoxCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 372480177}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -4232,6 +4246,18 @@ Transform:
   m_Father: {fileID: 1767355306}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &372480182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 372480177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 433af0c345e4b714b89ece251d1ee58b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gate: {fileID: 182689399}
 --- !u!1001 &376590477
 Prefab:
   m_ObjectHideFlags: 0
@@ -4564,6 +4590,7 @@ GameObject:
   - component: {fileID: 516189665}
   - component: {fileID: 516189664}
   - component: {fileID: 516189663}
+  - component: {fileID: 516189667}
   m_Layer: 0
   m_Name: Button 1
   m_TagString: Untagged
@@ -4612,7 +4639,7 @@ BoxCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 516189662}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -4637,6 +4664,18 @@ Transform:
   m_Father: {fileID: 1767355306}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &516189667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 516189662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 433af0c345e4b714b89ece251d1ee58b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gate: {fileID: 2056003529}
 --- !u!1 &538207608
 GameObject:
   m_ObjectHideFlags: 0
@@ -6944,6 +6983,31 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: 0.95
       objectReference: {fileID: 0}
+    - target: {fileID: 114595156422314984, guid: 291655a1a68eb234bb88c95f7ec21de6,
+        type: 2}
+      propertyPath: lifeTimer
+      value: 
+      objectReference: {fileID: 768244263}
+    - target: {fileID: 114595156422314984, guid: 291655a1a68eb234bb88c95f7ec21de6,
+        type: 2}
+      propertyPath: lifeCount
+      value: 
+      objectReference: {fileID: 443442525}
+    - target: {fileID: 114595156422314984, guid: 291655a1a68eb234bb88c95f7ec21de6,
+        type: 2}
+      propertyPath: lives
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114595156422314984, guid: 291655a1a68eb234bb88c95f7ec21de6,
+        type: 2}
+      propertyPath: startMoves
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114595156422314984, guid: 291655a1a68eb234bb88c95f7ec21de6,
+        type: 2}
+      propertyPath: scaledMoveDistance
+      value: 0.99
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 291655a1a68eb234bb88c95f7ec21de6, type: 2}
   m_IsPrefabParent: 0
@@ -7110,6 +7174,7 @@ GameObject:
   - component: {fileID: 1921315891}
   - component: {fileID: 1921315890}
   - component: {fileID: 1921315889}
+  - component: {fileID: 1921315893}
   m_Layer: 0
   m_Name: Button 3
   m_TagString: Untagged
@@ -7158,7 +7223,7 @@ BoxCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1921315888}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -7183,6 +7248,18 @@ Transform:
   m_Father: {fileID: 1767355306}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1921315893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1921315888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 433af0c345e4b714b89ece251d1ee58b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gate: {fileID: 1971853597}
 --- !u!1 &1971853597
 GameObject:
   m_ObjectHideFlags: 0
@@ -7193,9 +7270,10 @@ GameObject:
   - component: {fileID: 1971853600}
   - component: {fileID: 1971853599}
   - component: {fileID: 1971853598}
+  - component: {fileID: 1971853601}
   m_Layer: 0
   m_Name: Gate 3
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7264,11 +7342,23 @@ Transform:
   m_GameObject: {fileID: 1971853597}
   m_LocalRotation: {x: -0, y: -0.70710677, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 2, y: 1, z: -4.5}
-  m_LocalScale: {x: 0.5, y: 0.75, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.75, z: 0}
   m_Children: []
   m_Father: {fileID: 1767355306}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: -90.00001, z: 0}
+--- !u!65 &1971853601
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1971853597}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2, z: 0.2}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &2008222082
 GameObject:
   m_ObjectHideFlags: 0
@@ -7724,9 +7814,10 @@ GameObject:
   - component: {fileID: 2056003532}
   - component: {fileID: 2056003531}
   - component: {fileID: 2056003530}
+  - component: {fileID: 2056003533}
   m_Layer: 0
   m_Name: Gate 1
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7795,8 +7886,20 @@ Transform:
   m_GameObject: {fileID: 2056003529}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.5, y: 1, z: -8}
-  m_LocalScale: {x: 0.5, y: 0.75, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.75, z: 0}
   m_Children: []
   m_Father: {fileID: 1767355306}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2056003533
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2056003529}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2, z: 0.2}
+  m_Center: {x: 0, y: 1, z: 0}

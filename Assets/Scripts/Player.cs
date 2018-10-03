@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     //public Perspective perpsCamera;
     public bool gameOver, ghostLife, moveDelay;
 	public Vector3 startPosition = new Vector3(4, 1.2f, 0);
-    public float scaledMoveDistance;
+    public float scaledMoveDistance = 1;
 
     private Animator animator;
     private Vector3 newPosition;
@@ -19,7 +19,6 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
         lifetime = Time.time; // Start of game for scoring
         ghostLife = false;
-        scaledMoveDistance = 1;
     }
 
     void Update()
