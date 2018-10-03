@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     public bool gameOver, ghostLife, moveDelay;
 	public Vector3 startPosition = new Vector3(4, 1.2f, 0);
     public float scaledMoveDistance = 1;
+    public Respawn respawn;
 
     private Animator animator;
     private Vector3 newPosition;
@@ -140,7 +141,7 @@ public class Player : MonoBehaviour
     }
     private void ResetPos()
     {
-        transform.position = startPosition; // Start position, change variable for checkpoints
+        transform.position = respawn.adjustedRespawn(); // Start position, change variable for checkpoints
         //perpsCamera.CameraPositionReset();
         movesMade = 0;
         animator.Play("Expand"); // Play spawn animation
