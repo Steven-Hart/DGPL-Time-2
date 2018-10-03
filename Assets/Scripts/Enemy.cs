@@ -6,10 +6,18 @@ public class Enemy : MonoBehaviour
 {
     public Player player;
     public float scaledMoveDistance = 1;
+    public bool moveDelay;
+    public EnemyCube enemyCube;
 
 
     private Vector3 newPosition;
     public float Moves;
+    private enum Direction
+    {
+        Left,
+        Right
+    }
+    private Direction currentDirection = Direction.Right;
     
 
     // Use this for initialization
@@ -23,8 +31,27 @@ public class Enemy : MonoBehaviour
     {
         if(player.movesMade > Moves)
         {
-            EnemyMove(0, 0, -scaledMoveDistance); //Right
+            ChooseDirection();
             Moves = player.movesMade;
+        }
+    }
+
+    private void ChooseDirection()
+    {
+        if(currentDirection == Direction.Right)
+        {
+            transform.rotation = Quaternion.Euler(0, -90, 0);
+            EnemyMove(0, 0, -scaledMoveDistance); //Right
+            
+        }
+        else if (currentDirection == Direction.Left)
+        {
+            transform.rotation = Quaternion.Euler(0, 90, 0);
+            EnemyMove(0, 0, scaledMoveDistance);
+        }
+        else
+        {
+            Debug.LogError("Unkown enemy Direction");
         }
     }
 
@@ -36,11 +63,19 @@ public class Enemy : MonoBehaviour
         {
             if (col.tag == "Obstacle")
             {
+                if (currentDirection == Direction.Left)
+                {
+                    currentDirection = Direction.Right;
+                }
+                else
+                {
+                    currentDirection = Direction.Left;
+                }
                 return;
             }
         }
         newPosition = new Vector3(x, y, z);
-        //playerCube.MoveAnimation(); // Play movement animation
+        enemyCube.MoveAnimation(); // Play movement animation
     }
 
     public void TranslateEnemy()

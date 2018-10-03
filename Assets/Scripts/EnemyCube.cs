@@ -22,16 +22,21 @@ public class EnemyCube : MonoBehaviour
             enemy.TranslateEnemy();
             resetAnimation = false;
         }
-    }
+    }   
 
     public void MoveAnimation() // Play movement animation
     {
-        animator.Play("MoveDown");
+        animator.Play("MoveDown Enemy");
     }
 
     public void MoveEnemy() // To be called by animation event move down
     {
         resetAnimation = true;
-        animator.Play("Idle");
+        animator.Play("Idle Enemy");
+    }
+
+    private void ResetDelay()
+    {
+        enemy.moveDelay = false;
     }
 }
