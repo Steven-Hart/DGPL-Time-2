@@ -229,7 +229,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &78650145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -453,7 +453,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 0.2}
+  m_Size: {x: 2, y: 2, z: 0}
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &291176246
 GameObject:
@@ -4176,7 +4176,7 @@ GameObject:
   - component: {fileID: 372480182}
   m_Layer: 0
   m_Name: Button 2
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4333,6 +4333,10 @@ Prefab:
     - target: {fileID: 2300000, guid: fc2c5c538982c3846933c91c37182585, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: fc2c5c538982c3846933c91c37182585, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fc2c5c538982c3846933c91c37182585, type: 3}
@@ -5794,6 +5798,11 @@ Prefab:
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114054288508468902, guid: d67ef1378c81ded498e22354e15f0b9a,
+        type: 2}
+      propertyPath: scaledMoveDistance
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 33164003399024014, guid: d67ef1378c81ded498e22354e15f0b9a, type: 2}
     - {fileID: 23886773549389856, guid: d67ef1378c81ded498e22354e15f0b9a, type: 2}
@@ -5882,6 +5891,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1061112319}
   - component: {fileID: 1061112318}
+  - component: {fileID: 1061112321}
+  - component: {fileID: 1061112320}
   m_Layer: 0
   m_Name: Wireframe Half
   m_TagString: Untagged
@@ -5946,6 +5957,46 @@ Transform:
   m_Father: {fileID: 1595133552}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 180, z: 0}
+--- !u!66 &1061112320
+CompositeCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1061112317}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_GeometryType: 1
+  m_GenerationType: 1
+  m_EdgeRadius: 0
+  m_ColliderPaths: []
+  m_CompositePaths:
+    m_Paths: []
+  m_VertexDistance: 0.0005
+--- !u!50 &1061112321
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1061112317}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!4 &1093763348 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4950858496231900, guid: d67ef1378c81ded498e22354e15f0b9a,
@@ -6396,7 +6447,7 @@ Prefab:
       objectReference: {fileID: 2056003529}
     - target: {fileID: 1729763029063516, guid: b8117a6175ed04f4f80936638a0cb98b, type: 2}
       propertyPath: m_TagString
-      value: Ground
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b8117a6175ed04f4f80936638a0cb98b, type: 2}
@@ -6997,7 +7048,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4693878726551332, guid: 7adfd3fd3ab9e20468c87e2a1f8284f8, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -7
+      value: -8
       objectReference: {fileID: 0}
     - target: {fileID: 4693878726551332, guid: 7adfd3fd3ab9e20468c87e2a1f8284f8, type: 2}
       propertyPath: m_LocalRotation.x
@@ -7024,6 +7075,15 @@ Prefab:
       propertyPath: button
       value: 
       objectReference: {fileID: 516189662}
+    - target: {fileID: 1409379000360102, guid: 7adfd3fd3ab9e20468c87e2a1f8284f8, type: 2}
+      propertyPath: m_TagString
+      value: Obstacle
+      objectReference: {fileID: 0}
+    - target: {fileID: 65929107939823948, guid: 7adfd3fd3ab9e20468c87e2a1f8284f8,
+        type: 2}
+      propertyPath: m_Size.z
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7adfd3fd3ab9e20468c87e2a1f8284f8, type: 2}
   m_IsPrefabParent: 0
@@ -7256,7 +7316,7 @@ GameObject:
   - component: {fileID: 1921315893}
   m_Layer: 0
   m_Name: Button 3
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7437,7 +7497,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 0.2}
+  m_Size: {x: 2, y: 2, z: 0}
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &2008222082
 GameObject:

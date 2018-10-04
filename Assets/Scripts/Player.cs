@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class Player : MonoBehaviour
 	public Vector3 startPosition = new Vector3(4, 1.2f, 0);
     public float scaledMoveDistance = 1;
     public Respawn respawn;
+    public List<Enemy> enemyList;
 
     private Animator animator;
     private Vector3 newPosition;
@@ -101,17 +103,26 @@ public class Player : MonoBehaviour
         transform.Translate(x * moveSpeed * Time.deltaTime, y * moveSpeed * Time.deltaTime, z * moveSpeed * Time.deltaTime); // Move
         */
         Vector3 movePosition = transform.position + new Vector3(x, y, z); // Change to fixed space movement later
-        Collider[] collisions = Physics.OverlapBox(movePosition, new Vector3(0.5f, 0.5f, 0.5f)); // Check for obstacles
+        Collider[] collisions = Physics.OverlapBox(movePosition, new Vector3(0.45f, 1.1f, 0.45f)); // Check for obstacles
         foreach (Collider col in collisions)
         {
-            if (col.tag == "Obstacle")
+            switch (col.tag)
             {
-                return;
+                case "Obstacle":
+                    return;
+                case "Ground":
+                    newPosition = new Vector3(x, y, z);
+                    moveDelay = true;
+                    foreach (Enemy e in enemyList)
+                    {
+                        e.ChooseDirection();
+                    }
+                    playerCube.MoveAnimation(); // Play movement animation
+                    return;
+                default:
+                    continue;
             }
         }
-        newPosition = new Vector3(x, y, z);
-		moveDelay = true;
-        playerCube.MoveAnimation(); // Play movement animation
     }
 
     public void TranslatePlayer()
@@ -127,7 +138,7 @@ public class Player : MonoBehaviour
         */
     }
 
-    private void NextLife() // Called by animation event at end of shrink "death" animation
+    public void NextLife() // Called by animation event at end of shrink "death" animation
     {
         if (lives <= 0)
         {

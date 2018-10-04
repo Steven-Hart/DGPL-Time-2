@@ -26,23 +26,14 @@ public class Enemy : MonoBehaviour
         Moves = 1f;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(player.movesMade > Moves)
-        {
-            ChooseDirection();
-            Moves = player.movesMade;
-        }
-    }
 
-    private void ChooseDirection()
+
+    public void ChooseDirection()
     {
         if(currentDirection == Direction.Right)
         {
             transform.rotation = Quaternion.Euler(0, -90, 0);
             EnemyMove(0, 0, -scaledMoveDistance); //Right
-            
         }
         else if (currentDirection == Direction.Left)
         {
@@ -58,28 +49,42 @@ public class Enemy : MonoBehaviour
     private void EnemyMove(float x, float y, float z)
     {
         Vector3 movePosition = transform.position + new Vector3(x, y, z); // Change to fixed space movement later
-        Collider[] collisions = Physics.OverlapBox(movePosition, new Vector3(0.5f, 0.5f, 0.5f)); // Check for obstacles
+        Collider[] collisions = Physics.OverlapBox(movePosition, new Vector3(0.4f, 1.1f, 0.4f)); // Check for obstacles
         foreach (Collider col in collisions)
         {
-            if (col.tag == "Obstacle")
+            switch (col.tag)
             {
-                if (currentDirection == Direction.Left)
-                {
-                    currentDirection = Direction.Right;
-                }
-                else
-                {
-                    currentDirection = Direction.Left;
-                }
-                return;
+                case "Obstacle":
+                    if (currentDirection == Direction.Left)
+                    {
+                        currentDirection = Direction.Right;
+                    }
+                    else
+                    {
+                        currentDirection = Direction.Left;
+                    }
+                    ChooseDirection();
+                    return;
+                case "Ground":
+                    newPosition = new Vector3(x, y, z);
+                    enemyCube.MoveAnimation(); // Play movement animation
+                    break;
+                default:
+                    continue;
             }
         }
-        newPosition = new Vector3(x, y, z);
-        enemyCube.MoveAnimation(); // Play movement animation
     }
 
     public void TranslateEnemy()
     {
         transform.position += newPosition;
+    }
+
+    void OnTriggerEnter(Collider collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            player.NextLife(); 
+        }
     }
 }
