@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
@@ -6,9 +7,12 @@ public class Player : MonoBehaviour
     public UnityEngine.UI.Text lifeTimer, lifeCount, WinLife, WinTime, WinText;
     public GameObject winPanel, nextButton;
     public PlayerCube playerCube;
-    public Perspective perpsCamera;
+    //public Perspective perpsCamera;
     public bool gameOver, ghostLife, moveDelay;
 	public Vector3 startPosition = new Vector3(4, 1.2f, 0);
+    public float scaledMoveDistance = 1;
+    public Respawn respawn;
+    public List<Enemy> enemyList;
 
     private Animator animator;
     private Vector3 newPosition;
@@ -47,22 +51,22 @@ public class Player : MonoBehaviour
         if (inputVertical > 0) // Up
         {
             transform.rotation = Quaternion.Euler(0,180,0);
-            MovePlayer(2, 0, 0);
+            MovePlayer(scaledMoveDistance, 0, 0);
         }
         else if (inputVertical < 0) // Down
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
-            MovePlayer(-2, 0, 0);
+            MovePlayer(-scaledMoveDistance, 0, 0);
         }
         else if (inputHorizontal > 0) // Right
         {
             transform.rotation = Quaternion.Euler(0, -90, 0);
-            MovePlayer(0, 0, -2);
+            MovePlayer(0, 0, -scaledMoveDistance);
         }
         else if (inputHorizontal < 0) // Left
         {
             transform.rotation = Quaternion.Euler(0, 90, 0);
-            MovePlayer(0, 0, 2);
+            MovePlayer(0, 0, scaledMoveDistance);
         }
     }
 
@@ -99,31 +103,53 @@ public class Player : MonoBehaviour
         transform.Translate(x * moveSpeed * Time.deltaTime, y * moveSpeed * Time.deltaTime, z * moveSpeed * Time.deltaTime); // Move
         */
         Vector3 movePosition = transform.position + new Vector3(x, y, z); // Change to fixed space movement later
-        Collider[] collisions = Physics.OverlapBox(movePosition, new Vector3(0.5f, 0.5f, 0.5f)); // Check for obstacles
+        Vector3 relativePosition = movePosition - transform.position;
+        relativePosition = relativePosition / 2;
+        Collider[] collisions = Physics.OverlapBox(movePosition - relativePosition, new Vector3(0.1f, 1.1f, 0.1f)); // Check for obstacles
         foreach (Collider col in collisions)
         {
-            if (col.tag == "Obstacle")
+            switch (col.tag)
             {
-                return;
+                case "Obstacle":
+                    return;
+                default:
+                    continue;
             }
         }
-        newPosition = new Vector3(x, y, z);
-		moveDelay = true;
-        playerCube.MoveAnimation(); // Play movement animation
+        collisions = Physics.OverlapBox(movePosition,new Vector3(0.48f, 1.1f, 0.48f)); // Check for ground
+        foreach (Collider col in collisions)
+        {
+            switch (col.tag)
+            {
+                case "Ground":
+                    newPosition = new Vector3(x, y, z);
+                    moveDelay = true;
+                    foreach (Enemy e in enemyList)
+                    {
+                        e.ChooseDirection();
+                    }
+                    playerCube.MoveAnimation(); // Play movement animation
+                    return;
+                default:
+                    continue;
+            }
+        }
     }
 
     public void TranslatePlayer()
     {
         movesMade++;
         transform.position += newPosition; // Move
+        /* Camera Movement
         perpsCamera.TargetCameraPosition = newPosition;
         if (perpsCamera.CameraSmooth == false)
         {
             perpsCamera.CameraMove();
         }
+        */
     }
 
-    private void NextLife() // Called by animation event at end of shrink "death" animation
+    public void NextLife() // Called by animation event at end of shrink "death" animation
     {
         if (lives <= 0)
         {
@@ -137,8 +163,8 @@ public class Player : MonoBehaviour
     }
     private void ResetPos()
     {
-        transform.position = startPosition; // Start position, change variable for checkpoints
-        perpsCamera.CameraPositionReset();
+        transform.position = respawn.adjustedRespawn(); // Start position, change variable for checkpoints
+        //perpsCamera.CameraPositionReset();
         movesMade = 0;
         animator.Play("Expand"); // Play spawn animation
         lifetime = Time.time; // Start of new life
