@@ -83,7 +83,17 @@ public class Enemy : MonoBehaviour
                 default:
                     continue;
             }
+
         }
+        if (currentDirection == Direction.Left)
+        {
+            currentDirection = Direction.Right;
+        }
+        else
+        {
+            currentDirection = Direction.Left;
+        }
+        ChooseDirection();
     }
 
     public void TranslateEnemy()
