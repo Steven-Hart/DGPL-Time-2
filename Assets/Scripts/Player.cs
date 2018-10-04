@@ -103,13 +103,24 @@ public class Player : MonoBehaviour
         transform.Translate(x * moveSpeed * Time.deltaTime, y * moveSpeed * Time.deltaTime, z * moveSpeed * Time.deltaTime); // Move
         */
         Vector3 movePosition = transform.position + new Vector3(x, y, z); // Change to fixed space movement later
-        Collider[] collisions = Physics.OverlapBox(movePosition, new Vector3(0.45f, 1.1f, 0.45f)); // Check for obstacles
+        Vector3 relativePosition = movePosition - transform.position;
+        relativePosition = relativePosition / 2;
+        Collider[] collisions = Physics.OverlapBox(movePosition - relativePosition, new Vector3(0.1f, 1.1f, 0.1f)); // Check for obstacles
         foreach (Collider col in collisions)
         {
             switch (col.tag)
             {
                 case "Obstacle":
                     return;
+                default:
+                    continue;
+            }
+        }
+        collisions = Physics.OverlapBox(movePosition,new Vector3(0.48f, 1.1f, 0.48f)); // Check for ground
+        foreach (Collider col in collisions)
+        {
+            switch (col.tag)
+            {
                 case "Ground":
                     newPosition = new Vector3(x, y, z);
                     moveDelay = true;
