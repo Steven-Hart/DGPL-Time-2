@@ -33,10 +33,14 @@ public class LevelEditor : MonoBehaviour {
     public GameObject cellPrefab, mapParent, editDialog;
     [Space(1)]
     [Header("Level Test")]
-	public GameObject testLevelGroup;
+	public Transform testLevelGroup;
 	public GameObject MainMenu;
+    [Space(1)]
+    [Header("Map File Buttons")]
+	public Button loadButton;
+	public Button saveButton;
 	[Space(1)]
-	[Header("Editor Buttons")]
+	[Header("Map Editor Buttons")]
 	public Button playerButton;
     public Button groundButton;
     public Button voidButton;
@@ -49,13 +53,25 @@ public class LevelEditor : MonoBehaviour {
     public Button testButton;
     public Button endButton;
     public Button linkButton;
-	
-    public static GameObject playerPrefab, groundPrefab, enemyPrefab, gatePrefab, triggerPrefab, endPrefab; // Level building blocks
+	public Text nameText;
+	public Text mapNameText;
+	public Text currentToolText;
+    [Space(1)]
+    [Header("Builder Prefabs")]
+    public GameObject playerPrefab;
+	public GameObject groundPrefab;
+	public GameObject enemyPrefab;
+	public GameObject gatePrefab;
+	public GameObject triggerPrefab;
+	public GameObject endPrefab;
+
+    public static GameObject playerBlock, groundBlock, enemyBlock, gateBlock, triggerBlock, endBlock; // Level building blocks
 
     private GameObject[,] cellButtons = new GameObject[Map.MapSize[0], Map.MapSize[1]]; // Cell buttons store for script access
 	private int[] linkSource = new int[] {-1,-1}; // Store current link source
 	private static Color32 playerColour = new Color32(13, 144, 19, 255), groundColour = new Color32(131, 131, 131, 255), gateColour = new Color32(24,236,255,255), enemyColour = new Color32(237, 28, 36, 255), triggerColour = new Color32(255,156,23, 255), endColour = new Color32(0,255,0, 255);
 	private List<int[]> linkStorage = new List<int[]>();
+	private string mapPath;
 
     void Start()
 	{
@@ -74,11 +90,49 @@ public class LevelEditor : MonoBehaviour {
         linkButton.onClick.AddListener(delegate { ChangeTool(ToolTypes.Link); });
         voidButton.onClick.AddListener(delegate{ChangeTool(ToolTypes.Void);});
         setNameButton.onClick.AddListener(ChangeMapNameFromTextBox);
-		testButton.onClick.AddListener(delegate{BuildLevel(WorkingMap, transform);});
-		// TODO play button, load from file, save to file.
+		testButton.onClick.AddListener(delegate{BuildLevel(WorkingMap, testLevelGroup);});
+		// Level Editor building blocks init
+		playerBlock = playerPrefab;
+		groundBlock = groundPrefab;
+		enemyBlock = enemyPrefab;
+		gateBlock = gatePrefab;
+		triggerBlock = triggerPrefab;
+		endBlock = endPrefab;
+        // Map file buttons
+		mapPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + WorkingMap.Name + ".lsmap"; // lifespan map
+        saveButton.onClick.AddListener(SaveMap);
+        loadButton.onClick.AddListener(LoadMap);
+		nameText.rectTransform.parent.GetComponent<InputField>().text = WorkingMap.Name;
 	}
 
-	private void BuildUI()
+	void SaveMap() // For save button
+    {
+		SaveLevel(WorkingMap, Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + WorkingMap.Name + ".lsmap");
+	}
+
+	void LoadMap() // For load button
+	{
+		WorkingMap = LoadLevel(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + nameText.text + ".lsmap");
+	}
+
+	void MapTextChecker()
+	{
+		if(nameText.text != WorkingMap.Name)
+		{
+			nameText.rectTransform.parent.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+		} else 
+		{
+            nameText.rectTransform.parent.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+		}
+	}
+
+    void ChangeMapNameFromTextBox() // Set map name
+    {
+        WorkingMap.Name = nameText.text;
+        mapNameText.text = "Map name:\n" + WorkingMap.Name;
+    }
+
+    private void BuildUI()
 	{
 		//Vector3 startCellPosition = new Vector3(-774f, -646f,0f); // x spacing: 105, y spacing: 105
 		for (int y = 0; y < Map.MapSize[1]; y++)
@@ -98,14 +152,15 @@ public class LevelEditor : MonoBehaviour {
 	public void ChangeTool(ToolTypes target) // For buttons
 	{
 		SelectedTool = target;
-		if (target != ToolTypes.Linking)
-        	linkSource = new int[]{-1,-1}; // Reset link if changed during linking stage
-		Debug.Log(SelectedTool);
-	}
-
-	public void ChangeMapNameFromTextBox() // Need textbox and setNameButton
-	{
-		// Need to create a text box
+		currentToolText.text = "Current tool:\n" + target.ToString();
+		if (target == ToolTypes.Linking)
+		{
+			currentToolText.text += " [" + linkSource[0] + ","+linkSource[1]+"]";
+		} else
+		{
+            linkSource = new int[] { -1, -1 }; // Reset link if changed during linking stage
+        }
+		Debug.Log("Current Tool: " + SelectedTool);
 	}
 
 	public void EditCell(int x, int y, GameObject cellClicked) // Place data into cell button
@@ -129,6 +184,7 @@ public class LevelEditor : MonoBehaviour {
 					}
 					WorkingMap.PlayerSpawn = thisCell;
 					WorkingMap.PlayerSpawnCoordinate = new int[] {x,y};
+					thisCell.ObjectType = ObjectTypes.Player;
 				}
                 cellClicked.transform.GetChild(1).gameObject.SetActive(false);
 				cellClicked.GetComponent<Image>().color = playerColour;
@@ -231,7 +287,7 @@ public class LevelEditor : MonoBehaviour {
                 ChangeTool(ToolTypes.Linking); // Set to link destination selection state
 				return;
 			case ToolTypes.Linking:
-                if ((linkSource[0] != -1 && linkSource[0] != x) && (linkSource[1] != -1 || linkSource[1] != y))
+                if (linkSource[0] != -1 && linkSource[1] != -1 && !(linkSource[0] == x && linkSource[1] == y))
                 {
                     if (thisCell.ObjectType != ObjectTypes.Gate)
                     {
@@ -240,26 +296,47 @@ public class LevelEditor : MonoBehaviour {
                     }
                     // check if link already exists (listStorage.Contains() does not match arrays properly)
                     int[] newLink = new int[] { x, y, linkSource[0], linkSource[1]};
+                    Text sourceText = cellButtons[linkSource[0], linkSource[1]].transform.GetChild(0).GetComponent<Text>();
+                    Text destinationText = cellButtons[x, y].transform.GetChild(0).GetComponent<Text>();
+					// Cell link
+					thisCell.Link = linkSource.Clone() as int[];
+                    WorkingMap.GetCell(linkSource[0], linkSource[1]).Link = new int[] {x,y};
+                    int linkIndex = -1;
                     foreach (int[] linked in linkStorage)
                     {
 						if (linked[0] == newLink[0] && linked[1] == newLink[1] && linked[2] == newLink[2] && linked[3] == newLink[3])
                         {
-                            Debug.Log("Link already exists");
+                            Debug.Log("Link already exists. Removing link");
+							linkIndex = linkStorage.IndexOf(linked);
+							
+							// Remove link number from button
+							sourceText.text = LinkTextModifier(sourceText.text, linkIndex, false);
+                            destinationText.text = LinkTextModifier(destinationText.text, linkIndex, false);
+							// Modify existing links to the correct number (links that are > removed link is shifted down 1) after removal
+							for (int i = linkStorage.Count-1; i > linkIndex; i--)
+							{
+								Debug.Log(i);
+								Text sourceMod = cellButtons[linkStorage[i][0], linkStorage[i][1]].transform.GetChild(0).GetComponent<Text>();
+                                Text destinationMod = cellButtons[linkStorage[i][2], linkStorage[i][3]].transform.GetChild(0).GetComponent<Text>();
+
+								sourceMod.text = LinkTextModifier(sourceMod.text, i);
+								destinationMod.text = LinkTextModifier(destinationMod.text, i);
+							}
+
+							linkStorage.Remove(linked); // Remove link from list
 							ChangeTool(ToolTypes.Link); // Reset tool to link
                             return;
 						}
                     }
                     // Destination cell link display
                     linkStorage.Add(newLink);
-					int linkIndex = linkStorage.IndexOf(newLink,0);
-					Text destinationText = cellButtons[x, y].transform.GetChild(0).GetComponent<Text>();
+					linkIndex = linkStorage.IndexOf(newLink,0);
                     if (destinationText.text != "")
                     {
                         destinationText.text += ", ";
                     }
                     destinationText.text += linkIndex.ToString();
                     // Source cell link display
-                    Text sourceText = cellButtons[linkSource[0], linkSource[1]].transform.GetChild(0).GetComponent<Text>();
                     if (sourceText.text != "")
 					{
 						sourceText.text += ", ";
@@ -296,6 +373,60 @@ public class LevelEditor : MonoBehaviour {
 		thisCell.Special = null;
 	}
 
+	private static string LinkTextModifier (string textDisplay, int linkToRemove, bool modify = true)
+	{
+        if (textDisplay == linkToRemove.ToString())
+        {
+            if (modify)
+            {
+                return (linkToRemove - 1).ToString();
+            }
+            else
+            {
+                return "";
+            }
+        }
+        else if (textDisplay.Contains(", " + linkToRemove + ",")) // For "#, linkIndex, "
+        {
+			if (modify)
+			{
+                return textDisplay.Replace(", " + linkToRemove + ",", ", " + (linkToRemove - 1) + ",");
+			}else
+			{
+                return textDisplay.Replace(", " + linkToRemove + ",", ",");
+			}
+        }
+        else if (textDisplay.EndsWith(", " + linkToRemove))
+        {
+
+            string result = textDisplay.Substring(0, textDisplay.Length - (", " + linkToRemove).Length);
+            if (modify)
+            {
+                return result + ", " + (linkToRemove - 1);
+            }
+            else
+            {
+                return result;
+            }
+        }
+        else if (textDisplay.StartsWith(linkToRemove + ", ")) // For "linkIndex, #"
+        {
+            string result = textDisplay.Substring((linkToRemove + ", ").Length, textDisplay.Length - (linkToRemove + ", ").Length);
+            if (modify)
+            {
+                return (linkToRemove-1) + ", " + result;
+            }
+            else
+            {
+                return result;
+            }
+        }
+        else
+        {
+            return "error";
+        }
+	}
+
 	private static GameObject CreateObject(int x, int y, Cell cellToBuild, Transform parent) // Create objects in scene
 	{
 		float objectY = 0;
@@ -304,33 +435,33 @@ public class LevelEditor : MonoBehaviour {
 		switch(cellToBuild.ObjectType) // Special considerations for certain objects
 		{
 			case ObjectTypes.Player:
-				objectY = 2.2f;
-                prefabToPlace = playerPrefab;
+				objectY = 1f;
+                prefabToPlace = playerBlock;
 				break;
 			case ObjectTypes.Enemy:
-                prefabToPlace = enemyPrefab;
+                prefabToPlace = enemyBlock;
 				break;
 			case ObjectTypes.Gate:
-				objectY = 2.0f;
-				objectRotation = Quaternion.Euler(0, cellToBuild.Direction * 90, 0);
-                prefabToPlace = gatePrefab;
+				objectY = 1f;
+				objectRotation = Quaternion.Euler(0, (cellToBuild.Direction + 1)* 90, 0);
+                prefabToPlace = gateBlock;
                 break;
 			case ObjectTypes.Trigger:
-				objectY =1f;
-                prefabToPlace = playerPrefab;
+				objectY =0.03f;
+                prefabToPlace = triggerBlock;
 				break;
             case ObjectTypes.End:
-                objectY = 1f;
-                prefabToPlace = endPrefab;
+                objectY = 0.05f;
+                prefabToPlace = endBlock;
                 break;
 			case ObjectTypes.Ground:
-                Instantiate(groundPrefab, new Vector3(2 * x, 0, 2 * y), Quaternion.identity, parent);
+                Instantiate(groundBlock, new Vector3(2 * x, 0, 2 * y), Quaternion.identity, parent);
 				goto default;
 			case ObjectTypes.Void: // if no object exists in the cell
             default:
 				return null;
 		}
-		Instantiate(groundPrefab, new Vector3(2 * x, 0, 2 * y), Quaternion.identity, parent); // The ground under object
+		Instantiate(groundBlock, new Vector3(2 * x, 0, 2 * y), Quaternion.identity, parent); // The ground under object
 		return Instantiate(prefabToPlace, new Vector3(2 * x, objectY, 2 * y), objectRotation, parent); // The object itself
 	}
 
@@ -416,13 +547,14 @@ public class LevelEditor : MonoBehaviour {
 									goto case 4;
 								case 4:
 									// Load object link
-									if (!ValidateCoordinates(new string[] { cellSplit[2], cellSplit[3] }, out x, out y))
+									int linkX = -1, linkY = -1;
+									if (!ValidateCoordinates(new string[] { cellSplit[2], cellSplit[3] }, out linkX, out linkY))
 									{
 										Debug.Log("Line " + lineNumber + ": Invalid link coordinates.");
 									}
 									else
 									{
-										loadCell.Link = new int[2] { x, y };
+										loadCell.Link = new int[2] { linkX, linkY };
 									}
 									goto case 2; // The forbidden goto because of C# limitations
 								case 3:
@@ -556,29 +688,28 @@ public class LevelEditor : MonoBehaviour {
 					Cell cellToBuild = mapToBuild.GetCell(x, y);
                     objectMap[x,y] = CreateObject(x, y, cellToBuild, parent);
 					int[] objectLink = cellToBuild.Link; // Store link to link after all objects are built
+                    Debug.Log(linkStorage.Count);
 					if (objectLink[0] >= 0 && objectLink[1] >= 0)
 					{
-						linkStorage.Add(new int[] {x, y}, objectLink); // Save coords of linked objects
+                        Debug.Log(linkStorage.Count);
+						linkStorage.Add(new int[] {x, y}, new int[] {objectLink[0], objectLink[1]}); // Save coords of linked objects
 					}
 				}
 			}
-            for (int x = 0; x < Map.MapSize[0]; x++)
-            {
-                for (int y = 0; y < Map.MapSize[1]; y++)
-                {
-					int[] currentCoords = new int[] { x, y };
-                    if(linkStorage.ContainsKey(currentCoords))
-					{
-						GameObject linkSource = objectMap[x,y]; // Get source object
-						int [] linkCoords = linkStorage[currentCoords]; // Get coords of object its linked to
-						GameObject linkDestination = objectMap[linkCoords[0], linkCoords[1]]; // Get linked object
-
-						GateTrigger gateSource = linkSource.GetComponent<GateTrigger>(); // Check if source object is a gate
-						if(gateSource == null) // If not gate then next cell
-							continue;
-						gateSource.Link = linkDestination; // Set object to disable by trigger
-					}
-                }
+			Debug.Log(linkStorage.Count);
+			foreach (KeyValuePair<int[],int[]> link in linkStorage) // Link triggers and gates
+			{
+				Debug.Log("entered kvp loop");
+                GameObject linkSource = objectMap[link.Key[0], link.Key[1]]; // Get source object
+                GameObject linkDestination = objectMap[link.Value[0], link.Value[1]]; // Get linked object
+                Debug.Log(linkSource);
+                GateTrigger gateSource = linkSource.GetComponent<GateTrigger>(); // Check if source object is a gate
+                if (gateSource == null) // If not gate then next cell
+				{
+                    Debug.Log("iteration skipped");
+                    continue;
+				}
+				gateSource.Link = linkDestination; // Set object to disable by trigger
             }
 		}
 		catch (Exception e)

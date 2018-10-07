@@ -3,8 +3,8 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float moveSpeed = 1, lives = 5, lifetime, movesMade, startMoves=15;
-    public UnityEngine.UI.Text lifeTimer, lifeCount, WinLife, WinTime, WinText;
-    public GameObject winPanel, nextButton;
+    //public UnityEngine.UI.Text lifeTimer, lifeCount, WinLife, WinTime, WinText;
+    //public GameObject winPanel, nextButton;
     public PlayerCube playerCube;
     public Perspective perpsCamera;
     public bool gameOver, ghostLife, moveDelay;
@@ -16,7 +16,8 @@ public class Player : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
-        lifetime = Time.time; // Start of game for scoring
+        perpsCamera = Camera.main.GetComponent<Perspective>();
+        //lifetime = Time.time; // Start of game for scoring
         ghostLife = false;
     }
 
@@ -31,7 +32,7 @@ public class Player : MonoBehaviour
             if (!ghostLife) // Ghost life
             {
                 gameOver = true;
-                lifetime = Time.time;
+                //lifetime = Time.time;
                 animator.Play("Shrink"); // "Death" animation
                 return;
             }
@@ -40,7 +41,7 @@ public class Player : MonoBehaviour
             ghostLife = false;
         }
         // lifeTimer.text = Mathf.Round(15 - lifespan).ToString("00"); // Life timer display update
-        lifeTimer.text = lifespan.ToString("00");
+        //lifeTimer.text = lifespan.ToString("00");
         if (moveDelay)
             return;
         float inputHorizontal = Input.GetAxis("Horizontal"), inputVertical = Input.GetAxis("Vertical"); // Get movement input
@@ -69,19 +70,19 @@ public class Player : MonoBehaviour
     public void Win()
     {
         gameOver = true;
-        winPanel.SetActive(true); // Display end screen
-        WinText.text = "Level Completed!";
-        WinLife.text = lives.ToString("Lives remaining: 0");
-        WinTime.text = Mathf.Round((5 - lives) * 15 + Time.time - lifetime).ToString("0 seconds");
+        //winPanel.SetActive(true); // Display end screen
+        //WinText.text = "Level Completed!";
+        //WinLife.text = lives.ToString("Lives remaining: 0");
+       // WinTime.text = Mathf.Round((5 - lives) * 15 + Time.time - lifetime).ToString("0 seconds");
     }
 
     public void Lose()
     {
-        winPanel.SetActive(true); // Display end screen
-        WinTime.gameObject.SetActive(false);
-        WinLife.gameObject.SetActive(false);
-        nextButton.gameObject.SetActive(false);
-        WinText.text = "Level Failed!";
+        //winPanel.SetActive(true); // Display end screen
+        //WinTime.gameObject.SetActive(false);
+        //WinLife.gameObject.SetActive(false);
+        //nextButton.gameObject.SetActive(false);
+        //WinText.text = "Level Failed!";
     }
 
     private void MovePlayer(float x, float y, float z)
@@ -118,7 +119,7 @@ public class Player : MonoBehaviour
         moveDelay = false;
         movesMade++;
         transform.position += newPosition; // Move
-        perpsCamera.CameraMove(newPosition);
+        //perpsCamera.CameraMove(newPosition);
     }
 
     private void NextLife() // Called by animation event at end of shrink "death" animation
@@ -131,14 +132,14 @@ public class Player : MonoBehaviour
         gameOver = false;
         ResetPos();
         lives--;
-        lifeCount.text = lives.ToString();
+        //lifeCount.text = lives.ToString();
     }
     private void ResetPos()
     {
         transform.position = startPosition; // Start position, change variable for checkpoints
-        perpsCamera.CameraPositionReset();
+        //perpsCamera.CameraPositionReset();
         movesMade = 0;
         animator.Play("Expand"); // Play spawn animation
-        lifetime = Time.time; // Start of new life
+        //lifetime = Time.time; // Start of new life
     }
 }
