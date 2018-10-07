@@ -30,10 +30,10 @@ public class LevelEditor : MonoBehaviour {
 		Linking,
 		Rotate
 	}
-    public GameObject cellPrefab, mapParent, editDialog;
+    public GameObject cellPrefab;
     [Space(1)]
     [Header("Level Test")]
-	public Transform testLevelGroup;
+	public Transform mapParent;
 	public GameObject MainMenu;
     [Space(1)]
     [Header("Map File Buttons")]
@@ -90,7 +90,7 @@ public class LevelEditor : MonoBehaviour {
         linkButton.onClick.AddListener(delegate { ChangeTool(ToolTypes.Link); });
         voidButton.onClick.AddListener(delegate{ChangeTool(ToolTypes.Void);});
         setNameButton.onClick.AddListener(ChangeMapNameFromTextBox);
-		testButton.onClick.AddListener(delegate{BuildLevel(WorkingMap, testLevelGroup);});
+		testButton.onClick.AddListener(delegate{BuildLevel(WorkingMap, mapParent);});
 		// Level Editor building blocks init
 		playerBlock = playerPrefab;
 		groundBlock = groundPrefab;
@@ -274,7 +274,7 @@ public class LevelEditor : MonoBehaviour {
 					return;
 				}
 
-				editDialog.SetActive(true);
+				//editDialog.SetActive(true);
 
 				// TODO: Edit tool - colour
 				return;
