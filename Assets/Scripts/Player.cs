@@ -111,17 +111,19 @@ public class Player : MonoBehaviour
             switch (col.tag)
             {
                 case "Obstacle":
+					Debug.Log("Player: Hit obstacle");
                     return;
                 default:
                     continue;
             }
         }
-        collisions = Physics.OverlapBox(movePosition,new Vector3(0.48f, 1.1f, 0.48f)); // Check for ground
+        collisions = Physics.OverlapBox(movePosition,new Vector3(0.48f, 2f, 0.48f)); // Check for ground
         foreach (Collider col in collisions)
         {
             switch (col.tag)
             {
                 case "Ground":
+					Debug.Log("Player: Ground detected");
                     newPosition = new Vector3(x, y, z);
                     moveDelay = true;
                     foreach (Enemy e in enemyList)
