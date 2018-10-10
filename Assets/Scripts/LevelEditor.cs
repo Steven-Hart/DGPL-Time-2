@@ -545,7 +545,7 @@ public class LevelEditor : MonoBehaviour {
 		{
 			case ObjectTypes.Player:
 				destinationButton.GetComponent<Image>().color = playerColour;
-                goto enableDirection;
+                break;
 			case ObjectTypes.Enemy:
 				destinationButton.GetComponent<Image>().color = enemyColour;
 				goto enableDirection;
