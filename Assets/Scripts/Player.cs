@@ -50,23 +50,23 @@ public class Player : MonoBehaviour
         float inputHorizontal = Input.GetAxis("Horizontal"), inputVertical = Input.GetAxis("Vertical"); // Get movement input
         if (inputVertical > 0) // Up
         {
-            transform.rotation = Quaternion.Euler(0,180,0);
-            MovePlayer(scaledMoveDistance, 0, 0);
+            transform.rotation = Quaternion.Euler(0,-90,0);
+            MovePlayer(0, 0, -scaledMoveDistance);
         }
         else if (inputVertical < 0) // Down
         {
-            transform.rotation = Quaternion.Euler(0, 0, 0);
-            MovePlayer(-scaledMoveDistance, 0, 0);
+            transform.rotation = Quaternion.Euler(0, 90, 0);
+            MovePlayer(0, 0, scaledMoveDistance);
         }
         else if (inputHorizontal > 0) // Right
         {
-            transform.rotation = Quaternion.Euler(0, -90, 0);
-            MovePlayer(0, 0, -scaledMoveDistance);
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+            MovePlayer(-scaledMoveDistance,0, 0);
         }
         else if (inputHorizontal < 0) // Left
         {
-            transform.rotation = Quaternion.Euler(0, 90, 0);
-            MovePlayer(0, 0, scaledMoveDistance);
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+            MovePlayer(scaledMoveDistance, 0, 0);
         }
     }
 
