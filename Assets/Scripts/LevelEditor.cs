@@ -53,8 +53,8 @@ public class LevelEditor : MonoBehaviour {
     public Button testButton;
     public Button endButton;
     public Button linkButton;
-	public Text nameText;
 	public Text mapNameText;
+	public InputField mapNameInput;
 	public Text currentToolText;
     [Space(1)]
     [Header("Builder Prefabs")]
@@ -71,7 +71,7 @@ public class LevelEditor : MonoBehaviour {
 	private int[] linkSource = new int[] {-1,-1}; // Store current link source
 	private static Color32 playerColour = new Color32(13, 144, 19, 255), groundColour = new Color32(131, 131, 131, 255), gateColour = new Color32(24,236,255,255), enemyColour = new Color32(237, 28, 36, 255), triggerColour = new Color32(255,156,23, 255), endColour = new Color32(0,255,0, 255);
 	private List<int[]> linkStorage = new List<int[]>();
-	private string mapPath;
+	private static string mapsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "\\" + "Lifespan"; // lifespan map files path
 
     void Start()
 	{
@@ -99,37 +99,48 @@ public class LevelEditor : MonoBehaviour {
 		triggerBlock = triggerPrefab;
 		endBlock = endPrefab;
         // Map file buttons
-		mapPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + WorkingMap.Name + ".lsmap"; // lifespan map
+		Debug.Log("mapsPath" + mapsPath);
+		//mapsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "\\" + "Lifespan";
         saveButton.onClick.AddListener(SaveMap);
         loadButton.onClick.AddListener(LoadMap);
-		nameText.rectTransform.parent.GetComponent<InputField>().text = WorkingMap.Name;
+        mapNameInput.text = WorkingMap.Name;
+		mapNameInput.onValueChanged.AddListener(delegate{MapTextChecker();});
 	}
 
 	void SaveMap() // For save button
     {
-		SaveLevel(WorkingMap, Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + WorkingMap.Name + ".lsmap");
+		SaveLevel(WorkingMap, mapsPath + "\\" + WorkingMap.Name + ".lsmap");
 	}
 
 	void LoadMap() // For load button
 	{
-		WorkingMap = LoadLevel(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\" + nameText.text + ".lsmap");
+		List<int[]> tempLinks = new List<int[]>();
+		Map loadMap = LoadLevel(mapsPath + "\\" + mapNameInput.text + ".lsmap", out tempLinks);
+		if (loadMap == null)
+		{
+			return;
+		}
+		WorkingMap = loadMap;
+		linkStorage = tempLinks;
+		LoadMapToUI(WorkingMap);
 	}
 
 	void MapTextChecker()
 	{
-		if(nameText.text != WorkingMap.Name)
+		if(mapNameInput.text != WorkingMap.Name)
 		{
-			nameText.rectTransform.parent.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+            mapNameInput.gameObject.GetComponent<Image>().color = new Color32(251, 166, 166, 255);
 		} else 
 		{
-            nameText.rectTransform.parent.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
+            mapNameInput.gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
 		}
 	}
 
     void ChangeMapNameFromTextBox() // Set map name
     {
-        WorkingMap.Name = nameText.text;
+        WorkingMap.Name = mapNameInput.text;
         mapNameText.text = "Map name:\n" + WorkingMap.Name;
+        mapNameInput.gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
     }
 
     private void BuildUI()
@@ -188,8 +199,8 @@ public class LevelEditor : MonoBehaviour {
 				}
                 cellClicked.transform.GetChild(1).gameObject.SetActive(false);
 				cellClicked.GetComponent<Image>().color = playerColour;
-				// Change button image display
-				break;
+                // Change button image display
+                break;
 			case ToolTypes.Enemy:
 				if (thisCell.ObjectType == ObjectTypes.Enemy)
 				{
@@ -199,8 +210,8 @@ public class LevelEditor : MonoBehaviour {
 
                 cellClicked.transform.GetChild(1).gameObject.SetActive(true);
 				cellClicked.GetComponent<Image>().color = enemyColour;
-				// Set up special and colour
-				break;
+                // Set up special and colour
+                break;
 			case ToolTypes.Gate:
                 cellClicked.transform.GetChild(1).gameObject.SetActive(true);
 				if (thisCell.ObjectType == ObjectTypes.Gate)
@@ -233,8 +244,8 @@ public class LevelEditor : MonoBehaviour {
 
                 cellClicked.transform.GetChild(1).gameObject.SetActive(false);
                 cellClicked.GetComponent<Image>().color = groundColour;
-				// Ground with no object on it.
-				break;
+                // Ground with no object on it.
+                break;
             case ToolTypes.End:
                 if (WorkingMap.EndCellCoordinate[1] < cellButtons.GetLength(1) && WorkingMap.EndCellCoordinate[0] < cellButtons.GetLength(0) && WorkingMap.EndCellCoordinate[0] >= 0 && WorkingMap.EndCellCoordinate[0] >= 0)
                 {	// Remove old end point
@@ -299,32 +310,16 @@ public class LevelEditor : MonoBehaviour {
                     Text sourceText = cellButtons[linkSource[0], linkSource[1]].transform.GetChild(0).GetComponent<Text>();
                     Text destinationText = cellButtons[x, y].transform.GetChild(0).GetComponent<Text>();
 					// Cell link
-					thisCell.Link = linkSource.Clone() as int[];
-                    WorkingMap.GetCell(linkSource[0], linkSource[1]).Link = new int[] {x,y};
+					thisCell.Link.Add(linkSource.Clone() as int[]);
+                    WorkingMap.GetCell(linkSource).Link.Add(new int[2] {x,y});
                     int linkIndex = -1;
                     foreach (int[] linked in linkStorage)
                     {
 						if (linked[0] == newLink[0] && linked[1] == newLink[1] && linked[2] == newLink[2] && linked[3] == newLink[3])
                         {
                             Debug.Log("Link already exists. Removing link");
-							linkIndex = linkStorage.IndexOf(linked);
-							
-							// Remove link number from button
-							sourceText.text = LinkTextModifier(sourceText.text, linkIndex, false);
-                            destinationText.text = LinkTextModifier(destinationText.text, linkIndex, false);
-							// Modify existing links to the correct number (links that are > removed link is shifted down 1) after removal
-							for (int i = linkStorage.Count-1; i > linkIndex; i--)
-							{
-								Debug.Log(i);
-								Text sourceMod = cellButtons[linkStorage[i][0], linkStorage[i][1]].transform.GetChild(0).GetComponent<Text>();
-                                Text destinationMod = cellButtons[linkStorage[i][2], linkStorage[i][3]].transform.GetChild(0).GetComponent<Text>();
-
-								sourceMod.text = LinkTextModifier(sourceMod.text, i);
-								destinationMod.text = LinkTextModifier(destinationMod.text, i);
-							}
-
-							linkStorage.Remove(linked); // Remove link from list
-							ChangeTool(ToolTypes.Link); // Reset tool to link
+							RemoveLink(linked);
+                            ChangeTool(ToolTypes.Link); // Reset tool to link
                             return;
 						}
                     }
@@ -345,9 +340,9 @@ public class LevelEditor : MonoBehaviour {
                     ChangeTool(ToolTypes.Link); // Set tool to original state
                     return;
                 }
-				break;
+				return;
 			case ToolTypes.Rotate:
-				if(thisCell.ObjectType != ObjectTypes.Enemy && thisCell.ObjectType != ObjectTypes.Gate)
+				if(thisCell.ObjectType != ObjectTypes.Enemy && thisCell.ObjectType != ObjectTypes.Gate&& thisCell.ObjectType != ObjectTypes.Player)
 				{
 					Debug.Log("RotateTool: incorrect type");
 					return;
@@ -367,9 +362,22 @@ public class LevelEditor : MonoBehaviour {
 			default:
 				Debug.Log("EditCell: reached default case");
 				return;
+                
+		}
+		List<int[]> linkRemoval = new List<int[]>();
+        foreach (int[] linked in linkStorage) // Get all links to current cell
+        {
+            if ((linked[0] == x && linked[1] == y) || (linked[2] == x && linked[3] == y))
+            {
+                linkRemoval.Add(linked);
+            }
+        }
+		foreach (int[] linked in linkRemoval) // Remove all links to current cell
+		{
+			RemoveLink(linked);
 		}
 		thisCell.Direction = 0;
-		thisCell.Link = new int[] { -1, -1 }; // Need to remove possible links to this object
+		thisCell.Link.Clear(); // Need to remove possible links to this object
 		thisCell.Special = null;
 	}
 
@@ -506,31 +514,132 @@ public class LevelEditor : MonoBehaviour {
 		}
 	}
 
-	public static Map LoadLevel (string levelFile)  // TODO: end object load
+	private void RemoveLink(int[] fullLink)
+	{
+        int linkIndex = linkStorage.IndexOf(fullLink);
+        Text sourceText = cellButtons[fullLink[0], fullLink[1]].transform.GetChild(0).GetComponent<Text>();
+        Text destinationText = cellButtons[fullLink[2], fullLink[3]].transform.GetChild(0).GetComponent<Text>();
+        // Remove link number from button
+        sourceText.text = LinkTextModifier(sourceText.text, linkIndex, false);
+        destinationText.text = LinkTextModifier(destinationText.text, linkIndex, false);
+        // Modify existing links to the correct number (links that are > removed link is shifted down 1) after removal
+        for (int i = linkStorage.Count - 1; i > linkIndex; i--)
+        {
+            Debug.Log(i);
+            Text sourceMod = cellButtons[linkStorage[i][0], linkStorage[i][1]].transform.GetChild(0).GetComponent<Text>();
+            Text destinationMod = cellButtons[linkStorage[i][2], linkStorage[i][3]].transform.GetChild(0).GetComponent<Text>();
+
+            sourceMod.text = LinkTextModifier(sourceMod.text, i);
+            destinationMod.text = LinkTextModifier(destinationMod.text, i);
+        }
+
+        linkStorage.Remove(fullLink); // Remove link from list
+        return;
+	}
+
+	public static void CellToButton(Cell sourceCell, GameObject destinationButton) // Loaded map to ui button display
+	{
+        destinationButton.transform.GetChild(0).GetComponent<Text>().text = ""; // Empty link labels
+        destinationButton.transform.GetChild(1).gameObject.SetActive(false);
+		switch(sourceCell.ObjectType) // Can be replaced with something other than colour later
+		{
+			case ObjectTypes.Player:
+				destinationButton.GetComponent<Image>().color = playerColour;
+                goto enableDirection;
+			case ObjectTypes.Enemy:
+				destinationButton.GetComponent<Image>().color = enemyColour;
+				goto enableDirection;
+			case ObjectTypes.Gate:
+				destinationButton.GetComponent<Image>().color = gateColour;
+                goto enableDirection;
+			case ObjectTypes.Trigger:
+				destinationButton.GetComponent<Image>().color = triggerColour;
+				break;
+			case ObjectTypes.Ground:
+				destinationButton.GetComponent<Image>().color = groundColour;
+				break;
+			case ObjectTypes.End:
+				destinationButton.GetComponent<Image>().color = endColour;
+				break;
+			case ObjectTypes.Void:
+			default:
+				destinationButton.GetComponent<Image>().color = Color.white;
+				break;
+			enableDirection:
+				destinationButton.transform.GetChild(1).gameObject.SetActive(true);
+                destinationButton.transform.GetChild(1).rotation = Quaternion.Euler(0, 0, 45 - (sourceCell.Direction * 90));
+				break;
+		}
+	}
+
+	private void LoadMapToUI (Map mapToLoad)
+	{
+		for (int x = 0; x < Map.MapSize[0]; x++)
+		{
+			for (int y = 0; y < Map.MapSize[1]; y++)
+			{
+				CellToButton(mapToLoad.GetCell(x, y), cellButtons[x, y]);
+			}
+		}
+		// Set link labels
+        foreach (int[] link in linkStorage)
+        {
+			Cell sourceCell = mapToLoad.GetCell(link[0], link[1]);
+            if (!(sourceCell.ObjectType == ObjectTypes.Trigger)) // Link source is trigger
+            {
+                continue;
+            }
+            if (!(mapToLoad.GetCell(link[2], link[3]).ObjectType == ObjectTypes.Gate)) // Linked to gate
+            {
+                continue;
+            }
+			int linkIndex = linkStorage.IndexOf(link);
+            Text sourceText = cellButtons[link[0], link[1]].transform.GetChild(0).GetComponent<Text>();
+            Text destinationText = cellButtons[link[2], link[3]].transform.GetChild(0).GetComponent<Text>();
+            // Destination cell link display
+            if (destinationText.text != "")
+            {
+                destinationText.text += ", ";
+            }
+            destinationText.text += linkIndex.ToString();
+            // Source cell link display
+            if (sourceText.text != "")
+            {
+                sourceText.text += ", ";
+            }
+            sourceText.text += linkIndex.ToString();
+        }
+	}
+
+	public static Map LoadLevel (string levelFile, out List<int[]> linkStorage)  // TODO: end object load
     {
         Map loadedMap = new Map();
+		linkStorage = new List<int[]>();
 		try
 		{
             using (StreamReader reader = File.OpenText(levelFile))
             {
                 loadedMap.Name = reader.ReadLine();
-                string[] spawn = reader.ReadLine().Split(','); // Format: x,y
+                string[] spawn = reader.ReadLine().Split(','); // Format: x,y,direction
                 int x, y; // Coordinates
 
 				// Player spawn set
 				if (!ValidateCoordinates(spawn, out x, out y))
 				{
-					Debug.Log("Invalid player spawn point.");
-					return null;
+					Debug.Log("Invalid or player spawn point non existant.");
+                    loadedMap.PlayerSpawnCoordinate = new int[] { -1, -1 };
+				} else 
+				{
+                    loadedMap.PlayerSpawnCoordinate = new int[] { x, y };
+                    Cell player = loadedMap.GetCell(x, y);
+                    player.ObjectType = ObjectTypes.Player;
 				}
-				loadedMap.PlayerSpawnCoordinate = new int[] {x,y};
-				loadedMap.GetCell(x, y).ObjectType = ObjectTypes.Player;
-
+				// Rest of map read
 				string lineRead = reader.ReadLine();
 				int lineNumber = 3;
                 while(lineRead !=null)
                 {
-					// Save Line Format: #,# ObjectType,Direction,LinkX,LinkY,Special
+					// Save Line Format: #,# ObjectType,Direction,LinkX,LinkY (*)
 					// Mandatory: #,# ObjectType,Direction
 					string[] lineSplit = lineRead.Split(' ');
 					if (ValidateCoordinates(lineSplit[0].Split(','), out x, out y))
@@ -542,22 +651,25 @@ public class LevelEditor : MonoBehaviour {
 							switch (cellSplit.Length)
 							{
 								default:
-								case 5:
-									// Load special script (future-proofing)
-									goto case 4;
-								case 4:
+								case 3:
+									Debug.Log(cellSplit.Length);
 									// Load object link
 									int linkX = -1, linkY = -1;
-									if (!ValidateCoordinates(new string[] { cellSplit[2], cellSplit[3] }, out linkX, out linkY))
+									int currentLink = 2;
+									while(cellSplit.Length >= currentLink + 2)
 									{
-										Debug.Log("Line " + lineNumber + ": Invalid link coordinates.");
-									}
-									else
-									{
-										loadCell.Link = new int[2] { linkX, linkY };
+                                        if (!ValidateCoordinates(new string[] { cellSplit[currentLink], cellSplit[currentLink + 1] }, out linkX, out linkY))
+                                        {
+                                            Debug.Log("Line " + lineNumber + ": Invalid link coordinates." + cellSplit[currentLink] + "," + cellSplit[currentLink + 1] + " | " + linkX +"," + linkY);
+                                        }
+                                        else
+                                        {
+                                            loadCell.Link.Add(new int[2] { linkX, linkY });
+                                            linkStorage.Add(new int[] { x, y, linkX, linkY });
+                                        }
+										currentLink += 2;
 									}
 									goto case 2; // The forbidden goto because of C# limitations
-								case 3:
 								case 2:
 									short direction = 0;
 									short.TryParse(cellSplit[1], out direction);
@@ -581,7 +693,6 @@ public class LevelEditor : MonoBehaviour {
 		}
 		catch (FileNotFoundException e)
 		{
-			Debug.Log("File not found:" + "\"" + levelFile + "\"");
 			Debug.Log(e.Message);
 			return null;
 		}
@@ -593,6 +704,7 @@ public class LevelEditor : MonoBehaviour {
 		}
 		catch (Exception e)
 		{
+			Debug.Log(levelFile);
             Debug.Log(e.Message);
             return null;
 		}
@@ -603,6 +715,10 @@ public class LevelEditor : MonoBehaviour {
 	{
 		try
 		{
+			if(!Directory.Exists(mapsPath))
+			{
+				Directory.CreateDirectory(mapsPath);
+			}
 			if (File.Exists(savePath))
 			{
 				// ask for user confirmation before overwriting
@@ -611,13 +727,20 @@ public class LevelEditor : MonoBehaviour {
 			{
 				// Map name and spawn coordinates
 				writer.WriteLine(mapToSave.Name);
-				writer.WriteLine(mapToSave.PlayerSpawnCoordinate[0] +","+ mapToSave.PlayerSpawnCoordinate[1]);
+				if (mapToSave.PlayerSpawn != null)
+				{
+                    writer.WriteLine(mapToSave.PlayerSpawnCoordinate[0] + "," + mapToSave.PlayerSpawnCoordinate[1] );
+				}else
+				{
+					writer.WriteLine("-1,-1");
+				}
+				
 
 				for (int x = 0; x < Map.MapSize[0]; x++)
 				{
 					for (int y = 0; y < Map.MapSize[1]; y++)
 					{
-						// Save Line Format: #,# ObjectType,Direction,LinkX,LinkY,Special
+						// Default Save Line Format: #,# ObjectType,Direction,LinkX,LinkY,Special
 						// Mandatory: #,# ObjectType,Direction
 						Cell cellToSave = mapToSave.GetCell(x,y);
 						string saveLine = x+","+y;
@@ -633,8 +756,13 @@ public class LevelEditor : MonoBehaviour {
 							case ObjectTypes.Enemy:
 								saveLine += " enemy," + cellToSave.Direction;
 								break;
-							case ObjectTypes.Trigger:
-								saveLine += " trigger,0,"+cellToSave.Link[0]+","+cellToSave.Link[1];
+							case ObjectTypes.Trigger: // Trigger Format: #,# ObjectType,LinkX,LinkY(*)
+                                saveLine += " trigger,0";
+								foreach(int[] link in cellToSave.Link)
+								{
+                                    saveLine += "," + link[0] + "," + link[1];
+                                    Debug.Log(saveLine);
+								}
 								break;
 							case ObjectTypes.Ground:
 								saveLine += " ground";
@@ -687,29 +815,32 @@ public class LevelEditor : MonoBehaviour {
 				{
 					Cell cellToBuild = mapToBuild.GetCell(x, y);
                     objectMap[x,y] = CreateObject(x, y, cellToBuild, parent);
-					int[] objectLink = cellToBuild.Link; // Store link to link after all objects are built
+					List<int[]> objectLinks = cellToBuild.Link; // Store link to link after all objects are built
                     Debug.Log(linkStorage.Count);
-					if (objectLink[0] >= 0 && objectLink[1] >= 0)
+					foreach (int[] objectLink in objectLinks)
 					{
-                        Debug.Log(linkStorage.Count);
-						linkStorage.Add(new int[] {x, y}, new int[] {objectLink[0], objectLink[1]}); // Save coords of linked objects
+                        if (objectLink[0] >= 0 && objectLink[1] >= 0)
+                        {
+                            Debug.Log(linkStorage.Count);
+                            linkStorage.Add(new int[] { x, y }, new int[] { objectLink[0], objectLink[1] }); // Save coords of linked objects
+                        }
 					}
 				}
 			}
 			Debug.Log(linkStorage.Count);
 			foreach (KeyValuePair<int[],int[]> link in linkStorage) // Link triggers and gates
 			{
-				Debug.Log("entered kvp loop");
+				Debug.Log("Entered kvp loop");
                 GameObject linkSource = objectMap[link.Key[0], link.Key[1]]; // Get source object
                 GameObject linkDestination = objectMap[link.Value[0], link.Value[1]]; // Get linked object
                 Debug.Log(linkSource);
                 GateTrigger gateSource = linkSource.GetComponent<GateTrigger>(); // Check if source object is a gate
                 if (gateSource == null) // If not gate then next cell
 				{
-                    Debug.Log("iteration skipped");
+                    Debug.Log("Iteration skipped");
                     continue;
 				}
-				gateSource.Link = linkDestination; // Set object to disable by trigger
+				gateSource.Link.Add(linkDestination); // Set object to disable by trigger
             }
 		}
 		catch (Exception e)
@@ -730,13 +861,13 @@ public class Cell
 	{
 		Direction = 0;
 		ObjectType = ObjectTypes.Void;
-		Link = new int[] {-1,-1};
+		Link = new List<int[]>();
 		Special = null;
 	}
 
 	public short Direction { get; set; } // 0 Up, 1 Right, 2 Down, 3 Left 
 	public ObjectTypes ObjectType { get; set; } // Null = empty cell
-	public int[] Link { get; set; } // For triggers
+	public List<int[]> Link { get; set; } // For triggers
 	public MonoBehaviour Special { get; set; } // Special enemies.. maybe consumables? Future-proofing
 }
 
@@ -772,6 +903,11 @@ public class Map {
 	public Cell GetCell(int x, int y) // Returns cell of selected coordinate on map
 	{
 		return map[x, y];
+	}
+
+	public Cell GetCell(int[] cellGet)
+	{
+        return map[cellGet[0],cellGet[1]];
 	}
 	
 	public string Name { get; set; }

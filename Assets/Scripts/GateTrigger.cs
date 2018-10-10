@@ -1,15 +1,19 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class GateTrigger : MonoBehaviour
 {
-    public GameObject Link;
+    public List<GameObject> Link = new List<GameObject>();
 
     void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.tag == "Player")
         {
-            Link.SetActive(false); // Disables gate
-            //Gate.SetActive(!Gate.activeSelf); // Toggles Gate
+            foreach (GameObject gate in Link)
+            {
+                gate.SetActive(false); // Disables gate
+                //gate.SetActive(!gate.activeSelf); // Toggles Gate
+            }
         }
     }
 }

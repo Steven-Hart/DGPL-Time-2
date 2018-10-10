@@ -1090,18 +1090,7 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1476993143070650}
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.InputField+OnChangeEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
@@ -1132,11 +1121,11 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 14
-    m_MaxSize: 24
+    m_MinSize: 28
+    m_MaxSize: 34
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 0
@@ -1441,11 +1430,11 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 14
-    m_MaxSize: 32
+    m_MinSize: 28
+    m_MaxSize: 34
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 0
@@ -2282,8 +2271,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cellPrefab: {fileID: 1692505335660950, guid: 06b6c425144519149a354f6ffd09fce3, type: 2}
   mapParent: {fileID: 0}
-  editDialog: {fileID: 0}
-  testLevelGroup: {fileID: 0}
   MainMenu: {fileID: 0}
   loadButton: {fileID: 114311045488383502}
   saveButton: {fileID: 114136952035308154}
@@ -2299,8 +2286,8 @@ MonoBehaviour:
   testButton: {fileID: 114717831499009188}
   endButton: {fileID: 114844079190709636}
   linkButton: {fileID: 114069799159740232}
-  nameText: {fileID: 114292092026785610}
   mapNameText: {fileID: 114936453237125242}
+  mapNameInput: {fileID: 114198223108905302}
   currentToolText: {fileID: 114705088964793172}
   playerPrefab: {fileID: 1461758646176416, guid: 1f8b9523a78492b47a52c33c9710c5b4,
     type: 2}
