@@ -35,6 +35,7 @@ public class LevelEditor : MonoBehaviour {
     [Header("Level Test")]
 	public Transform mapParent;
 	public GameObject MainMenu;
+	public Transform cameraTransform;
     [Space(1)]
     [Header("Map File Buttons")]
 	public Button loadButton;
@@ -105,6 +106,8 @@ public class LevelEditor : MonoBehaviour {
         loadButton.onClick.AddListener(LoadMap);
         mapNameInput.text = WorkingMap.Name;
 		mapNameInput.onValueChanged.AddListener(delegate{MapTextChecker();});
+		Camera.main.transform.position = cameraTransform.position;
+		Camera.main.transform.rotation = cameraTransform.rotation;
 	}
 
 	void SaveMap() // For save button
