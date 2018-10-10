@@ -34,8 +34,9 @@ public class LevelEditor : MonoBehaviour {
     [Space(1)]
     [Header("Level Test")]
 	public Transform mapParent;
-	public GameObject MainMenu;
-	public Transform cameraTransform;
+	public GameObject mainMenu;
+	public Vector3 cameraPosition = new Vector3(-21,15,-11);
+	public Quaternion cameraRotation = Quaternion.Euler(45,45,0);
     [Space(1)]
     [Header("Map File Buttons")]
 	public Button loadButton;
@@ -73,6 +74,7 @@ public class LevelEditor : MonoBehaviour {
 	private static Color32 playerColour = new Color32(13, 144, 19, 255), groundColour = new Color32(131, 131, 131, 255), gateColour = new Color32(24,236,255,255), enemyColour = new Color32(237, 28, 36, 255), triggerColour = new Color32(255,156,23, 255), endColour = new Color32(0,255,0, 255);
 	private List<int[]> linkStorage = new List<int[]>();
 	private static string mapsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "\\" + "Lifespan"; // lifespan map files path
+	private bool testingMap = false;
 
     void Start()
 	{
@@ -91,7 +93,7 @@ public class LevelEditor : MonoBehaviour {
         linkButton.onClick.AddListener(delegate { ChangeTool(ToolTypes.Link); });
         voidButton.onClick.AddListener(delegate{ChangeTool(ToolTypes.Void);});
         setNameButton.onClick.AddListener(ChangeMapNameFromTextBox);
-		testButton.onClick.AddListener(delegate{BuildLevel(WorkingMap, mapParent);});
+		testButton.onClick.AddListener(TestMap);
 		// Level Editor building blocks init
 		playerBlock = playerPrefab;
 		groundBlock = groundPrefab;
@@ -106,8 +108,6 @@ public class LevelEditor : MonoBehaviour {
         loadButton.onClick.AddListener(LoadMap);
         mapNameInput.text = WorkingMap.Name;
 		mapNameInput.onValueChanged.AddListener(delegate{MapTextChecker();});
-		Camera.main.transform.position = cameraTransform.position;
-		Camera.main.transform.rotation = cameraTransform.rotation;
 	}
 
 	void SaveMap() // For save button
@@ -126,7 +126,25 @@ public class LevelEditor : MonoBehaviour {
 		WorkingMap = loadMap;
 		linkStorage = tempLinks;
 		LoadMapToUI(WorkingMap);
-	}
+    }
+
+	void TestMap() // For test button
+	{
+        // Position camera for level testing
+        Camera.main.transform.position = cameraPosition;
+        Camera.main.transform.rotation = cameraRotation;
+		// Disable menus
+		transform.parent.GetChild(0).gameObject.SetActive(false);
+        transform.parent.GetChild(1).gameObject.SetActive(false);
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(false);
+        }
+		
+		mapParent.gameObject.SetActive(true); // Enable parent
+		BuildLevel(WorkingMap, mapParent); // Build
+        testingMap = true;
+    }
 
 	void MapTextChecker()
 	{
@@ -145,6 +163,31 @@ public class LevelEditor : MonoBehaviour {
         mapNameText.text = "Map name:\n" + WorkingMap.Name;
         mapNameInput.gameObject.GetComponent<Image>().color = new Color32(255, 255, 255, 255);
     }
+
+	void Update()
+	{
+        if(testingMap)
+		{
+			if(Input.GetKeyDown(KeyCode.R))
+            {
+                // Enable your own disabled children
+                foreach (Transform child in transform)
+                {
+                    child.gameObject.SetActive(true);
+                }
+                // Enable menus
+                transform.parent.GetChild(0).gameObject.SetActive(true);
+                transform.parent.GetChild(1).gameObject.SetActive(true);
+				// Disable built level
+				foreach(Transform child in mapParent) // Kill the children
+                {
+					GameObject.Destroy(child.gameObject); 
+                }
+				mapParent.gameObject.SetActive(false); // Disable the parent
+                testingMap = false; // Massacre end
+			}
+		}
+	}
 
     private void BuildUI()
 	{
@@ -612,7 +655,8 @@ public class LevelEditor : MonoBehaviour {
             }
             sourceText.text += linkIndex.ToString();
         }
-	}
+        ChangeMapNameFromTextBox();
+    }
 
 	public static Map LoadLevel (string levelFile, out List<int[]> linkStorage)  // TODO: end object load
     {

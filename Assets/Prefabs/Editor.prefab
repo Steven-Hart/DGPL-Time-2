@@ -2272,6 +2272,8 @@ MonoBehaviour:
   cellPrefab: {fileID: 1692505335660950, guid: 06b6c425144519149a354f6ffd09fce3, type: 2}
   mapParent: {fileID: 0}
   MainMenu: {fileID: 0}
+  cameraPosition: {x: -20, y: 15, z: 15}
+  cameraRotation: {x: 0, y: 0, z: 0, w: 0}
   loadButton: {fileID: 114311045488383502}
   saveButton: {fileID: 114136952035308154}
   playerButton: {fileID: 114830946719681528}
