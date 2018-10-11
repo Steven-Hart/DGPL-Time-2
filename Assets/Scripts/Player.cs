@@ -188,7 +188,9 @@ public class Player : MonoBehaviour
     }
     private void ResetPos()
     {
-        transform.position = respawn.adjustedRespawn(); // Start position, change variable for checkpoints
+        // transform.position = respawn.adjustedRespawn(); // Why was this needed?
+        Vector3 respawnPosition = respawn.transform.position;
+        transform.position = new Vector3(respawnPosition.x, 1.5f, respawnPosition.z);
         //perpsCamera.CameraPositionReset();
         movesMade = 0;
         animator.Play("Expand"); // Play spawn animation

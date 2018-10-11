@@ -35,7 +35,7 @@ public class LevelEditor : MonoBehaviour {
     [Header("Level Test")]
 	public Transform mapParent;
 	public GameObject mainMenu;
-	public Vector3 cameraPosition = new Vector3(-21,15,-11);
+	public Vector3 cameraPosition = new Vector3(-8,15,15);
 	public Quaternion cameraRotation = Quaternion.Euler(45,135,0);
     [Space(1)]
     [Header("Map File Buttons")]
@@ -61,13 +61,14 @@ public class LevelEditor : MonoBehaviour {
     [Space(1)]
     [Header("Builder Prefabs")]
     public GameObject playerPrefab;
+	public GameObject spawnPrefab;
 	public GameObject groundPrefab;
 	public GameObject enemyPrefab;
 	public GameObject gatePrefab;
 	public GameObject triggerPrefab;
 	public GameObject endPrefab;
 
-    public static GameObject playerBlock, groundBlock, enemyBlock, gateBlock, triggerBlock, endBlock; // Level building blocks
+    public static GameObject playerBlock, spawnBlock, groundBlock, enemyBlock, gateBlock, triggerBlock, endBlock; // Level building blocks
 
     private GameObject[,] cellButtons = new GameObject[Map.MapSize[0], Map.MapSize[1]]; // Cell buttons store for script access
 	private int[] linkSource = new int[] {-1,-1}; // Store current link source
@@ -96,6 +97,7 @@ public class LevelEditor : MonoBehaviour {
 		testButton.onClick.AddListener(TestMap);
 		// Level Editor building blocks init
 		playerBlock = playerPrefab;
+		spawnBlock = spawnPrefab;
 		groundBlock = groundPrefab;
 		enemyBlock = enemyPrefab;
 		gateBlock = gatePrefab;
@@ -491,8 +493,10 @@ public class LevelEditor : MonoBehaviour {
 		{
 			case ObjectTypes.Player:
 				objectY = 1.5f;
-                prefabToPlace = playerBlock;
-				break;
+                Instantiate(groundBlock, new Vector3(x, 0, y), Quaternion.identity, parent); // The ground under object
+                prefabToPlace = Instantiate(playerBlock, new Vector3(x, objectY, y), objectRotation, parent);
+                prefabToPlace.GetComponent<Player>().respawn = Instantiate(spawnBlock, new Vector3(x, 1.01f, y), Quaternion.Euler(90, 0, 0), parent).GetComponent<Respawn>();
+				return prefabToPlace;
 			case ObjectTypes.Enemy:
 				objectY = 1.5f;
                 prefabToPlace = enemyBlock;
@@ -508,8 +512,8 @@ public class LevelEditor : MonoBehaviour {
 				break;
             case ObjectTypes.End:
                 objectY = 1.01f;
+                objectRotation = Quaternion.Euler(90, 0, 0);
                 prefabToPlace = endBlock;
-				objectRotation = Quaternion.Euler(90, 0,0);
                 break;
 			case ObjectTypes.Ground:
                 Instantiate(groundBlock, new Vector3(x, 0, y), Quaternion.identity, parent);
@@ -856,7 +860,8 @@ public class LevelEditor : MonoBehaviour {
 	{
         GameObject[,] objectMap = new GameObject[Map.MapSize[0], Map.MapSize[1]]; // For establishing object links
         Dictionary<int[], int[]> linkStorage = new Dictionary<int[], int[]>(); // Store link information from map
-
+		List<Enemy> generatedEnemies = new List<Enemy>(); // Store enemies for player script
+		Player playerScript = null;
         try
 		{
 			for (int x = 0; x < Map.MapSize[0]; x++)
@@ -864,9 +869,17 @@ public class LevelEditor : MonoBehaviour {
 				for (int y = 0; y < Map.MapSize[1]; y++)
 				{
 					Cell cellToBuild = mapToBuild.GetCell(x, y);
-                    objectMap[x,y] = CreateObject(x, y, cellToBuild, parent);
+					GameObject builtObject = CreateObject(x, y, cellToBuild, parent);
+					if (cellToBuild.ObjectType == ObjectTypes.Enemy)
+					{
+						generatedEnemies.Add(builtObject.GetComponent<Enemy>());
+					} else if (cellToBuild.ObjectType == ObjectTypes.Player)
+					{
+						playerScript = builtObject.GetComponent<Player>();
+						playerScript.startPosition = new Vector3(x, 1.5f, y); // Same as player objectY from CreateObject()
+                    }
+                    objectMap[x,y] = builtObject;
 					List<int[]> objectLinks = cellToBuild.Link; // Store link to link after all objects are built
-                    Debug.Log(linkStorage.Count);
 					foreach (int[] objectLink in objectLinks)
 					{
                         if (objectLink[0] >= 0 && objectLink[1] >= 0)
@@ -892,6 +905,14 @@ public class LevelEditor : MonoBehaviour {
 				}
 				gateSource.Link.Add(linkDestination); // Set object to disable by trigger
             }
+			if (playerScript != null)
+			{
+				playerScript.enemyList = generatedEnemies;
+				foreach (Enemy enemyScript in generatedEnemies)
+				{
+					enemyScript.player = playerScript;
+				}
+			}
 		}
 		catch (Exception e)
 		{
