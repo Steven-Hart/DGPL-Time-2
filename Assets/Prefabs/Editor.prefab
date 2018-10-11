@@ -2271,7 +2271,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cellPrefab: {fileID: 1692505335660950, guid: 06b6c425144519149a354f6ffd09fce3, type: 2}
   mapParent: {fileID: 0}
-  MainMenu: {fileID: 0}
+  mainMenu: {fileID: 0}
   cameraPosition: {x: -20, y: 15, z: 15}
   cameraRotation: {x: 0, y: 0, z: 0, w: 0}
   loadButton: {fileID: 114311045488383502}
@@ -2291,16 +2291,16 @@ MonoBehaviour:
   mapNameText: {fileID: 114936453237125242}
   mapNameInput: {fileID: 114198223108905302}
   currentToolText: {fileID: 114705088964793172}
-  playerPrefab: {fileID: 1461758646176416, guid: 1f8b9523a78492b47a52c33c9710c5b4,
+  playerPrefab: {fileID: 1461758646176416, guid: 291655a1a68eb234bb88c95f7ec21de6,
     type: 2}
-  groundPrefab: {fileID: 1923936481323850, guid: bc6400a576921eb40a8f89a5e9f686a8,
+  groundPrefab: {fileID: 1714809978364224, guid: 3f62c894918d99249bb98b5dc37ddcc8,
     type: 2}
-  enemyPrefab: {fileID: 1461758646176416, guid: 1f8b9523a78492b47a52c33c9710c5b4,
+  enemyPrefab: {fileID: 1602561621432310, guid: d67ef1378c81ded498e22354e15f0b9a,
     type: 2}
-  gatePrefab: {fileID: 1398003020666848, guid: 4846da23817f28e4c9ed7cdc63441d75, type: 2}
-  triggerPrefab: {fileID: 1157685146138022, guid: 66df078a65505d144b141377ba63ae45,
+  gatePrefab: {fileID: 1409379000360102, guid: 7adfd3fd3ab9e20468c87e2a1f8284f8, type: 2}
+  triggerPrefab: {fileID: 1729763029063516, guid: b8117a6175ed04f4f80936638a0cb98b,
     type: 2}
-  endPrefab: {fileID: 1762995738437186, guid: 494f424f4b9af2a4881dc308b64b0e67, type: 2}
+  endPrefab: {fileID: 1860769535022882, guid: d9a2a466c7506e641a0cb3adaa96caae, type: 2}
 --- !u!114 &114830946719681528
 MonoBehaviour:
   m_ObjectHideFlags: 1

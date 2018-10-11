@@ -191,7 +191,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  scaledMoveDistance: 0.99
+  scaledMoveDistance: 1
   moveDelay: 0
   enemyCube: {fileID: 114767467101873308}
   Moves: 0

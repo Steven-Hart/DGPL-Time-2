@@ -9,12 +9,13 @@ public class GetColour : MonoBehaviour {
     private Color buttonColour;
 
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
+		if(button==null)
+		{
+			return;
+		}
+		buttonColour = button.GetComponent<Renderer>().sharedMaterial.color;
+		GetComponent<SpriteRenderer>().color = buttonColour;
 	}
-
-    private void Update()
-    {
-        buttonColour = button.GetComponent<Renderer>().sharedMaterial.color;
-        GetComponent<SpriteRenderer>().color = buttonColour;
-    }
 }

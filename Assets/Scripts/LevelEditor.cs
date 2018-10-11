@@ -36,7 +36,7 @@ public class LevelEditor : MonoBehaviour {
 	public Transform mapParent;
 	public GameObject mainMenu;
 	public Vector3 cameraPosition = new Vector3(-21,15,-11);
-	public Quaternion cameraRotation = Quaternion.Euler(45,45,0);
+	public Quaternion cameraRotation = Quaternion.Euler(45,135,0);
     [Space(1)]
     [Header("Map File Buttons")]
 	public Button loadButton;
@@ -108,6 +108,7 @@ public class LevelEditor : MonoBehaviour {
         loadButton.onClick.AddListener(LoadMap);
         mapNameInput.text = WorkingMap.Name;
 		mapNameInput.onValueChanged.AddListener(delegate{MapTextChecker();});
+		cameraRotation = Quaternion.Euler(45,135,0);
 	}
 
 	void SaveMap() // For save button
@@ -489,10 +490,11 @@ public class LevelEditor : MonoBehaviour {
 		switch(cellToBuild.ObjectType) // Special considerations for certain objects
 		{
 			case ObjectTypes.Player:
-				objectY = 1f;
+				objectY = 1.5f;
                 prefabToPlace = playerBlock;
 				break;
 			case ObjectTypes.Enemy:
+				objectY = 1.5f;
                 prefabToPlace = enemyBlock;
 				break;
 			case ObjectTypes.Gate:
@@ -501,22 +503,23 @@ public class LevelEditor : MonoBehaviour {
                 prefabToPlace = gateBlock;
                 break;
 			case ObjectTypes.Trigger:
-				objectY =0.03f;
+				objectY =1.01f;
                 prefabToPlace = triggerBlock;
 				break;
             case ObjectTypes.End:
-                objectY = 0.05f;
+                objectY = 1.01f;
                 prefabToPlace = endBlock;
+				objectRotation = Quaternion.Euler(90, 0,0);
                 break;
 			case ObjectTypes.Ground:
-                Instantiate(groundBlock, new Vector3(2 * x, 0, 2 * y), Quaternion.identity, parent);
+                Instantiate(groundBlock, new Vector3(x, 0, y), Quaternion.identity, parent);
 				goto default;
 			case ObjectTypes.Void: // if no object exists in the cell
             default:
 				return null;
 		}
-		Instantiate(groundBlock, new Vector3(2 * x, 0, 2 * y), Quaternion.identity, parent); // The ground under object
-		return Instantiate(prefabToPlace, new Vector3(2 * x, objectY, 2 * y), objectRotation, parent); // The object itself
+		Instantiate(groundBlock, new Vector3(x, 0,  y), Quaternion.identity, parent); // The ground under object
+		return Instantiate(prefabToPlace, new Vector3(x, objectY, y), objectRotation, parent); // The object itself
 	}
 
 	private static bool ValidateCoordinates(string[] stringCoords, out int x, out int y)
