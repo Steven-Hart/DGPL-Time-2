@@ -4,8 +4,8 @@ using System.Collections.Generic;
 public class Player : MonoBehaviour
 {
     public float moveSpeed = 1, lives = 5, lifetime, movesMade, startMoves=15;
-    //public UnityEngine.UI.Text lifeTimer, lifeCount, WinLife, WinTime, WinText;
-    //public GameObject winPanel, nextButton;
+    public UnityEngine.UI.Text lifeTimer, lifeCount, WinLife, WinTime, WinText;
+    public GameObject winPanel, nextButton;
     public PlayerCube playerCube;
     //public Perspective perpsCamera;
     public bool gameOver, ghostLife, moveDelay;
@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
-        perpsCamera = Camera.main.GetComponent<Perspective>();
+        //perpsCamera = Camera.main.GetComponent<Perspective>();
         //lifetime = Time.time; // Start of game for scoring
         ghostLife = false;
     }
@@ -74,19 +74,19 @@ public class Player : MonoBehaviour
     public void Win()
     {
         gameOver = true;
-        //winPanel.SetActive(true); // Display end screen
-        //WinText.text = "Level Completed!";
-        //WinLife.text = lives.ToString("Lives remaining: 0");
-       // WinTime.text = Mathf.Round((5 - lives) * 15 + Time.time - lifetime).ToString("0 seconds");
+        winPanel.SetActive(true); // Display end screen
+        WinText.text = "Level Completed!";
+        WinLife.text = lives.ToString("Lives remaining: 0");
+        WinTime.text = Mathf.Round((5 - lives) * 15 + Time.time - lifetime).ToString("0 seconds");
     }
 
     public void Lose()
     {
-        //winPanel.SetActive(true); // Display end screen
-        //WinTime.gameObject.SetActive(false);
-        //WinLife.gameObject.SetActive(false);
-        //nextButton.gameObject.SetActive(false);
-        //WinText.text = "Level Failed!";
+        winPanel.SetActive(true); // Display end screen
+        WinTime.gameObject.SetActive(false);
+        WinLife.gameObject.SetActive(false);
+        nextButton.gameObject.SetActive(false);
+        WinText.text = "Level Failed!";
     }
 
     private void MovePlayer(float x, float y, float z)
