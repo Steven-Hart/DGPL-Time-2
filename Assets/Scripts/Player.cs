@@ -130,7 +130,7 @@ public class Player : MonoBehaviour
             {
                 case "Obstacle":
 					//Debug.Log("Player: Hit obstacle");
-                    if(!moveDelay)
+                    if(!source.isPlaying)
                         source.PlayOneShot(sound_obsticalbump, 1f);
                     return;
                 default:
@@ -153,7 +153,6 @@ public class Player : MonoBehaviour
                     playerCube.MoveAnimation(); // Play movement animation
                     return;
                 default:
-                    source.PlayOneShot(sound_edge, 1f);
                     continue;
             }
         }
