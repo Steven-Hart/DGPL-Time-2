@@ -13,9 +13,24 @@ public class Player : MonoBehaviour
     public float scaledMoveDistance = 1;
     public Respawn respawn;
     public List<Enemy> enemyList;
+    public AudioClip sound_move;
+    public AudioClip sound_death;
+    public AudioClip sound_edge;
+    public AudioClip sound_obsticalbump;
+    public AudioClip sound_finish;
+    public AudioClip sound_start;
+
+    private AudioSource source;
+    private float volLowRange = 0.5f;
+    private float volHighRange = 1.0f;
 
     private Animator animator;
     private Vector3 newPosition;
+
+    void Awake()
+    {
+        source = GetComponent<AudioSource>();
+    }
 
     void Start()
     {
@@ -37,6 +52,7 @@ public class Player : MonoBehaviour
             {
                 gameOver = true;
                 //lifetime = Time.time;
+                source.PlayOneShot(sound_death, 1f);
                 animator.Play("Shrink"); // "Death" animation
                 return;
             }
@@ -78,6 +94,7 @@ public class Player : MonoBehaviour
         WinText.text = "Level Completed!";
         WinLife.text = lives.ToString("Lives remaining: 0");
         WinTime.text = Mathf.Round((5 - lives) * 15 + Time.time - lifetime).ToString("0 seconds");
+        source.PlayOneShot(sound_finish, 1f);
     }
 
     public void Lose()
@@ -87,6 +104,7 @@ public class Player : MonoBehaviour
         WinLife.gameObject.SetActive(false);
         nextButton.gameObject.SetActive(false);
         WinText.text = "Level Failed!";
+        source.PlayOneShot(sound_finish, 1f);
     }
 
     private void MovePlayer(float x, float y, float z)
@@ -113,6 +131,7 @@ public class Player : MonoBehaviour
             {
                 case "Obstacle":
 					Debug.Log("Player: Hit obstacle");
+                    source.PlayOneShot(sound_obsticalbump, 1f);
                     return;
                 default:
                     continue;
@@ -132,8 +151,10 @@ public class Player : MonoBehaviour
                         e.ChooseDirection();
                     }
                     playerCube.MoveAnimation(); // Play movement animation
+                    source.PlayOneShot(sound_move, 1f);
                     return;
                 default:
+                    source.PlayOneShot(sound_edge, 1f);
                     continue;
             }
         }
@@ -157,6 +178,7 @@ public class Player : MonoBehaviour
         if (lives <= 0)
         {
             Lose();
+            source.PlayOneShot(sound_finish, 1f);
             return;
         }
         gameOver = false;
@@ -170,6 +192,7 @@ public class Player : MonoBehaviour
         //perpsCamera.CameraPositionReset();
         movesMade = 0;
         animator.Play("Expand"); // Play spawn animation
+        source.PlayOneShot(sound_start, 1f);
         //lifetime = Time.time; // Start of new life
     }
 }
