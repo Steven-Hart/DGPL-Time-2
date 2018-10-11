@@ -46,7 +46,7 @@ public class Player : MonoBehaviour
             return;
         //float lifespan = Time.time - lifetime;
         float lifespan = startMoves - movesMade;
-        if (lifespan < 0) // End of life
+        if (lifespan <= 0) // End of life
         {
             if (!ghostLife) // Ghost life
             {
@@ -60,8 +60,8 @@ public class Player : MonoBehaviour
             GetComponent<SphereCollider>().enabled = true;
             ghostLife = false;
         }
-        // lifeTimer.text = Mathf.Round(15 - lifespan).ToString("00"); // Life timer display update
-        //lifeTimer.text = lifespan.ToString("00");
+        lifeTimer.text = Mathf.Round(15 - lifespan).ToString("00"); // Life timer display update
+        lifeTimer.text = lifespan.ToString("00");
         if (moveDelay)
             return;
         float inputHorizontal = Input.GetAxis("Horizontal"), inputVertical = Input.GetAxis("Vertical"); // Get movement input
@@ -130,8 +130,9 @@ public class Player : MonoBehaviour
             switch (col.tag)
             {
                 case "Obstacle":
-					Debug.Log("Player: Hit obstacle");
-                    source.PlayOneShot(sound_obsticalbump, 1f);
+					//Debug.Log("Player: Hit obstacle");
+                    if(!moveDelay)
+                        source.PlayOneShot(sound_obsticalbump, 1f);
                     return;
                 default:
                     continue;
@@ -184,7 +185,7 @@ public class Player : MonoBehaviour
         gameOver = false;
         ResetPos();
         lives--;
-        //lifeCount.text = lives.ToString();
+        lifeCount.text = lives.ToString();
     }
     private void ResetPos()
     {

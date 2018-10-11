@@ -19,7 +19,8 @@ public class GateTrigger : MonoBehaviour
             foreach (GameObject gate in Link)
             {
                 gate.SetActive(false); // Disables gate
-                source.PlayOneShot(sound_gate, 1.0f);
+                if (!gate.activeSelf)
+                    source.PlayOneShot(sound_gate, 1.0f);
                 //gate.SetActive(!gate.activeSelf); // Toggles Gate
             }
         }
