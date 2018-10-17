@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33495422645709346}
   - component: {fileID: 65352968511902460}
   - component: {fileID: 23242995232681334}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Pillar
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -37,9 +37,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4540204772213152}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

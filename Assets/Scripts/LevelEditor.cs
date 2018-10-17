@@ -37,6 +37,14 @@ public class LevelEditor : MonoBehaviour {
 	public GameObject mainMenu;
 	public Vector3 cameraPosition = new Vector3(-8,15,15);
 	public Quaternion cameraRotation = Quaternion.Euler(45,135,0);
+	[Space(1)]
+    [Header("Level variables")]
+	public GameObject playerWinPanel;
+	public GameObject playerNextButton;
+	public Button winRetryButton;
+	public Button winNextButton;
+	public Text playerLifeTimer;
+	public Text playerLifeCount;
     [Space(1)]
     [Header("Map File Buttons")]
 	public Button loadButton;
@@ -69,6 +77,9 @@ public class LevelEditor : MonoBehaviour {
 	public GameObject endPrefab;
 
     public static GameObject playerBlock, spawnBlock, groundBlock, enemyBlock, gateBlock, triggerBlock, endBlock; // Level building blocks
+	public static GameObject winPanel, nextButton;
+	public static Button retryButton, panelNextButton; 
+	public static Text lifeTimer, lifeCount;
 
     private GameObject[,] cellButtons = new GameObject[Map.MapSize[0], Map.MapSize[1]]; // Cell buttons store for script access
 	private int[] linkSource = new int[] {-1,-1}; // Store current link source
@@ -103,6 +114,13 @@ public class LevelEditor : MonoBehaviour {
 		gateBlock = gatePrefab;
 		triggerBlock = triggerPrefab;
 		endBlock = endPrefab;
+		// Level required variables
+		lifeTimer=playerLifeTimer;
+		lifeCount= playerLifeCount;
+		winPanel=playerWinPanel;
+		nextButton=playerNextButton;
+		retryButton=winRetryButton;
+		panelNextButton = winNextButton;
         // Map file buttons
 		Debug.Log("mapsPath" + mapsPath);
 		//mapsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "\\" + "Lifespan";
@@ -503,7 +521,7 @@ public class LevelEditor : MonoBehaviour {
 				break;
 			case ObjectTypes.Gate:
 				objectY = 1f;
-				objectRotation = Quaternion.Euler(0, (cellToBuild.Direction + 1)* 90, 0);
+				objectRotation = Quaternion.Euler(0, cellToBuild.Direction* 90, 0);
                 prefabToPlace = gateBlock;
                 break;
 			case ObjectTypes.Trigger:
@@ -862,6 +880,7 @@ public class LevelEditor : MonoBehaviour {
         Dictionary<int[], int[]> linkStorage = new Dictionary<int[], int[]>(); // Store link information from map
 		List<Enemy> generatedEnemies = new List<Enemy>(); // Store enemies for player script
 		Player playerScript = null;
+		Finish endScript = null;
         try
 		{
 			for (int x = 0; x < Map.MapSize[0]; x++)
@@ -876,8 +895,17 @@ public class LevelEditor : MonoBehaviour {
 					} else if (cellToBuild.ObjectType == ObjectTypes.Player)
 					{
 						playerScript = builtObject.GetComponent<Player>();
+						playerScript.winPanel = winPanel;
+						playerScript.nextButton = nextButton;
+						playerScript.lifeTimer = lifeTimer;
+						playerScript.lifeCount = lifeCount;
 						playerScript.startPosition = new Vector3(x, 1.5f, y); // Same as player objectY from CreateObject()
-                    }
+                    } else if (cellToBuild.ObjectType == ObjectTypes.End)
+					{
+						endScript = builtObject.GetComponent<Finish>();
+						endScript.nextButton = panelNextButton;
+						endScript.retryButton = retryButton;
+					}
                     objectMap[x,y] = builtObject;
 					List<int[]> objectLinks = cellToBuild.Link; // Store link to link after all objects are built
 					foreach (int[] objectLink in objectLinks)

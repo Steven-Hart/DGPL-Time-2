@@ -20,7 +20,6 @@ public class ApplyFontSize : MonoBehaviour {
 		ResizeFont();
 	}
 	void Update () {
-        
     }
 
     //private void Update()

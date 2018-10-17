@@ -2272,8 +2272,12 @@ MonoBehaviour:
   cellPrefab: {fileID: 1692505335660950, guid: 06b6c425144519149a354f6ffd09fce3, type: 2}
   mapParent: {fileID: 0}
   mainMenu: {fileID: 0}
-  cameraPosition: {x: -20, y: 15, z: 15}
+  cameraPosition: {x: -8, y: 15, z: 15}
   cameraRotation: {x: 0, y: 0, z: 0, w: 0}
+  playerWinPanel: {fileID: 0}
+  playerNextButton: {fileID: 0}
+  playerLifeTimer: {fileID: 0}
+  playerLifeCount: {fileID: 0}
   loadButton: {fileID: 114311045488383502}
   saveButton: {fileID: 114136952035308154}
   playerButton: {fileID: 114830946719681528}
@@ -2292,6 +2296,8 @@ MonoBehaviour:
   mapNameInput: {fileID: 114198223108905302}
   currentToolText: {fileID: 114705088964793172}
   playerPrefab: {fileID: 1461758646176416, guid: 291655a1a68eb234bb88c95f7ec21de6,
+    type: 2}
+  spawnPrefab: {fileID: 1354019385732202, guid: e8b7d2d1046920244911b8c3cd60db8b,
     type: 2}
   groundPrefab: {fileID: 1714809978364224, guid: 3f62c894918d99249bb98b5dc37ddcc8,
     type: 2}
@@ -3080,7 +3086,7 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1598797603275048}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3092,7 +3098,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 1068, y: 0}
+  m_AnchoredPosition: {x: 1100, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224605545084611288
