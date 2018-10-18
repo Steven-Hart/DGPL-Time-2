@@ -60,7 +60,6 @@ public class Player : MonoBehaviour
             GetComponent<SphereCollider>().enabled = true;
             ghostLife = false;
         }
-		Debug.Log(lifeTimer);
         lifeTimer.text = Mathf.Round(15 - lifespan).ToString("00"); // Life timer display update
         lifeTimer.text = lifespan.ToString("00");
         if (moveDelay)

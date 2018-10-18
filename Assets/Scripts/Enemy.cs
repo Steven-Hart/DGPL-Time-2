@@ -28,8 +28,50 @@ public class Enemy : MonoBehaviour
 
 
 
-    public void ChooseDirection()
+    public void ChooseDirection(bool blocked = false)
     {
+		if (blocked)
+		{
+			Vector3 movePosition;
+			if (currentDirection == Direction.Right)
+			{
+				transform.rotation = Quaternion.Euler(0, -90, 0);
+				movePosition = new Vector3(0, 0, -scaledMoveDistance); //Right
+			}
+			else if (currentDirection == Direction.Left)
+			{
+				transform.rotation = Quaternion.Euler(0, 90, 0);
+				movePosition = new Vector3(0, 0, scaledMoveDistance);
+			} else
+			{
+				return;
+			}
+			Collider[] collisions = Physics.OverlapBox(transform.localPosition + movePosition, new Vector3(0.1f, 1.1f, 0.1f)); // Check for obstacles
+			foreach (Collider col in collisions)
+			{
+				switch (col.tag)
+				{
+					case "Obstacle":
+						return;
+					default:
+						continue;
+				}
+			}
+			collisions = Physics.OverlapBox(transform.localPosition + movePosition, new Vector3(0.4f, 1.1f, 0.4f)); // Check for obstacles
+			foreach (Collider col in collisions)
+			{
+				switch (col.tag)
+				{
+					case "Ground":
+						EnemyMove(0,0,movePosition.z); // Play movement animation
+						return;
+					default:
+						continue;
+				}
+
+			}
+			return;
+		}
         if(currentDirection == Direction.Right)
         {
             transform.rotation = Quaternion.Euler(0, -90, 0);
@@ -65,7 +107,7 @@ public class Enemy : MonoBehaviour
                     {
                         currentDirection = Direction.Left;
                     }
-                    ChooseDirection();
+                    ChooseDirection(true);
                     return;
                 default:
                     continue;
@@ -93,7 +135,7 @@ public class Enemy : MonoBehaviour
         {
             currentDirection = Direction.Left;
         }
-        ChooseDirection();
+        ChooseDirection(true);
     }
 
     public void TranslateEnemy()

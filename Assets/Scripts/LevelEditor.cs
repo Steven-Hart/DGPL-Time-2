@@ -896,6 +896,9 @@ public class LevelEditor : MonoBehaviour {
 					{
 						playerScript = builtObject.GetComponent<Player>();
 						playerScript.winPanel = winPanel;
+						playerScript.WinLife = winPanel.transform.GetChild(1).GetComponent<Text>();
+						playerScript.WinTime = winPanel.transform.GetChild(0).GetComponent<Text>();
+						playerScript.WinText = winPanel.transform.GetChild(2).GetComponent<Text>();
 						playerScript.nextButton = nextButton;
 						playerScript.lifeTimer = lifeTimer;
 						playerScript.lifeCount = lifeCount;
