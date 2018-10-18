@@ -892,6 +892,22 @@ public class LevelEditor : MonoBehaviour {
 					if (cellToBuild.ObjectType == ObjectTypes.Enemy)
 					{
 						generatedEnemies.Add(builtObject.GetComponent<Enemy>());
+						switch (cellToBuild.Direction)
+						{
+							case 0:
+								builtObject.GetComponent<Enemy>().currentDirection = Direction.Right;
+								break;
+							case 1:
+								builtObject.GetComponent<Enemy>().currentDirection = Direction.Down;
+								break;
+							case 2:
+								builtObject.GetComponent<Enemy>().currentDirection = Direction.Left;
+								break;
+							case 3:
+							default:
+								builtObject.GetComponent<Enemy>().currentDirection = Direction.Up;
+								break;
+						}
 					} else if (cellToBuild.ObjectType == ObjectTypes.Player)
 					{
 						playerScript = builtObject.GetComponent<Player>();
