@@ -161,7 +161,9 @@ public class LevelEditor : MonoBehaviour {
         {
             child.gameObject.SetActive(false);
         }
-		
+
+        playerLifeTimer.gameObject.SetActive(true);
+        playerLifeCount.gameObject.SetActive(true);
 		mapParent.gameObject.SetActive(true); // Enable parent
 		BuildLevel(WorkingMap, mapParent); // Build
         testingMap = true;
@@ -204,6 +206,9 @@ public class LevelEditor : MonoBehaviour {
                 {
 					GameObject.Destroy(child.gameObject); 
                 }
+				winPanel.SetActive(false);
+                playerLifeTimer.gameObject.SetActive(false);
+				playerLifeCount.gameObject.SetActive(false);
 				mapParent.gameObject.SetActive(false); // Disable the parent
                 testingMap = false; // Massacre end
 			}
