@@ -12,12 +12,14 @@ public class ApplyFontSize : MonoBehaviour {
     private int roleTextFontSize;
     private int nameTextFontSize;
 	
+	void Start() {
+		roleTextUI = GetComponentInChildren<TextMeshProUGUI>();
+		namesTextUI = GetComponentsInChildren<Text>();
+		roleTextFontSize = GetComponentInParent<SetFontSizes>().roleFontSize;
+		nameTextFontSize = GetComponentInParent<SetFontSizes>().nameFontSize;
+		ResizeFont();
+	}
 	void Update () {
-        roleTextUI = GetComponentInChildren<TextMeshProUGUI>();
-        namesTextUI = GetComponentsInChildren<Text>();
-        roleTextFontSize = GetComponentInParent<SetFontSizes>().roleFontSize;
-        nameTextFontSize = GetComponentInParent<SetFontSizes>().nameFontSize;
-        ResizeFont();
     }
 
     //private void Update()

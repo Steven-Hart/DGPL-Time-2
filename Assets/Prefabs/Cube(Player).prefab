@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23207482689079412}
   - component: {fileID: 114599555119776222}
   - component: {fileID: 95208968901416038}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,9 +42,10 @@ GameObject:
   - component: {fileID: 135936506601938246}
   - component: {fileID: 23941367884951018}
   - component: {fileID: 114595156422314984}
-  - component: {fileID: 54979439964890154}
   - component: {fileID: 95178579713037488}
-  m_Layer: 8
+  - component: {fileID: 82096692124951380}
+  - component: {fileID: 54602877272107100}
+  m_Layer: 10
   m_Name: Cube(Player)
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -160,7 +161,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1461758646176416}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!54 &54979439964890154
+--- !u!54 &54602877272107100
 Rigidbody:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -173,8 +174,88 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 116
+  m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!82 &82096692124951380
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1461758646176416}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 4288e989fc9c37b429e79fc457aaee09, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!95 &95178579713037488
 Animator:
   serializedVersion: 3
@@ -237,8 +318,16 @@ MonoBehaviour:
   ghostLife: 0
   moveDelay: 0
   startPosition: {x: 4, y: 1.2, z: 0}
-  scaledMoveDistance: 0.99
+  scaledMoveDistance: 1
   respawn: {fileID: 0}
+  enemyList:
+  - {fileID: 0}
+  sound_move: {fileID: 8300000, guid: 4288e989fc9c37b429e79fc457aaee09, type: 3}
+  sound_death: {fileID: 8300000, guid: 975c07f9c03701f43b6f161a584314bd, type: 3}
+  sound_edge: {fileID: 8300000, guid: 1c095eca5ad3321409a0cc1d7531adc0, type: 3}
+  sound_obsticalbump: {fileID: 8300000, guid: 971da76e4a56e274ebf2f9a0eabc1965, type: 3}
+  sound_finish: {fileID: 8300000, guid: dd2a65d0f43fea7479b42ecd2c31907f, type: 3}
+  sound_start: {fileID: 8300000, guid: 3caa847424db756458ecb865b5af3b1d, type: 3}
 --- !u!114 &114599555119776222
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -257,7 +346,7 @@ SphereCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1461758646176416}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5

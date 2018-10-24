@@ -1,12 +1,11 @@
 fileFormatVersion: 2
-guid: 433af0c345e4b714b89ece251d1ee58b
-timeCreated: 1539823064
+guid: 44e7ab7ec49ab0f4387f703646f58dbc
+timeCreated: 1536197682
 licenseType: Pro
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - sound_gate: {fileID: 8300000, guid: 9de8a851683a38046aa2f36a83bfae9a, type: 3}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
