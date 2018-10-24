@@ -1115,6 +1115,11 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!1 &292677104 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1204047288803522, guid: 39cb5745959e8f44e923dda85199a9b5,
+    type: 2}
+  m_PrefabInternal: {fileID: 179353121}
 --- !u!1 &294431335
 GameObject:
   m_ObjectHideFlags: 0
@@ -3558,6 +3563,11 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 768244261}
+--- !u!1 &775074771 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1204047288803522, guid: 39cb5745959e8f44e923dda85199a9b5,
+    type: 2}
+  m_PrefabInternal: {fileID: 741839826}
 --- !u!1 &819119494
 GameObject:
   m_ObjectHideFlags: 0
@@ -5278,6 +5288,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 17
       objectReference: {fileID: 0}
+    - target: {fileID: 1204047288803522, guid: 39cb5745959e8f44e923dda85199a9b5, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 39cb5745959e8f44e923dda85199a9b5, type: 2}
   m_IsPrefabParent: 0
@@ -5998,6 +6012,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6416cd93a6f7dd441bad80b95ac5cf16, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1643567005 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1204047288803522, guid: 39cb5745959e8f44e923dda85199a9b5,
+    type: 2}
+  m_PrefabInternal: {fileID: 1580682410}
 --- !u!1 &1646463930
 GameObject:
   m_ObjectHideFlags: 0
@@ -7725,6 +7744,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af2f0f0bc8a5f4044a04fd7787026305, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _lives:
+  - {fileID: 1643567005}
+  - {fileID: 292677104}
+  - {fileID: 775074771}
+  LifeCount: 3
 --- !u!4 &2139013645
 Transform:
   m_ObjectHideFlags: 0

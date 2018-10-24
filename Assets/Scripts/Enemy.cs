@@ -166,7 +166,7 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            player.LoseLife(); 
+            player.Lose(); 
         }
     }
 }

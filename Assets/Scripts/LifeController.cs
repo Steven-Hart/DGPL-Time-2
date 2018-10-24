@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class LifeController : MonoBehaviour {
 
-    private GameObject[] _lives;
+    public GameObject[] _lives;
     private int life_counter;
+    public int LifeCount;
     // Use this for initialization
     void Start () {
-        
-        _lives = GameObject.FindGameObjectsWithTag("Life");
-        life_counter = _lives.Length - 1;
+            //GameObject.FindGameObjectsWithTag("Life");
+        life_counter = 0;
     }
 	
 	// Update is called once per frame
@@ -20,10 +20,10 @@ public class LifeController : MonoBehaviour {
     //Disables game object one by one
     public void MinusLife()
     {
-        if(life_counter >= 0)
+        if(life_counter <= _lives.Length)
         {
             _lives[life_counter].SetActive(false);
-            life_counter--;
+            life_counter++;
         }
     }
 }
