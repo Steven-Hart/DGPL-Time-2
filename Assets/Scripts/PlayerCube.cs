@@ -26,7 +26,8 @@ public class PlayerCube : MonoBehaviour {
 
     public void MoveAnimation() // Play movement animation
     {
-        animator.Play("MoveDown");
+        //animator.Play("MoveDown");
+        animator.Play("Jump");
     }
 
     public void MovePlayer() // To be called by animation event move down
