@@ -180,7 +180,7 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            player.NextLife(); 
+            player.LoseLife(); 
         }
     }
 }

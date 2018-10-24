@@ -53,9 +53,7 @@ public class Player : MonoBehaviour
             {
                 gameOver = true;
                 //lifetime = Time.time;
-                source.PlayOneShot(sound_death, 1f);
-                animator.Play("Shrink"); // "Death" animation
-                
+                LoseLife();
                 return;
             }
             GetComponent<SphereCollider>().enabled = true;
@@ -100,14 +98,15 @@ public class Player : MonoBehaviour
 
     public void Lose()
     {
+        gameOver = true;
         winPanel.SetActive(true); // Display end screen
         WinTime.gameObject.SetActive(false);
         WinLife.gameObject.SetActive(false);
         nextButton.gameObject.SetActive(false);
         WinText.text = "Level Failed!";
         source.PlayOneShot(sound_finish, 1f);
-        while (source.isPlaying) { }
-        gameObject.SetActive(false);
+        //while (source.isPlaying) { }
+        //gameObject.SetActive(false);
     }
 
     private void MovePlayer(float x, float y, float z)
@@ -177,11 +176,18 @@ public class Player : MonoBehaviour
         */
     }
 
-    public void NextLife() // Called by animation event at end of shrink "death" animation
+    public void LoseLife()
     {
+        source.PlayOneShot(sound_death, 1f);
+        animator.Play("Shrink"); // "Death" animation
         lives--;
         lifeLine.MinusLife();
 
+        NextLife();
+    }
+
+    public void NextLife() // Called by animation event at end of shrink "death" animation
+    {
         if (lives <= 0)
         {
             Lose();
