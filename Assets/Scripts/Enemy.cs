@@ -24,8 +24,6 @@ public class Enemy : MonoBehaviour
 
     public void ChooseDirection(bool blocked = false)
     {
-		if (debug)
-			Debug.Log(currentDirection);
 		if (blocked)
 		{
 			Vector3 movePosition;
@@ -60,21 +58,59 @@ public class Enemy : MonoBehaviour
 						continue;
 				}
 			}
-			collisions = Physics.OverlapBox(transform.localPosition + movePosition, new Vector3(0.4f, 1.1f, 0.4f)); // Check for obstacles
+			collisions = Physics.OverlapBox(transform.localPosition + movePosition, new Vector3(0.48f, 1.1f, 0.48f)); // Check for obstacles
 			foreach (Collider col in collisions)
 			{
 				switch (col.tag)
 				{
 					case "Ground":
-						EnemyMove(0,0,movePosition.z); // Play movement animation
+						newPosition = movePosition;
+						enemyCube.MoveAnimation(); // Play movement animation
 						return;
 					default:
 						continue;
 				}
-
 			}
 			return;
 		}
+		ContinueDirection();
+    }
+
+    private void EnemyMove(float x, float y, float z)
+    {
+        Vector3 movePosition = transform.position + new Vector3(x, y, z); // Change to fixed space movement later
+        Vector3 relativePosition = movePosition - transform.position;
+        relativePosition = relativePosition/2;
+        Collider[] collisions = Physics.OverlapBox(movePosition - relativePosition, new Vector3(0.1f, 1.1f, 0.1f)); // Check for obstacles
+        foreach (Collider col in collisions)
+        {
+            switch (col.tag)
+            {
+                case "Obstacle":
+					TurnAround();
+                    return;
+                default:
+                    continue;
+            }
+        }
+        collisions = Physics.OverlapBox(movePosition, new Vector3(0.4f, 1.1f, 0.4f)); // Check for obstacles
+        foreach (Collider col in collisions)
+        {
+            switch (col.tag)
+            {
+                case "Ground":
+                    newPosition = new Vector3(x, y, z);
+                    enemyCube.MoveAnimation(); // Play movement animation
+                    return;
+                default:
+                    continue;
+            }
+        }
+		TurnAround();
+    }
+
+	private void ContinueDirection()
+	{
 		switch (currentDirection)
 		{
 			case Direction.Right:
@@ -95,59 +131,9 @@ public class Enemy : MonoBehaviour
 				EnemyMove(-scaledMoveDistance, 0, 0);
 				break;
 		}
-    }
-
-    private void EnemyMove(float x, float y, float z)
-    {
-        Vector3 movePosition = transform.position + new Vector3(x, y, z); // Change to fixed space movement later
-        Vector3 relativePosition = movePosition - transform.position;
-        relativePosition = relativePosition/2;
-        Collider[] collisions = Physics.OverlapBox(movePosition - relativePosition, new Vector3(0.1f, 1.1f, 0.1f)); // Check for obstacles
-        foreach (Collider col in collisions)
-        {
-            switch (col.tag)
-            {
-                case "Obstacle":
-					switch (currentDirection)
-					{
-						case Direction.Left:
-							transform.rotation = Quaternion.Euler(0, -90, 0);
-							currentDirection = Direction.Right;
-							break;
-						case Direction.Right:
-							transform.rotation = Quaternion.Euler(0, 90, 0);
-							currentDirection = Direction.Left;
-							break;
-						case Direction.Up:
-							transform.rotation = Quaternion.Euler(0, 180, 0);
-							currentDirection = Direction.Down;
-							break;
-						case Direction.Down:
-						default:
-							transform.rotation = Quaternion.Euler(0, 0, 0);
-							currentDirection = Direction.Up;
-							break;
-					}
-                    ChooseDirection(true);
-                    return;
-                default:
-                    continue;
-            }
-        }
-        collisions = Physics.OverlapBox(movePosition, new Vector3(0.4f, 1.1f, 0.4f)); // Check for obstacles
-        foreach (Collider col in collisions)
-        {
-            switch (col.tag)
-            {
-                case "Ground":
-                    newPosition = new Vector3(x, y, z);
-                    enemyCube.MoveAnimation(); // Play movement animation
-                    return;
-                default:
-                    continue;
-            }
-
-        }
+	}
+	private void TurnAround()
+	{
 		switch (currentDirection)
 		{
 			case Direction.Left:
@@ -168,8 +154,8 @@ public class Enemy : MonoBehaviour
 				currentDirection = Direction.Up;
 				break;
 		}
-        ChooseDirection(true);
-    }
+		ChooseDirection(true);
+	}
 
     public void TranslateEnemy()
     {

@@ -14,7 +14,6 @@ public class Player : MonoBehaviour
     public float scaledMoveDistance = 1;
     public Respawn respawn;
     public List<Enemy> enemyList;
-    public AudioClip sound_move;
     public AudioClip sound_death;
     public AudioClip sound_edge;
     public AudioClip sound_obsticalbump;
@@ -133,7 +132,7 @@ public class Player : MonoBehaviour
             {
                 case "Obstacle":
 					//Debug.Log("Player: Hit obstacle");
-                    if(!moveDelay)
+                    if(!source.isPlaying)
                         source.PlayOneShot(sound_obsticalbump, 1f);
                     return;
                 default:
@@ -154,10 +153,8 @@ public class Player : MonoBehaviour
                         e.ChooseDirection();
                     }
                     playerCube.MoveAnimation(); // Play movement animation
-                    source.PlayOneShot(sound_move, 1f);
                     return;
                 default:
-                    source.PlayOneShot(sound_edge, 1f);
                     continue;
             }
         }
