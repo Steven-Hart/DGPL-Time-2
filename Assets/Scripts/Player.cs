@@ -179,8 +179,6 @@ public class Player : MonoBehaviour
         animator.Play("Shrink"); // "Death" animation
         lives--;
         lifeLine.MinusLife();
-
-        NextLife();
     }
 
     public void NextLife() // Called by animation event at end of shrink "death" animation
@@ -188,7 +186,6 @@ public class Player : MonoBehaviour
         if (lives <= 0)
         {
             Lose();
-            source.PlayOneShot(sound_finish, 1f);
             return;
         }
         gameOver = false;
