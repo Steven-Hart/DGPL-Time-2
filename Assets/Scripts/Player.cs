@@ -175,6 +175,7 @@ public class Player : MonoBehaviour
 
     public void LoseLife()
     {
+        gameOver = true;
         source.PlayOneShot(sound_death, 1f);
         animator.Play("Shrink"); // "Death" animation
         lives--;
