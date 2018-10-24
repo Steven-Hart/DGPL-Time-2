@@ -5,6 +5,7 @@ public class Player : MonoBehaviour
 {
     public float moveSpeed = 1, lives = 5, lifetime, movesMade, startMoves=15;
     public UnityEngine.UI.Text lifeTimer, lifeCount, WinLife, WinTime, WinText;
+    public LifeController lifeLine;
     public GameObject winPanel, nextButton;
     public PlayerCube playerCube;
     //public Perspective perpsCamera;
@@ -21,8 +22,8 @@ public class Player : MonoBehaviour
     public AudioClip sound_start;
 
     private AudioSource source;
-    private float volLowRange = 0.5f;
-    private float volHighRange = 1.0f;
+    //private float volLowRange = 0.5f;
+    //private float volHighRange = 1.0f;
 
     private Animator animator;
     private Vector3 newPosition;
@@ -54,9 +55,9 @@ public class Player : MonoBehaviour
                 //lifetime = Time.time;
                 source.PlayOneShot(sound_death, 1f);
                 animator.Play("Shrink"); // "Death" animation
+                
                 return;
             }
-            ResetPos();
             GetComponent<SphereCollider>().enabled = true;
             ghostLife = false;
         }
@@ -105,6 +106,8 @@ public class Player : MonoBehaviour
         nextButton.gameObject.SetActive(false);
         WinText.text = "Level Failed!";
         source.PlayOneShot(sound_finish, 1f);
+        while (source.isPlaying) { }
+        gameObject.SetActive(false);
     }
 
     private void MovePlayer(float x, float y, float z)
@@ -176,6 +179,9 @@ public class Player : MonoBehaviour
 
     public void NextLife() // Called by animation event at end of shrink "death" animation
     {
+        lives--;
+        lifeLine.MinusLife();
+
         if (lives <= 0)
         {
             Lose();
@@ -184,8 +190,7 @@ public class Player : MonoBehaviour
         }
         gameOver = false;
         ResetPos();
-        lives--;
-        lifeCount.text = lives.ToString();
+        //lifeCount.text = lives.ToString();
     }
     private void ResetPos()
     {
