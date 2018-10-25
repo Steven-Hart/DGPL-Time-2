@@ -27,13 +27,11 @@ public class Player : MonoBehaviour
     private Animator animator;
     private Vector3 newPosition;
 
-    void Awake()
-    {
-        source = GetComponent<AudioSource>();
-    }
-
     void Start()
-    {
+	{
+		lifeLine.StartingMoves = Mathf.RoundToInt(startMoves);
+		lifeLine.SetStartingMoves();
+		source = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
         //perpsCamera = Camera.main.GetComponent<Perspective>();
         //lifetime = Time.time; // Start of game for scoring
@@ -148,6 +146,7 @@ public class Player : MonoBehaviour
 					Debug.Log("Player: Ground detected");
                     newPosition = new Vector3(x, y, z);
                     moveDelay = true;
+					lifeLine.MinusMove();
                     foreach (Enemy e in enemyList)
                     {
                         e.ChooseDirection();
@@ -200,6 +199,7 @@ public class Player : MonoBehaviour
         transform.position = new Vector3(respawnPosition.x, 1.5f, respawnPosition.z);
         //perpsCamera.CameraPositionReset();
         movesMade = 0;
+		lifeLine.MovesReset();
         animator.Play("Expand"); // Play spawn animation
         source.PlayOneShot(sound_start, 1f);
         //lifetime = Time.time; // Start of new life
