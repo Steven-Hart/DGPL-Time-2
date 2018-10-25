@@ -4045,6 +4045,10 @@ Prefab:
       propertyPath: scaledMoveDistance
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1602561621432310, guid: d67ef1378c81ded498e22354e15f0b9a, type: 2}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 33164003399024014, guid: d67ef1378c81ded498e22354e15f0b9a, type: 2}
     - {fileID: 23886773549389856, guid: d67ef1378c81ded498e22354e15f0b9a, type: 2}

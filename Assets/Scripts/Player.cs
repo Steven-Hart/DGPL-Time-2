@@ -135,6 +135,9 @@ public class Player : MonoBehaviour
                     if(!source.isPlaying)
                         source.PlayOneShot(sound_obsticalbump, 1f);
                     return;
+                case "Enemy":
+                    
+                    return;
                 default:
                     continue;
             }
