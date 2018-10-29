@@ -5,6 +5,7 @@ public class Player : MonoBehaviour
 {
     public float moveSpeed = 1, lives = 5, lifetime, movesMade, startMoves=15;
     public UnityEngine.UI.Text lifeTimer, lifeCount, WinLife, WinTime, WinText;
+    public LifeController lifeLine;
     public GameObject winPanel, nextButton;
     public PlayerCube playerCube;
     //public Perspective perpsCamera;
@@ -13,7 +14,6 @@ public class Player : MonoBehaviour
     public float scaledMoveDistance = 1;
     public Respawn respawn;
     public List<Enemy> enemyList;
-    public AudioClip sound_move;
     public AudioClip sound_death;
     public AudioClip sound_edge;
     public AudioClip sound_obsticalbump;
@@ -21,19 +21,17 @@ public class Player : MonoBehaviour
     public AudioClip sound_start;
 
     private AudioSource source;
-    private float volLowRange = 0.5f;
-    private float volHighRange = 1.0f;
+    //private float volLowRange = 0.5f;
+    //private float volHighRange = 1.0f;
 
     private Animator animator;
     private Vector3 newPosition;
 
-    void Awake()
-    {
-        source = GetComponent<AudioSource>();
-    }
-
     void Start()
-    {
+	{
+		lifeLine.StartingMoves = Mathf.RoundToInt(startMoves);
+		lifeLine.SetStartingMoves();
+		source = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
         //perpsCamera = Camera.main.GetComponent<Perspective>();
         //lifetime = Time.time; // Start of game for scoring
@@ -52,11 +50,9 @@ public class Player : MonoBehaviour
             {
                 gameOver = true;
                 //lifetime = Time.time;
-                source.PlayOneShot(sound_death, 1f);
-                animator.Play("Shrink"); // "Death" animation
+                LoseLife();
                 return;
             }
-            ResetPos();
             GetComponent<SphereCollider>().enabled = true;
             ghostLife = false;
         }
@@ -99,12 +95,15 @@ public class Player : MonoBehaviour
 
     public void Lose()
     {
+        gameOver = true;
         winPanel.SetActive(true); // Display end screen
         WinTime.gameObject.SetActive(false);
         WinLife.gameObject.SetActive(false);
         nextButton.gameObject.SetActive(false);
         WinText.text = "Level Failed!";
         source.PlayOneShot(sound_finish, 1f);
+        //while (source.isPlaying) { }
+        //gameObject.SetActive(false);
     }
 
     private void MovePlayer(float x, float y, float z)
@@ -131,8 +130,11 @@ public class Player : MonoBehaviour
             {
                 case "Obstacle":
 					//Debug.Log("Player: Hit obstacle");
-                    if(!moveDelay)
+                    if(!source.isPlaying)
                         source.PlayOneShot(sound_obsticalbump, 1f);
+                    return;
+                case "Enemy":
+                    
                     return;
                 default:
                     continue;
@@ -147,15 +149,14 @@ public class Player : MonoBehaviour
 					Debug.Log("Player: Ground detected");
                     newPosition = new Vector3(x, y, z);
                     moveDelay = true;
+					lifeLine.MinusMove();
                     foreach (Enemy e in enemyList)
                     {
                         e.ChooseDirection();
                     }
                     playerCube.MoveAnimation(); // Play movement animation
-                    source.PlayOneShot(sound_move, 1f);
                     return;
                 default:
-                    source.PlayOneShot(sound_edge, 1f);
                     continue;
             }
         }
@@ -174,18 +175,25 @@ public class Player : MonoBehaviour
         */
     }
 
+    public void LoseLife()
+    {
+        gameOver = true;
+        source.PlayOneShot(sound_death, 1f);
+        animator.Play("Shrink"); // "Death" animation
+        lives--;
+        lifeLine.MinusLife();
+    }
+
     public void NextLife() // Called by animation event at end of shrink "death" animation
     {
         if (lives <= 0)
         {
             Lose();
-            source.PlayOneShot(sound_finish, 1f);
             return;
         }
         gameOver = false;
         ResetPos();
-        lives--;
-        lifeCount.text = lives.ToString();
+        //lifeCount.text = lives.ToString();
     }
     private void ResetPos()
     {
@@ -194,6 +202,7 @@ public class Player : MonoBehaviour
         transform.position = new Vector3(respawnPosition.x, 1.5f, respawnPosition.z);
         //perpsCamera.CameraPositionReset();
         movesMade = 0;
+		lifeLine.MovesReset();
         animator.Play("Expand"); // Play spawn animation
         source.PlayOneShot(sound_start, 1f);
         //lifetime = Time.time; // Start of new life
