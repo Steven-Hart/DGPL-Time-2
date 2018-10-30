@@ -5,48 +5,36 @@ using UnityEngine;
 public class TestAnimations : MonoBehaviour {
 
     public Animator[] anims;
-    private AnimCheck[] animChecks;
+    private AnimationClip[] clips;
+    private float time = 0f;
 
     private void Start()
     {
-        animChecks = new AnimCheck[anims.Length];
-        for (int i = 0; i < anims.Length; i++)
+        clips = anims[1].runtimeAnimatorController.animationClips;
+        for (int j = 0; j < clips.Length; j++)
         {
-            animChecks[i] = anims[i].gameObject.GetComponent<AnimCheck>();
+            if (clips[j].name == "Level Disappear 01")
+            {
+                time = clips[j].length;
+            }
         }
     }
 
     // Update is called once per frame
     void Update () {
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    //anims[1].Play("Level Disappear 01");
-        //    anims[0].SetBool("Fade In", true);
-        //    anims[1].SetBool("Level Visible", false);
-
-        //}
-        //if (Input.GetKeyDown(KeyCode.UpArrow))
-        //{
-        //    anims[0].SetBool("Fade In", false);
-        //    anims[1].SetBool("Level Visible", true);
-        //}
-        //if (animChecks[0].Finished)
-        //{
-        //    Debug.Log("Finished");
-        //}
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            anims[0].Play("Fade In");
-            anims[0].Play("Fade Out");
+            StartCoroutine("FadeCoroutine");
         }
     }
 
-    private bool IsPlaying(Animator anim, string stateName)
+    IEnumerator FadeCoroutine()
     {
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName(stateName) &&
-                anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
-            return true;
-        else
-            return false;
+        anims[0].Play("Fade In");
+        anims[1].Play("Level Disappear 01");
+        yield return new WaitForSeconds(time + 2f); //Wait for clip to finish
+        //Do other stuff here
+        anims[0].Play("Fade Out");
+        anims[1].Play("Level Reappear 01");
     }
 }
