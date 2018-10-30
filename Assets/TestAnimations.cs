@@ -26,6 +26,10 @@ public class TestAnimations : MonoBehaviour {
         {
             StartCoroutine("FadeCoroutine");
         }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            anims[2].Play("In Game UI Fade Out");
+        }
     }
 
     IEnumerator FadeCoroutine()
