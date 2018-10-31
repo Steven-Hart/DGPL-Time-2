@@ -6,11 +6,17 @@ public class LevelFade : MonoBehaviour {
 
     public Animator[] anims;
 
+    public GameObject Menu;
+    public GameObject Credits;
+   
+    public List<GameObject> Levels;
 
     private bool result;
     private AnimationClip[] clips;
     private float time = 0f;
     private GameObject menu;
+    private GameObject currentLevel;
+    private GameObject nextLevel;
 
     public enum FadeState {MenuToCredits, MenuToGame, RestartLevel, NextLevel}
 
@@ -43,7 +49,7 @@ public class LevelFade : MonoBehaviour {
                 NextLevel(result, nextLevel);
                 break;
             case FadeState.RestartLevel:
-                NextLevel(result, nextLevel);
+                NextLevel(result, currentLevel);
                 break;
         }
     }
@@ -82,8 +88,8 @@ public class LevelFade : MonoBehaviour {
         anims[1].Play("Level Disappear 01");
         yield return new WaitForSeconds(time + 2f); //Wait for clip to finish
         //Do other stuff here
-        anims[0].Play("Fade Out");
-        anims[1].Play("Level Reappear 01");
+
+        Credits.SetActive(true);
     }
 
     IEnumerator FadeMenuToGameCoroutine()// Menu to Game
@@ -97,7 +103,7 @@ public class LevelFade : MonoBehaviour {
         anims[1].Play("Level Reappear 01");
     }
 
-    IEnumerator FadeNextLevelCoroutine()// Level to Level
+    IEnumerator FadeNextLevelCoroutine(int currentLevel, int NextLevel)// Level to Level
     {
 
         anims[0].Play("Fade In");
