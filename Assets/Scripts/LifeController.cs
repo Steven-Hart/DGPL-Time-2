@@ -31,7 +31,7 @@ public class LifeController : MonoBehaviour {
 
 	public void MinusMove()
 	{
-		moves[moveCounter].SetActive(false);
+		moves[moveCounter].GetComponent<MoveCounter>().LoseMove();
 		moveCounter--;
 	}
 
@@ -41,6 +41,7 @@ public class LifeController : MonoBehaviour {
 		for (int i = 0; i < StartingMoves; i++)
 		{
 			moves[i].SetActive(true);
+			moves[i].GetComponent<MoveCounter>().ResetMove();
 		}
 	}
     //Disables game object one by one
@@ -52,7 +53,6 @@ public class LifeController : MonoBehaviour {
             life_counter++;
         }
     }
-
 
 	public int StartingMoves {get; set;}
 }

@@ -15,7 +15,6 @@ public class Lifeline : MonoBehaviour {
 	{
 		PlayAllInAnimators(glowParent.transform.GetComponentsInChildren<Animator>());
 		PlayAllInAnimators(overlayParent.transform.GetComponentsInChildren<Animator>());
-		
 	}
 
 	private void PlayAllInAnimators(Animator[] childAnimators)
