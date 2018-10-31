@@ -100,6 +100,7 @@ public class Player : MonoBehaviour
         WinTime.gameObject.SetActive(false);
         WinLife.gameObject.SetActive(false);
         nextButton.gameObject.SetActive(false);
+		playerCube.gameObject.GetComponent<MeshRenderer>().enabled = false;
         WinText.text = "Level Failed!";
         source.PlayOneShot(sound_finish, 1f);
         //while (source.isPlaying) { }
@@ -190,9 +191,10 @@ public class Player : MonoBehaviour
         {
             Lose();
             return;
-        }
-        gameOver = false;
-        ResetPos();
+		}
+		animator.Play("Expand"); // Play spawn animation
+		gameOver = false;
+		ResetPos();
         //lifeCount.text = lives.ToString();
     }
     private void ResetPos()
@@ -203,7 +205,6 @@ public class Player : MonoBehaviour
         //perpsCamera.CameraPositionReset();
         movesMade = 0;
 		lifeLine.MovesReset();
-        animator.Play("Expand"); // Play spawn animation
         source.PlayOneShot(sound_start, 1f);
         //lifetime = Time.time; // Start of new life
     }
