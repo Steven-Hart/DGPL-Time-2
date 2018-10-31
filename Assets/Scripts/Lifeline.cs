@@ -13,6 +13,8 @@ public class Lifeline : MonoBehaviour {
 	
 	public void LoseLife()
 	{
+		if(glowParent == null || overlayParent == null)
+			return;
 		PlayAllInAnimators(glowParent.transform.GetComponentsInChildren<Animator>());
 		PlayAllInAnimators(overlayParent.transform.GetComponentsInChildren<Animator>());
 	}
