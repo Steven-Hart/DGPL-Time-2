@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     public AudioClip sound_finish;
     public AudioClip sound_start;
 	public AudioClip sound_lose;
+	public Direction currentDirection=Direction.Up;
 
     private AudioSource source;
     //private float volLowRange = 0.5f;
@@ -69,21 +70,26 @@ public class Player : MonoBehaviour
         if (inputVertical > 0) // Up
         {
             transform.rotation = Quaternion.Euler(0,-90,0);
+			// You may be wondering why it says right below instead of UP, well its to match up with enemy script's directions and I'm too scared to replace enemy script code in case something breaks since we're running out of time. <3 Calvin 
+			currentDirection = Direction.Right;
             MovePlayer(0, 0, -scaledMoveDistance);
         }
         else if (inputVertical < 0) // Down
         {
             transform.rotation = Quaternion.Euler(0, 90, 0);
+			currentDirection = Direction.Left;
             MovePlayer(0, 0, scaledMoveDistance);
         }
         else if (inputHorizontal > 0) // Right
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
+			currentDirection = Direction.Down;
             MovePlayer(-scaledMoveDistance,0, 0);
         }
         else if (inputHorizontal < 0) // Left
         {
             transform.rotation = Quaternion.Euler(0, 180, 0);
+			currentDirection = Direction.Up;
             MovePlayer(scaledMoveDistance, 0, 0);
         }
     }
@@ -138,32 +144,52 @@ public class Player : MonoBehaviour
                     if(!source.isPlaying)
                         source.PlayOneShot(sound_obsticalbump, 1f);
                     return;
-                case "Enemy":
-                    
-                    return;
                 default:
                     continue;
             }
         }
         collisions = Physics.OverlapBox(movePosition,new Vector3(0.48f, 2f, 0.48f)); // Check for ground
+		bool groundExists = false;
         foreach (Collider col in collisions)
         {
             switch (col.tag)
             {
                 case "Ground":
-                    newPosition = new Vector3(x, y, z);
-                    moveDelay = true;
-					lifeLine.MinusMove();
-                    foreach (Enemy e in enemyList)
-                    {
-                        e.ChooseDirection();
-                    }
-                    playerCube.MoveAnimation(); // Play movement animation
-                    return;
+					groundExists = true;
+                    break;
+				case "Enemy":
+					Direction enemyDirection = col.gameObject.GetComponent<Enemy>().currentDirection;
+					if (enemyDirection == currentDirection)
+					{
+						break;
+					} else
+					{
+						if ((currentDirection == Direction.Left && enemyDirection == Direction.Right)||
+						(currentDirection == Direction.Right && enemyDirection == Direction.Left)||
+						(currentDirection == Direction.Up && enemyDirection == Direction.Down)||
+						(currentDirection == Direction.Down && enemyDirection == Direction.Up))
+						{
+							Debug.Log("Enemy: " + enemyDirection.ToString() + " Player: " + currentDirection.ToString());
+							return;
+						}
+					}
+					break;
                 default:
                     continue;
             }
         }
+		if (groundExists)
+		{
+			groundExists = true;
+			newPosition = new Vector3(x, y, z);
+			moveDelay = true;
+			lifeLine.MinusMove();
+			foreach (Enemy e in enemyList)
+			{
+				e.ChooseDirection();
+			}
+			playerCube.MoveAnimation(); // Play movement animation
+		}
     }
 
     public void TranslatePlayer()
