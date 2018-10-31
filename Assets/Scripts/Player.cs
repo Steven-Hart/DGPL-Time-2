@@ -40,6 +40,10 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+		if (Input.GetAxis("Restart") > 0)
+		{
+			UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+		}
         if (gameOver)
             return;
         //float lifespan = Time.time - lifetime;
