@@ -134,7 +134,6 @@ public class Player : MonoBehaviour
             switch (col.tag)
             {
                 case "Obstacle":
-					//Debug.Log("Player: Hit obstacle");
                     if(!source.isPlaying)
                         source.PlayOneShot(sound_obsticalbump, 1f);
                     return;
@@ -151,7 +150,6 @@ public class Player : MonoBehaviour
             switch (col.tag)
             {
                 case "Ground":
-					Debug.Log("Player: Ground detected");
                     newPosition = new Vector3(x, y, z);
                     moveDelay = true;
 					lifeLine.MinusMove();
