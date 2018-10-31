@@ -48,7 +48,7 @@ public class LifeController : MonoBehaviour {
     {
         if(life_counter <= _lives.Length)
         {
-            _lives[life_counter].SetActive(false);
+            _lives[life_counter].GetComponent<Lifeline>().LoseLife();
             life_counter++;
         }
     }
