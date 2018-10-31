@@ -148,7 +148,7 @@ public class Player : MonoBehaviour
                     continue;
             }
         }
-        collisions = Physics.OverlapBox(movePosition,new Vector3(0.48f, 2f, 0.48f)); // Check for ground
+        collisions = Physics.OverlapBox(movePosition, new Vector3(0.48f, 0.8f, 0.48f)); // Check for ground
 		bool groundExists = false;
         foreach (Collider col in collisions)
         {
@@ -159,20 +159,16 @@ public class Player : MonoBehaviour
                     break;
 				case "Enemy":
 					Direction enemyDirection = col.gameObject.GetComponent<Enemy>().currentDirection;
-					if (enemyDirection == currentDirection)
+					if (currentDirection == enemyDirection)
 					{
 						break;
-					} else
-					{
-						if ((currentDirection == Direction.Left && enemyDirection == Direction.Right)||
+					} else if ((currentDirection == Direction.Left && enemyDirection == Direction.Right)||
 						(currentDirection == Direction.Right && enemyDirection == Direction.Left)||
 						(currentDirection == Direction.Up && enemyDirection == Direction.Down)||
 						(currentDirection == Direction.Down && enemyDirection == Direction.Up))
 						{
-							Debug.Log("Enemy: " + enemyDirection.ToString() + " Player: " + currentDirection.ToString());
 							return;
 						}
-					}
 					break;
                 default:
                     continue;

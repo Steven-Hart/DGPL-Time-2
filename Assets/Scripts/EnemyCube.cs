@@ -20,6 +20,7 @@ public class EnemyCube : MonoBehaviour
             transform.localPosition = Vector3.zero;
             transform.rotation = Quaternion.identity;
             enemy.TranslateEnemy();
+			enemy.ChooseDirectionOnly();
             resetAnimation = false;
         }
     }   

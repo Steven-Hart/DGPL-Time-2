@@ -22,6 +22,10 @@ public class Enemy : MonoBehaviour
         Moves = 1f;
     }
 
+	void Update()
+	{
+	}
+
     public void ChooseDirection(bool blocked = false)
     {
 		if (blocked)
@@ -75,6 +79,55 @@ public class Enemy : MonoBehaviour
 		}
 		ContinueDirection();
     }
+
+	public void ChooseDirectionOnly()
+	{
+		Vector3 movePosition;
+		switch (currentDirection)
+		{
+			case Direction.Right:
+				transform.rotation = Quaternion.Euler(0, -90, 0);
+				movePosition = new Vector3(0, 0, -scaledMoveDistance); //Right
+				break;
+			case Direction.Left:
+				transform.rotation = Quaternion.Euler(0, 90, 0);
+				movePosition = new Vector3(0, 0, scaledMoveDistance);
+				break;
+			case Direction.Up:
+				transform.rotation = Quaternion.Euler(0, 180, 0);
+				movePosition = new Vector3(scaledMoveDistance, 0, 0);
+				break;
+			case Direction.Down:
+			default:
+				transform.rotation = Quaternion.Euler(0, 0, 0);
+				movePosition = new Vector3(-scaledMoveDistance, 0, 0);
+				break;
+		}
+		Collider[] collisions = Physics.OverlapBox(transform.localPosition + movePosition, new Vector3(0.1f, 1.1f, 0.1f)); // Check for obstacles
+		foreach (Collider col in collisions)
+		{
+			switch (col.tag)
+			{
+				case "Obstacle":
+					TurnAround(false);
+					return;
+				default:
+					continue;
+			}
+		}
+		collisions = Physics.OverlapBox(transform.localPosition + movePosition, new Vector3(0.4f, 1.1f, 0.4f)); // Check for obstacles
+		foreach (Collider col in collisions)
+		{
+			switch (col.tag)
+			{
+				case "Ground":
+					return;
+				default:
+					continue;
+			}
+		}
+		TurnAround(false);
+	}
 
     private void EnemyMove(float x, float y, float z)
     {
@@ -132,7 +185,7 @@ public class Enemy : MonoBehaviour
 				break;
 		}
 	}
-	private void TurnAround()
+	private void TurnAround(bool move = true)
 	{
 		switch (currentDirection)
 		{
@@ -154,7 +207,8 @@ public class Enemy : MonoBehaviour
 				currentDirection = Direction.Up;
 				break;
 		}
-		ChooseDirection(true);
+		if (move)
+			ChooseDirection(true);
 	}
 
     public void TranslateEnemy()
