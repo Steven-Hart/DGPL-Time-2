@@ -21,7 +21,7 @@ public class GateTrigger : MonoBehaviour
 			{
 				if (gate.activeSelf)
 					triggered = true;
-                gate.SetActive(false); // Disables gate
+                gate.GetComponent<Gate>().DisableGate(); // Disables gate
                 //gate.SetActive(!gate.activeSelf); // Toggles Gate
             }
 			if (triggered)

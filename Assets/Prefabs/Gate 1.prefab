@@ -19,7 +19,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4693878726551332}
-  - component: {fileID: 95975427733009346}
+  - component: {fileID: 95172128869388924}
+  - component: {fileID: 114627884284414414}
   m_Layer: 0
   m_Name: Gate 1
   m_TagString: Obstacle
@@ -113,6 +114,34 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 2, z: 0}
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!95 &95172128869388924
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1409379000360102}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 741a197c1fd88d54bb891b444074bb40, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114627884284414414
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1409379000360102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee9dde6ed68020d49ad195cbe47f5e64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212659766646257334
 SpriteRenderer:
   m_ObjectHideFlags: 1
