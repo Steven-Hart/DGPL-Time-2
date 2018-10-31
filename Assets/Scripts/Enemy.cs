@@ -12,12 +12,8 @@ public class Enemy : MonoBehaviour
 
     private Vector3 newPosition;
     public float Moves;
-    private enum Direction
-    {
-        Left,
-        Right
-    }
-    private Direction currentDirection = Direction.Right;
+    public Direction currentDirection = Direction.Right;
+	public bool debug = false;
     
 
     // Use this for initialization
@@ -26,24 +22,58 @@ public class Enemy : MonoBehaviour
         Moves = 1f;
     }
 
-
-
-    public void ChooseDirection()
+    public void ChooseDirection(bool blocked = false)
     {
-        if(currentDirection == Direction.Right)
-        {
-            transform.rotation = Quaternion.Euler(0, -90, 0);
-            EnemyMove(0, 0, -scaledMoveDistance); //Right
-        }
-        else if (currentDirection == Direction.Left)
-        {
-            transform.rotation = Quaternion.Euler(0, 90, 0);
-            EnemyMove(0, 0, scaledMoveDistance);
-        }
-        else
-        {
-            Debug.LogError("Unkown enemy Direction");
-        }
+		if (blocked)
+		{
+			Vector3 movePosition;
+			switch (currentDirection)
+			{
+				case Direction.Right:
+					transform.rotation = Quaternion.Euler(0, -90, 0);
+					movePosition = new Vector3(0, 0, -scaledMoveDistance); //Right
+					break;
+				case Direction.Left:
+					transform.rotation = Quaternion.Euler(0, 90, 0);
+					movePosition = new Vector3(0, 0, scaledMoveDistance);
+					break;
+				case Direction.Up:
+					transform.rotation = Quaternion.Euler(0, 180, 0);
+					movePosition = new Vector3(scaledMoveDistance, 0, 0);
+					break;
+				case Direction.Down:
+				default:
+					transform.rotation = Quaternion.Euler(0, 0, 0);
+					movePosition = new Vector3(-scaledMoveDistance, 0, 0);
+					break;
+			}
+			Collider[] collisions = Physics.OverlapBox(transform.localPosition + movePosition, new Vector3(0.1f, 1.1f, 0.1f)); // Check for obstacles
+			foreach (Collider col in collisions)
+			{
+				switch (col.tag)
+				{
+					case "Obstacle":
+						return;
+					default:
+						continue;
+				}
+			}
+			collisions = Physics.OverlapBox(transform.localPosition + movePosition, new Vector3(0.48f, 1.1f, 0.48f)); // Check for obstacles
+			foreach (Collider col in collisions)
+			{
+				switch (col.tag)
+				{
+					case "Ground":
+						newPosition = movePosition;
+						enemyCube.MoveAnimation(); // Play movement animation
+						return;
+					default:
+						continue;
+				}
+			}
+			return;
+		}
+		ContinueDirection();
     }
 
     private void EnemyMove(float x, float y, float z)
@@ -57,15 +87,7 @@ public class Enemy : MonoBehaviour
             switch (col.tag)
             {
                 case "Obstacle":
-                    if (currentDirection == Direction.Left)
-                    {
-                        currentDirection = Direction.Right;
-                    }
-                    else
-                    {
-                        currentDirection = Direction.Left;
-                    }
-                    ChooseDirection();
+					TurnAround();
                     return;
                 default:
                     continue;
@@ -83,18 +105,57 @@ public class Enemy : MonoBehaviour
                 default:
                     continue;
             }
-
         }
-        if (currentDirection == Direction.Left)
-        {
-            currentDirection = Direction.Right;
-        }
-        else
-        {
-            currentDirection = Direction.Left;
-        }
-        ChooseDirection();
+		TurnAround();
     }
+
+	private void ContinueDirection()
+	{
+		switch (currentDirection)
+		{
+			case Direction.Right:
+				transform.rotation = Quaternion.Euler(0, -90, 0);
+				EnemyMove(0, 0, -scaledMoveDistance); //Right
+				break;
+			case Direction.Left:
+				transform.rotation = Quaternion.Euler(0, 90, 0);
+				EnemyMove(0, 0, scaledMoveDistance);
+				break;
+			case Direction.Up:
+				transform.rotation = Quaternion.Euler(0, 180, 0);
+				EnemyMove(scaledMoveDistance, 0, 0);
+				break;
+			case Direction.Down:
+			default:
+				transform.rotation = Quaternion.Euler(0, 0, 0);
+				EnemyMove(-scaledMoveDistance, 0, 0);
+				break;
+		}
+	}
+	private void TurnAround()
+	{
+		switch (currentDirection)
+		{
+			case Direction.Left:
+				transform.rotation = Quaternion.Euler(0, -90, 0);
+				currentDirection = Direction.Right;
+				break;
+			case Direction.Right:
+				transform.rotation = Quaternion.Euler(0, 90, 0);
+				currentDirection = Direction.Left;
+				break;
+			case Direction.Up:
+				transform.rotation = Quaternion.Euler(0, 180, 0);
+				currentDirection = Direction.Down;
+				break;
+			case Direction.Down:
+			default:
+				transform.rotation = Quaternion.Euler(0, 0, 0);
+				currentDirection = Direction.Up;
+				break;
+		}
+		ChooseDirection(true);
+	}
 
     public void TranslateEnemy()
     {
@@ -105,7 +166,15 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            player.NextLife(); 
+            player.Lose(); 
         }
     }
+}
+
+public enum Direction
+{
+	Left,
+	Right,
+	Up,
+	Down
 }
