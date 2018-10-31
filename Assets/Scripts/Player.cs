@@ -114,6 +114,7 @@ public class Player : MonoBehaviour
 		playerCube.gameObject.GetComponent<MeshRenderer>().enabled = false;
         WinText.text = "Level Failed!";
         source.PlayOneShot(sound_lose, 1f);
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelFade>().ChooseFade(LevelFade.FadeState.NextLevel);
         //while (source.isPlaying) { }
         //gameObject.SetActive(false);
     }
@@ -215,7 +216,7 @@ public class Player : MonoBehaviour
 		// To stop lose being triggered after winning on last move
         if (lives <= 0)
         {
-			if (!gameOver)
+			if (gameOver)
 				Lose();
             return;
 		}

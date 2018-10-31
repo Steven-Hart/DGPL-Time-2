@@ -19,6 +19,7 @@ public class LevelFade : MonoBehaviour {
     private int currentLevel;
     private bool finalLevel;
     private GameObject levelToLoad;
+    private bool fromGame; //Loading credits from game or menu
 
     public enum FadeState {MenuToCredits, MenuToGame, RestartLevel, NextLevel}
 
@@ -97,31 +98,53 @@ public class LevelFade : MonoBehaviour {
     {
         StartCoroutine("FadeMenuToCreditsCoroutine");
     }
+    public void GameCreditsToMenu()
+    {
+        StartCoroutine("FadeCreditsToMenuCoroutine");
+    }
 
     IEnumerator FadeMenuToCreditsCoroutine()// Menu to Credits
     {
-        int levelno = currentLevel += 1;
-        string dis = string.Format("Level Disappear 0{0}", levelno);
-        anims[0].Play("Fade In");
-        anims[1].Play(dis);
-        yield return new WaitForSeconds(time + 2f); //Wait for clip to finish
+        float _time;
+        _time = 0.5f;
+        if (fromGame)
+        {
+            int levelno = currentLevel += 1;
+            string dis = string.Format("Level Disappear 0{0}", levelno);
+            anims[0].Play("Fade In");
+            anims[1].Play(dis);
+            _time = time + 2f;
+        }
+        
+        yield return new WaitForSeconds(_time); //Wait for clip to finish
         //Do other stuff here
+        MainMenu.SetActive(false);
         GameUI.SetActive(false);
         Credits.SetActive(true);
+    }
+
+    IEnumerator FadeCreditsToMenuCoroutine()// Menu to Credits
+    {
+        yield return new WaitForSeconds(0.5f); //Wait for clip to finish
+        //Do other stuff here
+        MainMenu.SetActive(true);
+        GameUI.SetActive(false);
+        Credits.SetActive(false);
     }
 
     IEnumerator FadeMenuToGameCoroutine()// Menu to Game
     {
         
-        anims[0].Play("Fade In");
-        anims[1].Play("Level Disappear 01");
-        yield return new WaitForSeconds(time + 2f); //Wait for clip to finish
+        
+        yield return new WaitForSeconds(0.5f); //Wait for clip to finish
         //TODO MAIN MENU FADE
         MainMenu.SetActive(false);
         GameUI.SetActive(true);
 
         anims[0].Play("Fade Out");
         anims[1].Play("Level Reappear 01");
+        Levels[currentLevel].SetActive(true);
+
     }
 
     IEnumerator FadeNextLevelCoroutine()// Level to Level
@@ -148,9 +171,11 @@ public class LevelFade : MonoBehaviour {
         string re = string.Format("Level Reappear 0{0}", levelno);
         anims[0].Play("Fade In");
         anims[1].Play(dis);
+        Levels[currentLevel].SetActive(false);
         yield return new WaitForSeconds(time + 2f); //Wait for clip to finish
         //TODO: RESET THE CURRENT SCENE
         anims[0].Play("Fade Out");
         anims[1].Play(re);
+        Levels[currentLevel].SetActive(true);
     }
 }
