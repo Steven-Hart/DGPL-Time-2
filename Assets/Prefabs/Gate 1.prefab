@@ -19,6 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4693878726551332}
+  - component: {fileID: 95975427733009346}
   m_Layer: 0
   m_Name: Gate 1
   m_TagString: Obstacle
