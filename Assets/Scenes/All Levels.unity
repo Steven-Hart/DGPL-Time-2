@@ -3344,7 +3344,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &483598901
 Transform:
   m_ObjectHideFlags: 0
@@ -6897,6 +6897,11 @@ Prefab:
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 114054288508468902, guid: d67ef1378c81ded498e22354e15f0b9a,
+        type: 2}
+      propertyPath: currentDirection
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 33164003399024014, guid: d67ef1378c81ded498e22354e15f0b9a, type: 2}
     - {fileID: 23886773549389856, guid: d67ef1378c81ded498e22354e15f0b9a, type: 2}
@@ -8938,7 +8943,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1253442056
 Transform:
   m_ObjectHideFlags: 0
