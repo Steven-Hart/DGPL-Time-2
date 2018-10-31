@@ -102,6 +102,7 @@ public class Player : MonoBehaviour
         WinLife.text = lives.ToString("Lives remaining: 0");
         WinTime.text = Mathf.Round((5 - lives) * 15 + Time.time - lifetime).ToString("0 seconds");
         source.PlayOneShot(sound_finish, 1f);
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelFade>().ChooseFade(LevelFade.FadeState.NextLevel);
     }
 
     public void Lose()
@@ -114,7 +115,7 @@ public class Player : MonoBehaviour
 		playerCube.gameObject.GetComponent<MeshRenderer>().enabled = false;
         WinText.text = "Level Failed!";
         source.PlayOneShot(sound_lose, 1f);
-        GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelFade>().ChooseFade(LevelFade.FadeState.NextLevel);
+        
         //while (source.isPlaying) { }
         //gameObject.SetActive(false);
     }

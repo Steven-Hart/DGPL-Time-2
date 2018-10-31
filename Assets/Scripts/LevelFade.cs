@@ -51,10 +51,10 @@ public class LevelFade : MonoBehaviour {
                 StartGame();
                 break;
             case FadeState.NextLevel:
-                NextLevel(result);
+                NextLevel(true);
                 break;
             case FadeState.RestartLevel:
-                NextLevel(result);
+                NextLevel(false);
                 break;
         }
     }
@@ -136,14 +136,14 @@ public class LevelFade : MonoBehaviour {
     {
         
         
-        yield return new WaitForSeconds(0.5f); //Wait for clip to finish
+         //Wait for clip to finish
         //TODO MAIN MENU FADE
         MainMenu.SetActive(false);
         GameUI.SetActive(true);
-
+        yield return new WaitForSeconds(0.5f);
+        Levels[currentLevel].SetActive(true);
         anims[0].Play("Fade Out");
         anims[1].Play("Level Reappear 01");
-        Levels[currentLevel].SetActive(true);
 
     }
 
