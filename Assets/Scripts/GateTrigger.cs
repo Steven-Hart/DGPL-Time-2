@@ -7,10 +7,13 @@ public class GateTrigger : MonoBehaviour
     public AudioClip sound_gate;
     private AudioSource source;
 	private bool triggered = false;
+	private Vector3 startPosition;
+	private bool wasPlaying;
 
     void Awake()
     {
         source = GetComponent<AudioSource>();
+		startPosition = transform.localPosition;
     }
 
     void OnTriggerEnter(Collider collision)
@@ -25,7 +28,10 @@ public class GateTrigger : MonoBehaviour
                 //gate.SetActive(!gate.activeSelf); // Toggles Gate
             }
 			if (triggered)
+			{
 				source.PlayOneShot(sound_gate, 1.0f);
-        }
+				GetComponent<Animator>().Play("Button Press");
+			}
+		}
     }
 }
