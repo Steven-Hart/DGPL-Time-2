@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     public AudioClip sound_obsticalbump;
     public AudioClip sound_finish;
     public AudioClip sound_start;
+	public AudioClip sound_lose;
 
     private AudioSource source;
     //private float volLowRange = 0.5f;
@@ -106,7 +107,7 @@ public class Player : MonoBehaviour
         nextButton.gameObject.SetActive(false);
 		playerCube.gameObject.GetComponent<MeshRenderer>().enabled = false;
         WinText.text = "Level Failed!";
-        source.PlayOneShot(sound_finish, 1f);
+        source.PlayOneShot(sound_lose, 1f);
         //while (source.isPlaying) { }
         //gameObject.SetActive(false);
     }
@@ -189,9 +190,11 @@ public class Player : MonoBehaviour
 
     public void NextLife() // Called by animation event at end of shrink "death" animation
     {
+		// To stop lose being triggered after winning on last move
         if (lives <= 0)
         {
-            Lose();
+			if (!gameOver)
+				Lose();
             return;
 		}
 		animator.Play("Expand"); // Play spawn animation

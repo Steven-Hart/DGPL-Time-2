@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class Finish : MonoBehaviour
 {
     public Button retryButton, nextButton;
+	private bool triggered = false;	
 
     void Start()
     {
@@ -14,8 +15,9 @@ public class Finish : MonoBehaviour
 
     void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" && !triggered)
         {
+			triggered = true;
             collision.gameObject.GetComponent<Player>().Win();
         }
     }
