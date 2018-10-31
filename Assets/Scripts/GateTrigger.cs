@@ -6,6 +6,7 @@ public class GateTrigger : MonoBehaviour
     public List<GameObject> Link = new List<GameObject>();
     public AudioClip sound_gate;
     private AudioSource source;
+	private bool triggered = false;
 
     void Awake()
     {
@@ -14,15 +15,17 @@ public class GateTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" && !triggered)
         {
             foreach (GameObject gate in Link)
-            {
+			{
+				if (gate.activeSelf)
+					triggered = true;
                 gate.SetActive(false); // Disables gate
-                if (!gate.activeSelf)
-                    source.PlayOneShot(sound_gate, 1.0f);
                 //gate.SetActive(!gate.activeSelf); // Toggles Gate
             }
+			if (triggered)
+				source.PlayOneShot(sound_gate, 1.0f);
         }
     }
 }
