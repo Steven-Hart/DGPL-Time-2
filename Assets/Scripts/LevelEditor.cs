@@ -916,13 +916,7 @@ public class LevelEditor : MonoBehaviour {
 					} else if (cellToBuild.ObjectType == ObjectTypes.Player)
 					{
 						playerScript = builtObject.GetComponent<Player>();
-						playerScript.winPanel = winPanel;
-						playerScript.WinLife = winPanel.transform.GetChild(1).GetComponent<Text>();
-						playerScript.WinTime = winPanel.transform.GetChild(0).GetComponent<Text>();
-						playerScript.WinText = winPanel.transform.GetChild(2).GetComponent<Text>();
-						playerScript.nextButton = nextButton;
-						playerScript.lifeTimer = lifeTimer;
-						playerScript.lifeCount = lifeCount;
+						playerScript.lifeLine = GameObject.Find("Game Manager").GetComponent<LifeController>();
 						playerScript.startPosition = new Vector3(x, 1.5f, y); // Same as player objectY from CreateObject()
                     } else if (cellToBuild.ObjectType == ObjectTypes.End)
 					{
