@@ -149,9 +149,9 @@ public class LevelFade : MonoBehaviour {
         yield return new WaitForSeconds(1f);
         MainMenu.SetActive(false);
         UI[0].Play("Fade Out");
+		UI[1].Play("In Game UI Fade In");
+		GameUI.SetActive(true);
         Levels[currentLevel].SetActive(true);
-        UI[1].Play("In Game UI Fade In");
-        GameUI.SetActive(true);
 
 
     }
@@ -172,10 +172,12 @@ public class LevelFade : MonoBehaviour {
 			m.ResetMove();
 		}
         UI[0].Play("Fade Out");
-        anims[currentLevel + 1].Play(re);
-		Levels[currentLevel+1].GetComponentInChildren<Player>().lifeLine = lifecontrol; // Links new player to life controller
+		if(currentLevel + 1 < anims.Length)
+        	anims[currentLevel + 1].Play(re);
+		if (currentLevel + 1 < Levels.Count)
+			Levels[currentLevel+1].GetComponentInChildren<Player>().lifeLine = lifecontrol; // Links new player to life controller
 		levelToLoad.SetActive(true); //Enable next level
-
+		lifecontrol.ResetCanvas();
     }
 
     IEnumerator FadeRestartLevelCoroutine()// Restart Level
@@ -199,6 +201,7 @@ public class LevelFade : MonoBehaviour {
         UI[0].Play("Fade Out");
         anims[1].Play(re);
         Levels[currentLevel].SetActive(true);
+		lifecontrol.ResetCanvas();
         
     }
 }

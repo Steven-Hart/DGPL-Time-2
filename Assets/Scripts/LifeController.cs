@@ -7,13 +7,12 @@ public class LifeController : MonoBehaviour {
     public GameObject[] _lives;
 	public GameObject[] moves;
 	private int moveCounter;
-    private int life_counter;
+    public int lifeCounter = 0;
     public int LifeCount;
 
     // Use this for initialization
     void Start () {
         //GameObject.FindGameObjectsWithTag("Life");
-        life_counter = 0;
     }
 	
 	// Update is called once per frame
@@ -34,6 +33,7 @@ public class LifeController : MonoBehaviour {
 			}
 		}
 		moveCounter = StartingMoves-1;
+		MovesReset();
 	}
 
 	public void MinusMove()
@@ -54,10 +54,10 @@ public class LifeController : MonoBehaviour {
     //Disables game object one by one
     public void MinusLife()
     {
-        if(life_counter < _lives.Length)
+        if(lifeCounter < _lives.Length)
         {
-            _lives[life_counter].GetComponent<Lifeline>().LoseLife();
-            life_counter++;
+            _lives[lifeCounter].GetComponent<Lifeline>().LoseLife();
+			lifeCounter++;
         }
     }
 
@@ -85,10 +85,9 @@ public class LifeController : MonoBehaviour {
         }
     }
 
-    public void ResetCanvas(int movesToStartWith)
+    public void ResetCanvas()
     {
-        StartingMoves = movesToStartWith;
-        SetStartingMoves();
+		lifeCounter = 0;
         MovesReset();
     }
 }

@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
 
     private Animator animator;
     private Vector3 newPosition;
+	private bool winLevel = false; //Once it turns true, player should be destroyed and new level with new player is instantiated
 
     void Start()
 	{
@@ -97,7 +98,7 @@ public class Player : MonoBehaviour
 
     public void Win()
     {
-        gameOver = true;
+        gameOver = winLevel = true;
         source.PlayOneShot(sound_finish, 1f);
         GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelFade>().ChooseFade(LevelFade.FadeState.NextLevel);
         gameOver = false;
@@ -105,6 +106,8 @@ public class Player : MonoBehaviour
 
     public void Lose()
     {
+		if (winLevel)
+			return;
         source.PlayOneShot(sound_lose, 1f);
         GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelFade>().ChooseFade(LevelFade.FadeState.RestartLevel);
     }
@@ -175,6 +178,8 @@ public class Player : MonoBehaviour
 
     public void LoseLife()
     {
+		if (winLevel)
+			return;
         gameOver = true;
         source.PlayOneShot(sound_death, 1f);
         animator.Play("Shrink"); // "Death" animation

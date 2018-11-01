@@ -16449,6 +16449,7 @@ MonoBehaviour:
   - {fileID: 1456649469}
   - {fileID: 429532705}
   - {fileID: 1674156250}
+  lifeCounter: 0
   LifeCount: 3
 --- !u!224 &1788367551 stripped
 RectTransform:
