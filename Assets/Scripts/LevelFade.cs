@@ -23,6 +23,7 @@ public class LevelFade : MonoBehaviour {
     private bool finalLevel;
     private GameObject levelToLoad;
     private bool fromGame; //Loading credits from game or menu
+	private LifeController lifecontrol;
 
     public enum FadeState {MenuToCredits, MenuToGame, RestartLevel, NextLevel}
 
@@ -33,6 +34,7 @@ public class LevelFade : MonoBehaviour {
         finalLevel = false;
         menu = GameObject.FindGameObjectWithTag("Menu");
         clips = anims[0].runtimeAnimatorController.animationClips;
+		lifecontrol = GetComponent<LifeController>();
         for (int j = 0; j < clips.Length; j++)
         {
             if (clips[j].name == "Level Disappear 01")
@@ -165,13 +167,14 @@ public class LevelFade : MonoBehaviour {
 
         Levels[currentLevel - 1].SetActive(false); //Disable last level
 
+		foreach (MoveCounter m in UI[1].GetComponentsInChildren<MoveCounter>())
+		{
+			m.ResetMove();
+		}
         UI[0].Play("Fade Out");
         anims[currentLevel + 1].Play(re);
-        levelToLoad.SetActive(true); //Enable next level
-        foreach (MoveCounter m in UI[1].GetComponentsInChildren<MoveCounter>())
-        {
-            m.ResetMove();
-        }
+		Levels[currentLevel+1].GetComponentInChildren<Player>().lifeLine = lifecontrol; // Links new player to life controller
+		levelToLoad.SetActive(true); //Enable next level
 
     }
 
@@ -187,14 +190,11 @@ public class LevelFade : MonoBehaviour {
                                                     //TODO: RESET THE CURRENT SCENE
 
         Vector3 levelpos = Levels[currentLevel].transform.position;
+        Destroy(Levels[currentLevel]); // Destroys old level
 
-        Levels[currentLevel].GetComponentInChildren<LifeController>().transferLink();
-
-        Destroy(Levels[currentLevel]);
-
-        GameObject newLevel = Instantiate(LevelPrefabs[currentLevel]);
+        GameObject newLevel = Instantiate(LevelPrefabs[currentLevel]); // Let new level be born
         Levels[currentLevel] = newLevel;
-        newLevel.GetComponentInChildren<LifeController>().ResetCanvas((int)Levels[currentLevel].GetComponentInChildren<Player>().startMoves);
+		Levels[currentLevel].GetComponentInChildren<Player>().lifeLine = lifecontrol; // Links new player to life controller
 
         UI[0].Play("Fade Out");
         anims[1].Play(re);

@@ -19,11 +19,13 @@ public class LifeController : MonoBehaviour {
 	// Update is called once per frame
 	public void SetStartingMoves()
 	{
+		/*
         if(moves[0] == null)
         {
             MovesReset();
-            LinkMoves();
+            //LinkMoves();
         }
+		*/
         if (StartingMoves < moves.Length)
 		{
 			for (int i = moves.Length-1; i > StartingMoves-1; i--)
