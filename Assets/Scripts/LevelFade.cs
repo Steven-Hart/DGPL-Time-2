@@ -49,7 +49,6 @@ public class LevelFade : MonoBehaviour {
 		if (Input.GetAxis("Restart") > 0)
 		{
 			// Restart level here also needs to check if its on a level or main menu/credits
-			ChooseFade(FadeState.RestartLevel);
 		}
 	}
 
@@ -150,6 +149,8 @@ public class LevelFade : MonoBehaviour {
 
     IEnumerator FadeMenuToGameCoroutine()// Menu to Game
     {
+
+
         //Wait for clip to finish
         //TODO MAIN MENU FADE
         UI[0].Play("Fade In");
@@ -159,8 +160,9 @@ public class LevelFade : MonoBehaviour {
 		UI[1].Play("In Game UI Fade In");
 		GameUI.SetActive(true);
         Levels[currentLevel].SetActive(true);
-		Levels[currentLevel].GetComponentInChildren<Player>().lifeLine = lifecontrol;
-	}
+
+
+    }
 
     IEnumerator FadeNextLevelCoroutine()// Level to Level
     {
@@ -179,7 +181,6 @@ public class LevelFade : MonoBehaviour {
         //	anims[currentLevel + 1].Play(re);
 		//if (currentLevel + 1 < Levels.Count)
 		Levels[currentLevel+1].GetComponentInChildren<Player>().lifeLine = lifecontrol; // Links new player to life controller
-		lifecontrol._lives = Levels[currentLevel].GetComponent<LifeStore>().Lifelines;
 		levelToLoad.SetActive(true); //Enable next level
 		lifecontrol.ResetCanvas();
     }
@@ -189,14 +190,12 @@ public class LevelFade : MonoBehaviour {
         int levelno = currentLevel + 1;
         string dis = string.Format("Level Disappear 0{0}", levelno);
         string re = string.Format("Level Reappear 0{0}", levelno);
-		Debug.Log("dis: " + dis);
-		Debug.Log("re: " + re);
         anims[currentLevel].Play(dis);
+        Levels[currentLevel].SetActive(false);
         UI[0].Play("Fade In");
 
         yield return new WaitForSeconds(time + 2f); //Wait for clip to finish
 
-		Levels[currentLevel].SetActive(false);
         Vector3 levelpos = Levels[currentLevel].transform.position;
         Destroy(Levels[currentLevel]); // Destroys old level
 
@@ -207,7 +206,6 @@ public class LevelFade : MonoBehaviour {
 
         UI[0].Play("Fade Out");
         anims[currentLevel].Play(re);
-		lifecontrol._lives = Levels[currentLevel].GetComponent<LifeStore>().Lifelines;
         Levels[currentLevel].SetActive(true);
 		lifecontrol.ResetCanvas();
         
