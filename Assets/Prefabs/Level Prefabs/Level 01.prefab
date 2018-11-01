@@ -279,7 +279,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4647169462114200}
-  - component: {fileID: 114181198662162632}
   - component: {fileID: 95478190928828372}
   m_Layer: 0
   m_Name: Level 01
@@ -4155,21 +4154,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee9dde6ed68020d49ad195cbe47f5e64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114181198662162632
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1133624453070522}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76e3722fa79a26f4492bef0517d9ac95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Lifelines:
-  - {fileID: 1138260750532198}
-  - {fileID: 1597680246181838}
-  - {fileID: 1956539690330366}
 --- !u!114 &114347797842276576
 MonoBehaviour:
   m_ObjectHideFlags: 1
