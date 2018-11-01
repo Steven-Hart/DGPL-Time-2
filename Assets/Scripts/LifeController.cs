@@ -70,4 +70,11 @@ public class LifeController : MonoBehaviour {
             
         }
     }
+
+    public void ResetCanvas(int movesToStartWith)
+    {
+        StartingMoves = movesToStartWith;
+        SetStartingMoves();
+        MovesReset();
+    }
 }
