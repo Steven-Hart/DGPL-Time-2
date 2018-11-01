@@ -38,6 +38,9 @@ public class EnemyCube : MonoBehaviour
 
     private void ResetDelay()
     {
-        enemy.moveDelay = false;
-    }
+		if(enemy != null)
+		{
+	    	enemy.moveDelay = false;
+		}
+	}
 }

@@ -39,6 +39,9 @@ public class PlayerCube : MonoBehaviour {
 
     private void ResetDelay()
 	{
-		player.moveDelay = false;
+		if(player != null)
+		{
+			player.moveDelay = false;
+		}
 	}
 }
