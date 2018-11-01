@@ -2439,14 +2439,6 @@ Prefab:
       propertyPath: lifeLine
       value: 
       objectReference: {fileID: 1786018133}
-    - target: {fileID: 1312830451538750, guid: 217e063ba69f7c8448d19d89d5649725, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1133624453070522, guid: 217e063ba69f7c8448d19d89d5649725, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 217e063ba69f7c8448d19d89d5649725, type: 2}
   m_IsPrefabParent: 0
@@ -2775,10 +2767,6 @@ Prefab:
       propertyPath: lifeLine
       value: 
       objectReference: {fileID: 1786018133}
-    - target: {fileID: 1710829294964568, guid: 77816e28c26a17c4d85fae26a182f44b, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 77816e28c26a17c4d85fae26a182f44b, type: 2}
   m_IsPrefabParent: 0
@@ -3496,6 +3484,7 @@ MonoBehaviour:
   - {fileID: 1059906727506864, guid: 3d9469453114a32458f9fc903b26ead4, type: 2}
   - {fileID: 1710829294964568, guid: 77816e28c26a17c4d85fae26a182f44b, type: 2}
   - {fileID: 1913668692653842, guid: 5ca870529d23427469fa1f7b3987edda, type: 2}
+  currentLevel: 0
 --- !u!114 &1786018133
 MonoBehaviour:
   m_ObjectHideFlags: 0
