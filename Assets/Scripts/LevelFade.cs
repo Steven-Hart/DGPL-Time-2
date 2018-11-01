@@ -260,6 +260,14 @@ public class LevelFade : MonoBehaviour {
 
 	public void ExitGame() // Used by exit button
 	{
+		StartCoroutine("FadeToExit");
+	}
+
+	IEnumerator FadeToExit()
+	{
+		Camera.main.GetComponent<Animator>().Play("MusicFadeOut");
+		MainMenu.GetComponent<Animator>().Play("Fade Out");
+		yield return new WaitForSeconds(1f);
 		Application.Quit();
 	}
 }
