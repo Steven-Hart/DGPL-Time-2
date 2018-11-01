@@ -44,6 +44,14 @@ public class LevelFade : MonoBehaviour {
         }
     }
 
+	void Update()
+	{
+		if (Input.GetAxis("Restart") > 0)
+		{
+			// Restart level here also needs to check if its on a level or main menu/credits
+		}
+	}
+
     public void ChooseFade(FadeState _state)
     {
 
