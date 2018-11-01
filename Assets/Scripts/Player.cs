@@ -62,8 +62,8 @@ public class Player : MonoBehaviour
             GetComponent<SphereCollider>().enabled = true;
             ghostLife = false;
         }
-        lifeTimer.text = Mathf.Round(15 - lifespan).ToString("00"); // Life timer display update
-        lifeTimer.text = lifespan.ToString("00");
+        //lifeTimer.text = Mathf.Round(15 - lifespan).ToString("00"); // Life timer display update
+        //lifeTimer.text = lifespan.ToString("00");
         if (moveDelay)
             return;
         float inputHorizontal = Input.GetAxis("Horizontal"), inputVertical = Input.GetAxis("Vertical"); // Get movement input
@@ -108,15 +108,19 @@ public class Player : MonoBehaviour
 
     public void Lose()
     {
-        gameOver = true;
+
+        /*
+         gameOver = true;
         winPanel.SetActive(true); // Display end screen
         WinTime.gameObject.SetActive(false);
         WinLife.gameObject.SetActive(false);
         nextButton.gameObject.SetActive(false);
 		playerCube.gameObject.GetComponent<MeshRenderer>().enabled = false;
         WinText.text = "Level Failed!";
+         */
         source.PlayOneShot(sound_lose, 1f);
-        
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelFade>().ChooseFade(LevelFade.FadeState.RestartLevel);
+
         //while (source.isPlaying) { }
         //gameObject.SetActive(false);
     }

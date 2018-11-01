@@ -9,11 +9,13 @@ public class LifeController : MonoBehaviour {
 	private int moveCounter;
     private int life_counter;
     public int LifeCount;
+
     // Use this for initialization
     void Start () {
 		
             //GameObject.FindGameObjectsWithTag("Life");
         life_counter = 0;
+        LinkMoves();
     }
 	
 	// Update is called once per frame
@@ -55,4 +57,17 @@ public class LifeController : MonoBehaviour {
     }
 
 	public int StartingMoves {get; set;}
+
+    public void LinkMoves()
+    {
+        int[] moveNo = new int[] {0,1,4,2,5,8,3,6,9,12,7,10,13,11,14,15};
+        for(int i = 0; i<moves.Length;i++)
+        {
+            
+            string moveName = string.Format("Move ({0})", moveNo[i]);
+            moves[i] = GameObject.Find(moveName);
+
+            
+        }
+    }
 }

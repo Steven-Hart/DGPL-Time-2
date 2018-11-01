@@ -12,6 +12,7 @@ public class LevelFade : MonoBehaviour {
 
     public List<Animator> UI;
     public List<GameObject> Levels;
+    public List<GameObject> LevelPrefabs;
     
 
     private bool result;
@@ -184,8 +185,11 @@ public class LevelFade : MonoBehaviour {
         Levels[currentLevel].SetActive(false);
         yield return new WaitForSeconds(time + 2f); //Wait for clip to finish
         //TODO: RESET THE CURRENT SCENE
+        Vector3 levelpos = Levels[currentLevel].transform.position;
         UI[0].Play("Fade Out");
         anims[1].Play(re);
         Levels[currentLevel].SetActive(true);
+        GameObject newLevel = Instantiate(LevelPrefabs[currentLevel]);
+        Levels[currentLevel] = newLevel;
     }
 }
