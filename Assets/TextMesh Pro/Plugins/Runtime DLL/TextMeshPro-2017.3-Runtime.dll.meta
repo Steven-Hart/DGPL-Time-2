@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 681dfdae02cf3e240961966aad6b0f91
+guid: b5bd0d848a86e48409fe56688d66ecb5
 timeCreated: 1488610109
 licenseType: Store
 PluginImporter:
@@ -25,6 +25,7 @@ PluginImporter:
         Exclude Win: 0
         Exclude Win64: 0
         Exclude WindowsStoreApps: 0
+        Exclude iOS: 0
   - first:
       '': OSXIntel
     second:
@@ -46,7 +47,7 @@ PluginImporter:
   - first:
       Any: 
     second:
-      enabled: 1
+      enabled: 0
       settings:
         Exclude Android: 0
         Exclude Editor: 1
@@ -136,6 +137,13 @@ PluginImporter:
         PlaceholderPath: 
         SDK: AnySDK
         ScriptingBackend: AnyScriptingBackend
+  - first:
+      iPhone: iOS
+    second:
+      enabled: 1
+      settings:
+        CompileFlags: 
+        FrameworkDependencies: 
   userData: 
   assetBundleName: 
   assetBundleVariant: 
