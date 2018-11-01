@@ -103,6 +103,7 @@ public class Player : MonoBehaviour
         WinTime.text = Mathf.Round((5 - lives) * 15 + Time.time - lifetime).ToString("0 seconds");
         source.PlayOneShot(sound_finish, 1f);
         GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelFade>().ChooseFade(LevelFade.FadeState.NextLevel);
+        gameOver = false;
     }
 
     public void Lose()
