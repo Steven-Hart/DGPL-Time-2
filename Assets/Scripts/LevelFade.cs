@@ -166,20 +166,21 @@ public class LevelFade : MonoBehaviour {
 
     IEnumerator FadeNextLevelCoroutine()// Level to Level
     {
-        int levelno = currentLevel + 1;
-        string dis = string.Format("Level Disappear 0{0}", levelno);
-        string re = string.Format("Level Reappear 0{0}", levelno + 1);
+        
+        //int levelno = currentLevel + 1;
+        //string dis = string.Format("Level Disappear 0{0}", levelno);
+        //string re = string.Format("Level Reappear 0{0}", levelno + 1);
         UI[0].Play("Fade In");
-        anims[currentLevel].Play(dis);
+        //anims[currentLevel].Play(dis);
         yield return new WaitForSeconds(time + 2f); //Wait for clip to finish
 
         Levels[currentLevel - 1].SetActive(false); //Disable last level
 
         UI[0].Play("Fade Out");
-		if(currentLevel + 1 < anims.Length)
-        	anims[currentLevel + 1].Play(re);
-		if (currentLevel + 1 < Levels.Count)
-			Levels[currentLevel+1].GetComponentInChildren<Player>().lifeLine = lifecontrol; // Links new player to life controller
+		//if(currentLevel + 1 < anims.Length)
+        //	anims[currentLevel + 1].Play(re);
+		//if (currentLevel + 1 < Levels.Count)
+		Levels[currentLevel+1].GetComponentInChildren<Player>().lifeLine = lifecontrol; // Links new player to life controller
 		levelToLoad.SetActive(true); //Enable next level
 		lifecontrol.ResetCanvas();
     }
