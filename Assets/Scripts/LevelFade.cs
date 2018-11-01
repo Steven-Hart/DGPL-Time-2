@@ -190,21 +190,22 @@ public class LevelFade : MonoBehaviour {
         int levelno = currentLevel + 1;
         string dis = string.Format("Level Disappear 0{0}", levelno);
         string re = string.Format("Level Reappear 0{0}", levelno);
-        UI[0].Play("Fade In");
-        anims[1].Play(dis);
+        anims[currentLevel].Play(dis);
         Levels[currentLevel].SetActive(false);
+        UI[0].Play("Fade In");
+
         yield return new WaitForSeconds(time + 2f); //Wait for clip to finish
-                                                    //TODO: RESET THE CURRENT SCENE
 
         Vector3 levelpos = Levels[currentLevel].transform.position;
         Destroy(Levels[currentLevel]); // Destroys old level
 
         GameObject newLevel = Instantiate(LevelPrefabs[currentLevel]); // Let new level be born
         Levels[currentLevel] = newLevel;
+        anims[currentLevel] = Levels[currentLevel].GetComponent<Animator>();
 		Levels[currentLevel].GetComponentInChildren<Player>().lifeLine = lifecontrol; // Links new player to life controller
 
         UI[0].Play("Fade Out");
-        anims[1].Play(re);
+        anims[currentLevel].Play(re);
         Levels[currentLevel].SetActive(true);
 		lifecontrol.ResetCanvas();
         
