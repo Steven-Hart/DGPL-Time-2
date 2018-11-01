@@ -113,7 +113,7 @@ public class LevelFade : MonoBehaviour {
         _time = 0.5f;
         if (fromGame)
         {
-            int levelno = currentLevel;
+            int levelno = currentLevel + 1;
             string dis = string.Format("Level Disappear 0{0}", levelno);
             UI[0].Play("Fade In");
             anims[currentLevel].Play(dis);
@@ -155,14 +155,14 @@ public class LevelFade : MonoBehaviour {
 
     IEnumerator FadeNextLevelCoroutine()// Level to Level
     {
-        int levelno = currentLevel;
+        int levelno = currentLevel + 1;
         string dis = string.Format("Level Disappear 0{0}", levelno);
         string re = string.Format("Level Reappear 0{0}", levelno + 1);
         UI[0].Play("Fade In");
         anims[currentLevel].Play(dis);
         yield return new WaitForSeconds(time + 2f); //Wait for clip to finish
 
-        Levels[currentLevel].SetActive(false); //Disable last level
+        Levels[currentLevel - 1].SetActive(false); //Disable last level
 
         UI[0].Play("Fade Out");
         anims[currentLevel + 1].Play(re);
@@ -176,7 +176,7 @@ public class LevelFade : MonoBehaviour {
 
     IEnumerator FadeRestartLevelCoroutine()// Restart Level
     {
-        int levelno = currentLevel;
+        int levelno = currentLevel + 1;
         string dis = string.Format("Level Disappear 0{0}", levelno);
         string re = string.Format("Level Reappear 0{0}", levelno);
         UI[0].Play("Fade In");
