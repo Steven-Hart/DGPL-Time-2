@@ -4,9 +4,9 @@ using System.Collections.Generic;
 public class Player : MonoBehaviour
 {
     public float moveSpeed = 1, lives = 5, lifetime, movesMade, startMoves=15;
-    public UnityEngine.UI.Text lifeTimer, lifeCount, WinLife, WinTime, WinText;
+    //public UnityEngine.UI.Text lifeTimer, lifeCount, WinLife, WinTime, WinText;
     public LifeController lifeLine;
-    public GameObject winPanel, nextButton;
+    //public GameObject winPanel, nextButton;
     public PlayerCube playerCube;
     //public Perspective perpsCamera;
     public bool gameOver, ghostLife, moveDelay;
@@ -28,9 +28,11 @@ public class Player : MonoBehaviour
 
     private Animator animator;
     private Vector3 newPosition;
+	private bool winLevel = false; //Once it turns true, player should be destroyed and new level with new player is instantiated
 
     void Start()
 	{
+        //lifeLine.LinkMoves();
 		lifeLine.StartingMoves = Mathf.RoundToInt(startMoves);
 		lifeLine.SetStartingMoves();
 		source = GetComponent<AudioSource>();
@@ -42,10 +44,6 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-		if (Input.GetAxis("Restart") > 0)
-		{
-			UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
-		}
         if (gameOver)
             return;
         //float lifespan = Time.time - lifetime;
@@ -62,8 +60,8 @@ public class Player : MonoBehaviour
             GetComponent<SphereCollider>().enabled = true;
             ghostLife = false;
         }
-        lifeTimer.text = Mathf.Round(15 - lifespan).ToString("00"); // Life timer display update
-        lifeTimer.text = lifespan.ToString("00");
+        //lifeTimer.text = Mathf.Round(15 - lifespan).ToString("00"); // Life timer display update
+        //lifeTimer.text = lifespan.ToString("00");
         if (moveDelay)
             return;
         float inputHorizontal = Input.GetAxis("Horizontal"), inputVertical = Input.GetAxis("Vertical"); // Get movement input
@@ -96,44 +94,22 @@ public class Player : MonoBehaviour
 
     public void Win()
     {
-        gameOver = true;
-        winPanel.SetActive(true); // Display end screen
-        WinText.text = "Level Completed!";
-        WinLife.text = lives.ToString("Lives remaining: 0");
-        WinTime.text = Mathf.Round((5 - lives) * 15 + Time.time - lifetime).ToString("0 seconds");
+        gameOver = winLevel = true;
         source.PlayOneShot(sound_finish, 1f);
         GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelFade>().ChooseFade(LevelFade.FadeState.NextLevel);
+        gameOver = false;
     }
 
     public void Lose()
     {
-        gameOver = true;
-        winPanel.SetActive(true); // Display end screen
-        WinTime.gameObject.SetActive(false);
-        WinLife.gameObject.SetActive(false);
-        nextButton.gameObject.SetActive(false);
-		playerCube.gameObject.GetComponent<MeshRenderer>().enabled = false;
-        WinText.text = "Level Failed!";
+		if (winLevel)
+			return;
         source.PlayOneShot(sound_lose, 1f);
-        
-        //while (source.isPlaying) { }
-        //gameObject.SetActive(false);
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelFade>().ChooseFade(LevelFade.FadeState.RestartLevel);
     }
 
     private void MovePlayer(float x, float y, float z)
     {
-        /*
-        Vector3 newPosition = transform.position + new Vector3(x * moveSpeed * Time.deltaTime, y * moveSpeed * Time.deltaTime, z * moveSpeed * Time.deltaTime); // Change to fixed space movement later
-        Collider[] collisions = Physics.OverlapBox(newPosition, new Vector3(0.5f, 0.5f, 0.5f)); // Check for obstacles
-        foreach (Collider col in collisions)
-        {
-            if (col.tag == "Obstacle")
-            {
-                return;
-            }
-        }
-        transform.Translate(x * moveSpeed * Time.deltaTime, y * moveSpeed * Time.deltaTime, z * moveSpeed * Time.deltaTime); // Move
-        */
         Vector3 movePosition = transform.position + new Vector3(x, y, z); // Change to fixed space movement later
         Vector3 relativePosition = movePosition - transform.position;
         relativePosition = relativePosition / 2;
@@ -181,11 +157,6 @@ public class Player : MonoBehaviour
 			groundExists = true;
 			newPosition = new Vector3(x, y, z);
 			moveDelay = true;
-			lifeLine.MinusMove();
-			foreach (Enemy e in enemyList)
-			{
-				e.ChooseDirection();
-			}
 			playerCube.MoveAnimation(); // Play movement animation
 		}
     }
@@ -193,18 +164,14 @@ public class Player : MonoBehaviour
     public void TranslatePlayer()
     {
         movesMade++;
+		lifeLine.MinusMove();
         transform.position += newPosition; // Move
-        /* Camera Movement
-        perpsCamera.TargetCameraPosition = newPosition;
-        if (perpsCamera.CameraSmooth == false)
-        {
-            perpsCamera.CameraMove();
-        }
-        */
     }
 
     public void LoseLife()
     {
+		if (winLevel)
+			return;
         gameOver = true;
         source.PlayOneShot(sound_death, 1f);
         animator.Play("Shrink"); // "Death" animation
@@ -224,17 +191,13 @@ public class Player : MonoBehaviour
 		animator.Play("Expand"); // Play spawn animation
 		gameOver = false;
 		ResetPos();
-        //lifeCount.text = lives.ToString();
     }
     private void ResetPos()
     {
-        // transform.position = respawn.adjustedRespawn(); // Why was this needed?
         Vector3 respawnPosition = respawn.transform.position;
         transform.position = new Vector3(respawnPosition.x, 1.5f, respawnPosition.z);
-        //perpsCamera.CameraPositionReset();
         movesMade = 0;
 		lifeLine.MovesReset();
         source.PlayOneShot(sound_start, 1f);
-        //lifetime = Time.time; // Start of new life
     }
 }

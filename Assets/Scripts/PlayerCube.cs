@@ -28,6 +28,10 @@ public class PlayerCube : MonoBehaviour {
     {
         //animator.Play("MoveDown");
         animator.Play("Jump");
+		foreach (Enemy e in player.enemyList)
+		{
+			e.ChooseDirection();
+		}
     }
 
     public void MovePlayer() // To be called by animation event move down
@@ -39,6 +43,9 @@ public class PlayerCube : MonoBehaviour {
 
     private void ResetDelay()
 	{
-		player.moveDelay = false;
+		if(player != null)
+		{
+			player.moveDelay = false;
+		}
 	}
 }
