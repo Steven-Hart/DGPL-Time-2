@@ -15,7 +15,7 @@ PlayerSettings:
   productName: Lifespan
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
-  m_SplashScreenBackgroundColor: {r: 0.41176468, g: 0.41176468, b: 0.41176468, a: 1}
+  m_SplashScreenBackgroundColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_ShowUnitySplashScreen: 1
   m_ShowUnitySplashLogo: 1
   m_SplashScreenOverlayOpacity: 1

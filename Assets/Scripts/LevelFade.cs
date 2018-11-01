@@ -257,4 +257,9 @@ public class LevelFade : MonoBehaviour {
 		Levels[currentLevel].GetComponentInChildren<Player>().gameOver = false; // If player moves too early enemy will skip a move
 		fadeInProgress = false;
     }
+
+	public void ExitGame() // Used by exit button
+	{
+		Application.Quit();
+	}
 }
