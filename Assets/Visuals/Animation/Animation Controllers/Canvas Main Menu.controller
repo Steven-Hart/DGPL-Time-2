@@ -52,7 +52,7 @@ AnimatorState:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Main Menu UI Fade Out
+  m_Name: Fade Out
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -77,7 +77,7 @@ AnimatorState:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Main Menu UI Fade In
+  m_Name: Fade In
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -106,10 +106,10 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 1102539144210109388}
-    m_Position: {x: 200, y: 0, z: 0}
+    m_Position: {x: 588, y: 192, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102687419523859644}
-    m_Position: {x: 235, y: 65, z: 0}
+    m_Position: {x: 264, y: 192, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102474180847493876}
     m_Position: {x: 421.54034, y: 124.44043, z: 0}

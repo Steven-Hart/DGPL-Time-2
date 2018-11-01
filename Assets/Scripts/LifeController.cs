@@ -6,7 +6,7 @@ public class LifeController : MonoBehaviour {
 
     public GameObject[] _lives;
 	public GameObject[] moves;
-	private int moveCounter;
+	public int moveCounter;
     public int lifeCounter = 0;
     public int LifeCount;
 

@@ -51,7 +51,7 @@ public class Enemy : MonoBehaviour
 					movePosition = new Vector3(-scaledMoveDistance, 0, 0);
 					break;
 			}
-			Collider[] collisions = Physics.OverlapBox(transform.localPosition + movePosition, new Vector3(0.1f, 1.1f, 0.1f)); // Check for obstacles
+			Collider[] collisions = Physics.OverlapBox(transform.localPosition + movePosition, new Vector3(0.1f, 0.1f, 0.1f)); // Check for obstacles
 			foreach (Collider col in collisions)
 			{
 				switch (col.tag)
@@ -62,7 +62,7 @@ public class Enemy : MonoBehaviour
 						continue;
 				}
 			}
-			collisions = Physics.OverlapBox(transform.localPosition + movePosition, new Vector3(0.48f, 1.1f, 0.48f)); // Check for obstacles
+			collisions = Physics.OverlapBox(transform.localPosition + movePosition, new Vector3(0.48f, 0.8f, 0.48f)); // Check for obstacles
 			foreach (Collider col in collisions)
 			{
 				switch (col.tag)
@@ -103,7 +103,7 @@ public class Enemy : MonoBehaviour
 				movePosition = new Vector3(-scaledMoveDistance, 0, 0);
 				break;
 		}
-		Collider[] collisions = Physics.OverlapBox(transform.localPosition + movePosition, new Vector3(0.1f, 1.1f, 0.1f)); // Check for obstacles
+		Collider[] collisions = Physics.OverlapBox(transform.localPosition + movePosition, new Vector3(0.1f, 0.1f, 0.1f)); // Check for obstacles
 		foreach (Collider col in collisions)
 		{
 			switch (col.tag)
@@ -115,7 +115,7 @@ public class Enemy : MonoBehaviour
 					continue;
 			}
 		}
-		collisions = Physics.OverlapBox(transform.localPosition + movePosition, new Vector3(0.4f, 1.1f, 0.4f)); // Check for obstacles
+		collisions = Physics.OverlapBox(transform.localPosition + movePosition, new Vector3(0.48f, 0.8f, 0.48f)); // Check for obstacles
 		foreach (Collider col in collisions)
 		{
 			switch (col.tag)
@@ -134,7 +134,7 @@ public class Enemy : MonoBehaviour
         Vector3 movePosition = transform.position + new Vector3(x, y, z); // Change to fixed space movement later
         Vector3 relativePosition = movePosition - transform.position;
         relativePosition = relativePosition/2;
-        Collider[] collisions = Physics.OverlapBox(movePosition - relativePosition, new Vector3(0.1f, 1.1f, 0.1f)); // Check for obstacles
+        Collider[] collisions = Physics.OverlapBox(movePosition - relativePosition, new Vector3(0.1f, 0.1f, 0.1f)); // Check for obstacles
         foreach (Collider col in collisions)
         {
             switch (col.tag)
@@ -146,7 +146,7 @@ public class Enemy : MonoBehaviour
                     continue;
             }
         }
-        collisions = Physics.OverlapBox(movePosition, new Vector3(0.4f, 1.1f, 0.4f)); // Check for obstacles
+        collisions = Physics.OverlapBox(movePosition, new Vector3(0.48f, 0.8f, 0.48f)); // Check for obstacles
         foreach (Collider col in collisions)
         {
             switch (col.tag)
