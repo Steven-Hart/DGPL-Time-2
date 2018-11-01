@@ -12,16 +12,19 @@ public class LifeController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
-            //GameObject.FindGameObjectsWithTag("Life");
+        //GameObject.FindGameObjectsWithTag("Life");
         life_counter = 0;
-        LinkMoves();
     }
 	
 	// Update is called once per frame
 	public void SetStartingMoves()
 	{
-		if (StartingMoves < moves.Length)
+        if(moves[0] == null)
+        {
+            MovesReset();
+            LinkMoves();
+        }
+        if (StartingMoves < moves.Length)
 		{
 			for (int i = moves.Length-1; i > StartingMoves-1; i--)
 			{
@@ -68,6 +71,15 @@ public class LifeController : MonoBehaviour {
             moves[i] = GameObject.Find(moveName);
 
             
+        }
+    }
+
+    public void transferLink()
+    {
+        for (int i = 0; i < moves.Length; i++)
+        {
+            moves[i].SetActive(true);
+            moves[i].GetComponent<MoveCounter>().ResetMove();
         }
     }
 

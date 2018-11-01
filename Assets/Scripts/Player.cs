@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
 
     void Start()
 	{
+        lifeLine.LinkMoves();
 		lifeLine.StartingMoves = Mathf.RoundToInt(startMoves);
 		lifeLine.SetStartingMoves();
 		source = GetComponent<AudioSource>();

@@ -562,7 +562,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &78650145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5610,7 +5610,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &819119495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7863,7 +7863,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1267197169
 Transform:
   m_ObjectHideFlags: 0
@@ -8330,22 +8330,22 @@ MonoBehaviour:
   - {fileID: 581383257}
   - {fileID: 1398815426}
   moves:
-  - {fileID: 75346872}
-  - {fileID: 1441934916}
-  - {fileID: 1095893403}
-  - {fileID: 707536904}
-  - {fileID: 2096134699}
-  - {fileID: 864142277}
-  - {fileID: 239768297}
-  - {fileID: 1741185345}
-  - {fileID: 188881975}
-  - {fileID: 772984111}
-  - {fileID: 1891101716}
-  - {fileID: 514927400}
-  - {fileID: 20089499}
-  - {fileID: 1456649469}
-  - {fileID: 429532705}
-  - {fileID: 1674156250}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   LifeCount: 3
 --- !u!4 &1420511723
 Transform:
@@ -10532,6 +10532,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 1267197169}
     m_Modifications:
+    - target: {fileID: 114333469214716382, guid: 0f7a68ff356d14e46aad405094e40851,
+        type: 2}
+      propertyPath: AllMoves.Array.size
+      value: 16
+      objectReference: {fileID: 0}
     - target: {fileID: 4405452013595614, guid: 0f7a68ff356d14e46aad405094e40851, type: 2}
       propertyPath: m_LocalPosition.x
       value: -1.0600003
@@ -10583,82 +10588,96 @@ Prefab:
         type: 2}
       propertyPath: moves.Array.data[0]
       value: 
-      objectReference: {fileID: 75346872}
+      objectReference: {fileID: 0}
     - target: {fileID: 114333469214716382, guid: 0f7a68ff356d14e46aad405094e40851,
         type: 2}
       propertyPath: moves.Array.data[1]
       value: 
-      objectReference: {fileID: 1441934916}
+      objectReference: {fileID: 0}
     - target: {fileID: 114333469214716382, guid: 0f7a68ff356d14e46aad405094e40851,
         type: 2}
       propertyPath: moves.Array.data[2]
       value: 
-      objectReference: {fileID: 1095893403}
+      objectReference: {fileID: 0}
     - target: {fileID: 114333469214716382, guid: 0f7a68ff356d14e46aad405094e40851,
         type: 2}
       propertyPath: moves.Array.data[3]
       value: 
-      objectReference: {fileID: 707536904}
+      objectReference: {fileID: 0}
     - target: {fileID: 114333469214716382, guid: 0f7a68ff356d14e46aad405094e40851,
         type: 2}
       propertyPath: moves.Array.data[4]
       value: 
-      objectReference: {fileID: 2096134699}
+      objectReference: {fileID: 0}
     - target: {fileID: 114333469214716382, guid: 0f7a68ff356d14e46aad405094e40851,
         type: 2}
       propertyPath: moves.Array.data[5]
       value: 
-      objectReference: {fileID: 864142277}
+      objectReference: {fileID: 0}
     - target: {fileID: 114333469214716382, guid: 0f7a68ff356d14e46aad405094e40851,
         type: 2}
       propertyPath: moves.Array.data[6]
       value: 
-      objectReference: {fileID: 239768297}
+      objectReference: {fileID: 0}
     - target: {fileID: 114333469214716382, guid: 0f7a68ff356d14e46aad405094e40851,
         type: 2}
       propertyPath: moves.Array.data[7]
       value: 
-      objectReference: {fileID: 1741185345}
+      objectReference: {fileID: 0}
     - target: {fileID: 114333469214716382, guid: 0f7a68ff356d14e46aad405094e40851,
         type: 2}
       propertyPath: moves.Array.data[8]
       value: 
-      objectReference: {fileID: 188881975}
+      objectReference: {fileID: 0}
     - target: {fileID: 114333469214716382, guid: 0f7a68ff356d14e46aad405094e40851,
         type: 2}
       propertyPath: moves.Array.data[9]
       value: 
-      objectReference: {fileID: 772984111}
+      objectReference: {fileID: 0}
     - target: {fileID: 114333469214716382, guid: 0f7a68ff356d14e46aad405094e40851,
         type: 2}
       propertyPath: moves.Array.data[10]
       value: 
-      objectReference: {fileID: 1891101716}
+      objectReference: {fileID: 0}
     - target: {fileID: 114333469214716382, guid: 0f7a68ff356d14e46aad405094e40851,
         type: 2}
       propertyPath: moves.Array.data[11]
       value: 
-      objectReference: {fileID: 514927400}
+      objectReference: {fileID: 0}
     - target: {fileID: 114333469214716382, guid: 0f7a68ff356d14e46aad405094e40851,
         type: 2}
       propertyPath: moves.Array.data[12]
       value: 
-      objectReference: {fileID: 20089499}
+      objectReference: {fileID: 0}
     - target: {fileID: 114333469214716382, guid: 0f7a68ff356d14e46aad405094e40851,
         type: 2}
       propertyPath: moves.Array.data[13]
       value: 
-      objectReference: {fileID: 1456649469}
+      objectReference: {fileID: 0}
     - target: {fileID: 114333469214716382, guid: 0f7a68ff356d14e46aad405094e40851,
         type: 2}
       propertyPath: moves.Array.data[14]
       value: 
-      objectReference: {fileID: 429532705}
+      objectReference: {fileID: 0}
     - target: {fileID: 114333469214716382, guid: 0f7a68ff356d14e46aad405094e40851,
         type: 2}
       propertyPath: moves.Array.data[15]
       value: 
-      objectReference: {fileID: 1674156250}
+      objectReference: {fileID: 0}
+    - target: {fileID: 1965574061192544, guid: 0f7a68ff356d14e46aad405094e40851, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114333469214716382, guid: 0f7a68ff356d14e46aad405094e40851,
+        type: 2}
+      propertyPath: AllMoves.Array.data[0]
+      value: 
+      objectReference: {fileID: 75346872}
+    - target: {fileID: 114333469214716382, guid: 0f7a68ff356d14e46aad405094e40851,
+        type: 2}
+      propertyPath: AllMoves.Array.data[1]
+      value: 
+      objectReference: {fileID: 1441934916}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0f7a68ff356d14e46aad405094e40851, type: 2}
   m_IsPrefabParent: 0

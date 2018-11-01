@@ -187,11 +187,13 @@ public class LevelFade : MonoBehaviour {
                                                     //TODO: RESET THE CURRENT SCENE
 
         Vector3 levelpos = Levels[currentLevel].transform.position;
+
+        Levels[currentLevel].GetComponentInChildren<LifeController>().transferLink();
+
         Destroy(Levels[currentLevel]);
 
         GameObject newLevel = Instantiate(LevelPrefabs[currentLevel]);
         Levels[currentLevel] = newLevel;
-        newLevel.GetComponentInChildren<LifeController>().LinkMoves();
         newLevel.GetComponentInChildren<LifeController>().ResetCanvas((int)Levels[currentLevel].GetComponentInChildren<Player>().startMoves);
 
         UI[0].Play("Fade Out");
