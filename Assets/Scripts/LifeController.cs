@@ -52,7 +52,7 @@ public class LifeController : MonoBehaviour {
     //Disables game object one by one
     public void MinusLife()
     {
-        if(life_counter <= _lives.Length)
+        if(life_counter < _lives.Length)
         {
             _lives[life_counter].GetComponent<Lifeline>().LoseLife();
             life_counter++;
