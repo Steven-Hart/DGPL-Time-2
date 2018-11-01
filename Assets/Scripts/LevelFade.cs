@@ -166,11 +166,7 @@ public class LevelFade : MonoBehaviour {
         yield return new WaitForSeconds(time + 2f); //Wait for clip to finish
 
         Levels[currentLevel - 1].SetActive(false); //Disable last level
-
-		foreach (MoveCounter m in UI[1].GetComponentsInChildren<MoveCounter>())
-		{
-			m.ResetMove();
-		}
+		
         UI[0].Play("Fade Out");
 		if(currentLevel + 1 < anims.Length)
         	anims[currentLevel + 1].Play(re);
