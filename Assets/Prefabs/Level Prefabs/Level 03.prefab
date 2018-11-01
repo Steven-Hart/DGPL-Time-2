@@ -426,6 +426,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4487824599462304}
+  - component: {fileID: 114369405882805632}
   m_Layer: 0
   m_Name: Level 03
   m_TagString: Untagged
@@ -2225,14 +2226,7 @@ MonoBehaviour:
   lifetime: 0
   movesMade: 0
   startMoves: 5
-  lifeTimer: {fileID: 0}
-  lifeCount: {fileID: 0}
-  WinLife: {fileID: 0}
-  WinTime: {fileID: 0}
-  WinText: {fileID: 0}
   lifeLine: {fileID: 0}
-  winPanel: {fileID: 0}
-  nextButton: {fileID: 0}
   playerCube: {fileID: 114046499502728094}
   gameOver: 0
   ghostLife: 0
@@ -2249,6 +2243,18 @@ MonoBehaviour:
   sound_start: {fileID: 8300000, guid: 3caa847424db756458ecb865b5af3b1d, type: 3}
   sound_lose: {fileID: 8300000, guid: 76e60f6f3da69cb48987a5103a9592fb, type: 3}
   currentDirection: 2
+--- !u!114 &114369405882805632
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1710829294964568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76e3722fa79a26f4492bef0517d9ac95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Lifelines: []
 --- !u!114 &114391109416252548
 MonoBehaviour:
   m_ObjectHideFlags: 1
