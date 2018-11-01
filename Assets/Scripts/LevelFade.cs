@@ -138,12 +138,15 @@ public class LevelFade : MonoBehaviour {
         
          //Wait for clip to finish
         //TODO MAIN MENU FADE
-        MainMenu.SetActive(false);
-        GameUI.SetActive(true);
-        yield return new WaitForSeconds(0.5f);
+        anims[0].Play("Fade In");
+        yield return new WaitForSeconds(1f);
         Levels[currentLevel].SetActive(true);
+        MainMenu.SetActive(false);
+
         anims[0].Play("Fade Out");
         anims[1].Play("Level Reappear 01");
+        GameUI.SetActive(true);
+
 
     }
 

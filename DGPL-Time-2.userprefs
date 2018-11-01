@@ -1,9 +1,9 @@
 ﻿<Properties StartupItem="DGPL-Time-2.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Standard Assets\Effects\ImageEffects\Readme.txt">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\LevelFade.cs">
     <Files>
       <File FileName="Assets\Scripts\Player.cs" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\Effects\ImageEffects\Readme.txt" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\LevelFade.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
