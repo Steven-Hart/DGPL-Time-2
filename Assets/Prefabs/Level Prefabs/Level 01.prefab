@@ -279,6 +279,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4647169462114200}
+  - component: {fileID: 114181198662162632}
   - component: {fileID: 95478190928828372}
   m_Layer: 0
   m_Name: Level 01
@@ -1123,22 +1124,6 @@ GameObject:
   - component: {fileID: 95880488699006142}
   m_Layer: 0
   m_Name: Fade (12)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1734163521817960
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4502531433921990}
-  - component: {fileID: 114621619528652670}
-  m_Layer: 0
-  m_Name: LifeController (Level1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2106,19 +2091,6 @@ Transform:
   m_Father: {fileID: 4365229160363714}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
---- !u!4 &4502531433921990
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1734163521817960}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.0600003, y: -0.5, z: -4.4399996}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4647169462114200}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4516290167057682
 Transform:
   m_ObjectHideFlags: 1
@@ -2304,7 +2276,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4502531433921990}
   - {fileID: 4912999842246214}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -2742,7 +2713,7 @@ Transform:
   - {fileID: 4091075459302722}
   - {fileID: 4658236700635218}
   m_Father: {fileID: 4647169462114200}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4932793808377916
 Transform:
@@ -4184,6 +4155,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee9dde6ed68020d49ad195cbe47f5e64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114181198662162632
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1133624453070522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76e3722fa79a26f4492bef0517d9ac95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Lifelines:
+  - {fileID: 1138260750532198}
+  - {fileID: 1597680246181838}
+  - {fileID: 1956539690330366}
 --- !u!114 &114347797842276576
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4210,15 +4196,8 @@ MonoBehaviour:
   lives: 3
   lifetime: 0
   movesMade: 0
-  startMoves: 10
-  lifeTimer: {fileID: 0}
-  lifeCount: {fileID: 0}
-  WinLife: {fileID: 0}
-  WinTime: {fileID: 0}
-  WinText: {fileID: 0}
-  lifeLine: {fileID: 114621619528652670}
-  winPanel: {fileID: 0}
-  nextButton: {fileID: 0}
+  startMoves: 7
+  lifeLine: {fileID: 0}
   playerCube: {fileID: 114772797375302980}
   gameOver: 0
   ghostLife: 0
@@ -4245,39 +4224,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee9dde6ed68020d49ad195cbe47f5e64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114621619528652670
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1734163521817960}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af2f0f0bc8a5f4044a04fd7787026305, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _lives:
-  - {fileID: 1138260750532198}
-  - {fileID: 1597680246181838}
-  - {fileID: 1956539690330366}
-  moves:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  LifeCount: 3
 --- !u!114 &114769194592948350
 MonoBehaviour:
   m_ObjectHideFlags: 1
