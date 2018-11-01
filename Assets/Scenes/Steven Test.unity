@@ -16429,9 +16429,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lives:
-  - {fileID: 88838276}
-  - {fileID: 160794744}
-  - {fileID: 1193384956}
+  - {fileID: 1552718780}
+  - {fileID: 581383257}
+  - {fileID: 1398815426}
   moves:
   - {fileID: 75346872}
   - {fileID: 1441934916}
