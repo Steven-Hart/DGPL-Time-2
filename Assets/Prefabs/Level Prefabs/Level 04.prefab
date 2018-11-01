@@ -1036,7 +1036,7 @@ GameObject:
   - component: {fileID: 4555097639477630}
   - component: {fileID: 114752909733620996}
   m_Layer: 0
-  m_Name: Life 1 (2)
+  m_Name: Life 3
   m_TagString: Life
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1373,7 +1373,7 @@ GameObject:
   - component: {fileID: 4932216193983406}
   - component: {fileID: 114980682376035420}
   m_Layer: 0
-  m_Name: Life 1 (1)
+  m_Name: Life 2
   m_TagString: Life
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1405,6 +1405,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4358181169472690}
   - component: {fileID: 95863093896655772}
+  - component: {fileID: 114645586516633946}
   m_Layer: 0
   m_Name: Level 04
   m_TagString: Untagged
@@ -4379,6 +4380,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62dc47a694672aa47a7fd0b935fbf315, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114645586516633946
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1913668692653842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76e3722fa79a26f4492bef0517d9ac95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Lifelines:
+  - {fileID: 1324104603909894}
+  - {fileID: 1904686520957236}
+  - {fileID: 1619157431975990}
 --- !u!114 &114664990884368550
 MonoBehaviour:
   m_ObjectHideFlags: 1
