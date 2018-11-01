@@ -28,7 +28,7 @@ public class LevelFade : MonoBehaviour {
     public enum FadeState {MenuToCredits, MenuToGame, RestartLevel, NextLevel}
 
 
-    private void Start()
+	void Start()
     {
         currentLevel = 0;
         finalLevel = false;
@@ -166,7 +166,7 @@ public class LevelFade : MonoBehaviour {
         yield return new WaitForSeconds(time + 2f); //Wait for clip to finish
 
         Levels[currentLevel - 1].SetActive(false); //Disable last level
-		
+
         UI[0].Play("Fade Out");
 		if(currentLevel + 1 < anims.Length)
         	anims[currentLevel + 1].Play(re);
