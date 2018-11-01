@@ -157,11 +157,6 @@ public class Player : MonoBehaviour
 			groundExists = true;
 			newPosition = new Vector3(x, y, z);
 			moveDelay = true;
-			lifeLine.MinusMove();
-			foreach (Enemy e in enemyList)
-			{
-				e.ChooseDirection();
-			}
 			playerCube.MoveAnimation(); // Play movement animation
 		}
     }
@@ -169,6 +164,7 @@ public class Player : MonoBehaviour
     public void TranslatePlayer()
     {
         movesMade++;
+		lifeLine.MinusMove();
         transform.position += newPosition; // Move
     }
 

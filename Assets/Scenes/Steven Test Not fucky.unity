@@ -239,6 +239,8 @@ GameObject:
   - component: {fileID: 70118493}
   - component: {fileID: 70118492}
   - component: {fileID: 70118496}
+  - component: {fileID: 70118498}
+  - component: {fileID: 70118497}
   m_Layer: 5
   m_Name: Canvas Credits
   m_TagString: Untagged
@@ -341,6 +343,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roleFontSize: 117
   nameFontSize: 49
+--- !u!95 &70118497
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 70118491}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3f6fa002b0111194da6177eb099bf340, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!225 &70118498
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 70118491}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &75346872 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1985867243494896, guid: c78ae0a6ecfb47e45ab92bf9d5ad65c5,
@@ -1293,7 +1323,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &575360937
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1973,6 +2003,23 @@ GameObject:
   m_PrefabParentObject: {fileID: 1472685002713516, guid: 0a4b6cdbe69aee0498c59ca7fddb45a7,
     type: 2}
   m_PrefabInternal: {fileID: 191605830}
+--- !u!95 &814006166
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 814006165}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e95e4f6a0450c1a4fbf73f73feb6b7da, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!82 &814006172
 AudioSource:
   m_ObjectHideFlags: 0

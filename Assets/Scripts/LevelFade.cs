@@ -44,6 +44,7 @@ public class LevelFade : MonoBehaviour {
             }
 		}
 		MainMenu.GetComponent<Animator>().Play("Fade In");
+		Camera.main.GetComponent<Animator>().Play("MusicFadeIn");
     }
 
 	void Update()
@@ -52,6 +53,7 @@ public class LevelFade : MonoBehaviour {
 			return;
 		if (Input.GetAxis("Restart") > 0)
 		{
+			Levels[currentLevel].GetComponentInChildren<Player>().gameOver = true;
 			// Restart level here also needs to check if its on a level or main menu/credits
 			ChooseFade(FadeState.RestartLevel);
 		}
@@ -99,6 +101,7 @@ public class LevelFade : MonoBehaviour {
             }
             else //Goes to credits if last level was won
             {
+				fromGame = true;
                 ChooseFade(FadeState.MenuToCredits);
             }
         }
@@ -126,19 +129,22 @@ public class LevelFade : MonoBehaviour {
 	{
 		if (fadeInProgress)
 			return;
+		if (finalLevel)
+		{
+			StartCoroutine("FadeCreditsToMenuFinal");
+		}
         StartCoroutine("FadeCreditsToMenuCoroutine");
     }
 
 	IEnumerator FadeCreditsToMenuFinal()
 	{
 		fadeInProgress = true;
-		MainMenu.SetActive(true);
-		MainMenu.GetComponent<Animator>().Play("Fade In");
+		Credits.GetComponent<Animator>().Play("Fade Out");
+		Camera.main.GetComponent<Animator>().Play("MusicFadeOut");
 		yield return new WaitForSeconds(1f); //Wait for clip to finish
-											 //Do other stuff here
-		GameUI.SetActive(false);
-		Credits.SetActive(false);
+
 		fadeInProgress = false;
+		UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name); // Fades out reload current scene
 	}
 
     IEnumerator FadeMenuToCreditsCoroutine()// Menu to Credits
@@ -159,19 +165,22 @@ public class LevelFade : MonoBehaviour {
         MainMenu.SetActive(false);
         GameUI.SetActive(false);
         Credits.SetActive(true);
-		Credits.GetComponent<Animator>().Play("Fade Out");
+		Credits.GetComponent<Animator>().Play("Fade In");
+		yield return new WaitForSeconds(0.9f);
 		fadeInProgress = false;
     }
 
     IEnumerator FadeCreditsToMenuCoroutine()// Menu to Credits
     {
 		fadeInProgress = true;
-		MainMenu.SetActive(true);
-		MainMenu.GetComponent<Animator>().Play("Fade In");
+		Credits.GetComponent<Animator>().Play("Fade Out");
         yield return new WaitForSeconds(1f); //Wait for clip to finish
         //Do other stuff here
         GameUI.SetActive(false);
         Credits.SetActive(false);
+		MainMenu.SetActive(true);
+		MainMenu.GetComponent<Animator>().Play("Fade In");
+		yield return new WaitForSeconds(0.9f);
 		fadeInProgress =false;
     }
 
@@ -188,6 +197,7 @@ public class LevelFade : MonoBehaviour {
 		GameUI.SetActive(true);
 		UI[1].Play("In Game UI Fade In"); // UI 1 Game HUD
 		Levels[currentLevel].SetActive(true);
+		yield return new WaitForSeconds(0.9f);
 		fadeInProgress = false;
     }
 
@@ -200,6 +210,7 @@ public class LevelFade : MonoBehaviour {
         yield return new WaitForSeconds(time + 1f); //Wait for clip to finish
 
         Levels[currentLevel].SetActive(false); //Disable last level
+		yield return new WaitForSeconds(0.5f);
 
         UI[0].Play("Fade Out");
 		UI[1].Play("In Game UI Fade In");
@@ -210,9 +221,12 @@ public class LevelFade : MonoBehaviour {
 		currentLevel ++;
 		Levels[currentLevel].GetComponentInChildren<Player>().lifeLine = lifecontrol; // Links new player to life controller
 		lifecontrol._lives = Levels[currentLevel].GetComponent<LifeStore>().Lifelines;
+		Levels[currentLevel].GetComponentInChildren<Player>().gameOver = true;
 		levelToLoad.SetActive(true); //Enable next level
 		lifecontrol.ResetCanvas();
 		anims[currentLevel].Play("Level Reappear");
+		yield return new WaitForSeconds(1f);
+		Levels[currentLevel].GetComponentInChildren<Player>().gameOver = false;
 		fadeInProgress = false;
     }
 
@@ -222,8 +236,10 @@ public class LevelFade : MonoBehaviour {
         anims[currentLevel].Play("Level Disappear");
         UI[0].Play("Fade In"); // UI 0 background colour overlay
 		UI[1].Play("In Game UI Fade Out");
-        yield return new WaitForSeconds(time + 1f); //Wait for clip to finish
+        yield return new WaitForSeconds(time + 0.5f); //Wait for clip to finish
+
 		Levels[currentLevel].SetActive(false);
+		yield return new WaitForSeconds(0.5f);
         //Vector3 levelpos = Levels[currentLevel].transform.position;
         Destroy(Levels[currentLevel]); // Destroys old level
 		UI[1].Play("In Game UI Fade In");
@@ -232,11 +248,13 @@ public class LevelFade : MonoBehaviour {
 		anims[currentLevel] = Levels[currentLevel].GetComponent<Animator>();
 		lifecontrol._lives = Levels[currentLevel].GetComponent<LifeStore>().Lifelines;
 		Levels[currentLevel].GetComponentInChildren<Player>().lifeLine = lifecontrol; // Links new player to life controller
-
+		Levels[currentLevel].GetComponentInChildren<Player>().gameOver = true;
         UI[0].Play("Fade Out");
         Levels[currentLevel].SetActive(true);
 		anims[currentLevel].Play("Level Reappear");
 		lifecontrol.ResetCanvas();
+		yield return new WaitForSeconds(1f);
+		Levels[currentLevel].GetComponentInChildren<Player>().gameOver = false; // If player moves too early enemy will skip a move
 		fadeInProgress = false;
     }
 }
