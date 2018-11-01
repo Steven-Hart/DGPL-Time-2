@@ -265,9 +265,11 @@ public class LevelFade : MonoBehaviour {
 
 	IEnumerator FadeToExit()
 	{
+		fadeInProgress = true;
 		Camera.main.GetComponent<Animator>().Play("MusicFadeOut");
 		MainMenu.GetComponent<Animator>().Play("Fade Out");
 		yield return new WaitForSeconds(1f);
 		Application.Quit();
+		fadeInProgress = false;
 	}
 }
