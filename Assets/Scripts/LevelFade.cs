@@ -88,7 +88,6 @@ public class LevelFade : MonoBehaviour {
                 }
                 levelToLoad = Levels[currentLevel + 1];
                 StartCoroutine("FadeNextLevelCoroutine");
-                currentLevel += 1;
 
 
             }
@@ -174,15 +173,16 @@ public class LevelFade : MonoBehaviour {
         //anims[currentLevel].Play(dis);
         yield return new WaitForSeconds(time + 2f); //Wait for clip to finish
 
-        Levels[currentLevel - 1].SetActive(false); //Disable last level
+        Levels[currentLevel].SetActive(false); //Disable last level
 
         UI[0].Play("Fade Out");
 		//if(currentLevel + 1 < anims.Length)
         //	anims[currentLevel + 1].Play(re);
 		//if (currentLevel + 1 < Levels.Count)
-		Levels[currentLevel+1].GetComponentInChildren<Player>().lifeLine = lifecontrol; // Links new player to life controller
+		Levels[currentLevel + 1].GetComponentInChildren<Player>().lifeLine = lifecontrol; // Links new player to life controller
 		levelToLoad.SetActive(true); //Enable next level
 		lifecontrol.ResetCanvas();
+        currentLevel += 1;
     }
 
     IEnumerator FadeRestartLevelCoroutine()// Restart Level
