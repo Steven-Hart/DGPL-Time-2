@@ -4249,7 +4249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5829101a71bff5a4682cab11a65c57a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sound_move: {fileID: 0}
+  sound_move: {fileID: 8300000, guid: e65c6180e88cbcf4f8526e8ae76f1945, type: 3}
 --- !u!114 &114850550888360340
 MonoBehaviour:
   m_ObjectHideFlags: 1

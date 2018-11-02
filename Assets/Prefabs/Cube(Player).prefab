@@ -392,7 +392,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5829101a71bff5a4682cab11a65c57a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sound_move: {fileID: 0}
+  sound_move: {fileID: 8300000, guid: 4288e989fc9c37b429e79fc457aaee09, type: 3}
 --- !u!114 &114595156422314984
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -409,14 +409,7 @@ MonoBehaviour:
   lifetime: 0
   movesMade: 0
   startMoves: 10
-  lifeTimer: {fileID: 0}
-  lifeCount: {fileID: 0}
-  WinLife: {fileID: 0}
-  WinTime: {fileID: 0}
-  WinText: {fileID: 0}
   lifeLine: {fileID: 0}
-  winPanel: {fileID: 0}
-  nextButton: {fileID: 0}
   playerCube: {fileID: 114462008574906750}
   gameOver: 0
   ghostLife: 0
@@ -432,6 +425,7 @@ MonoBehaviour:
   sound_finish: {fileID: 8300000, guid: dd2a65d0f43fea7479b42ecd2c31907f, type: 3}
   sound_start: {fileID: 8300000, guid: 3caa847424db756458ecb865b5af3b1d, type: 3}
   sound_lose: {fileID: 8300000, guid: 76e60f6f3da69cb48987a5103a9592fb, type: 3}
+  currentDirection: 2
 --- !u!114 &114599555119776222
 MonoBehaviour:
   m_ObjectHideFlags: 1
