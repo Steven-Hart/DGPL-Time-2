@@ -1196,6 +1196,8 @@ GameObject:
   - component: {fileID: 434406382}
   - component: {fileID: 434406381}
   - component: {fileID: 434406380}
+  - component: {fileID: 434406384}
+  - component: {fileID: 434406383}
   m_Layer: 0
   m_Name: Canvas Particles
   m_TagString: Untagged
@@ -1279,6 +1281,34 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!95 &434406383
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 434406378}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ff476001e4d031642b8d410f5dbe57f7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!225 &434406384
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 434406378}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &443442523
 GameObject:
   m_ObjectHideFlags: 0
@@ -1547,6 +1577,10 @@ Prefab:
     - target: {fileID: 4358181169472690, guid: 5ca870529d23427469fa1f7b3987edda, type: 2}
       propertyPath: m_RootOrder
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913668692653842, guid: 5ca870529d23427469fa1f7b3987edda, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5ca870529d23427469fa1f7b3987edda, type: 2}
